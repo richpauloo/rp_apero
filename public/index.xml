@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rich Pauloo, PhD on Rich Paulo</title>
+    <link>/</link>
+    <description>Recent content in Rich Pauloo, PhD on Rich Paulo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 29 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Netlify</title>
+      <link>/collection/day02/01-netlify/</link>
+      <pubDate>Sat, 02 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/collection/day02/01-netlify/</guid>
+      <description>So far, we&amp;rsquo;ve been leveraging GitHub Pages for publishing. This works great, but for blogdown we&amp;rsquo;ll start using Netlify. Let&amp;rsquo;s start RIGHT NOW with a site we&amp;rsquo;ve already built and published.
+Pre-requisites     Pick either your postcards site, or your distill site from day 01. Refresh your memory- which repository was it again?</description>
+    </item>
+    
+    <item>
+      <title>A GitHub profile</title>
+      <link>/collection/day01/01-github/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/collection/day01/01-github/</guid>
+      <description>Profile      https://docs.github.com/en/github/setting-up-and-managing-your-github-profile/personalizing-your-profile
+Pin projects to profile      https://docs.github.com/en/github/setting-up-and-managing-your-github-profile/pinning-items-to-your-profile
+Profile README     This is new! Let&amp;rsquo;s do it:
+ https://docs.github.com/en/github/setting-up-and-managing-your-github-profile/managing-your-profile-readme</description>
+    </item>
+    
+    <item>
+      <title>Prework</title>
+      <link>/collection/prework/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/collection/prework/</guid>
+      <description>Welcome to the Introducing Yourself Online workshop! We look forward to meeting you. Before attending the workshop, please complete the following prework.
+Set up RStudio Cloud     Sign up for a free RStudio Cloud account at https://rstudio.cloud/ before the workshop. I recommend logging in with an existing Google or GitHub account, if you have one (rather than creating a new account with another password you have to remember).</description>
+    </item>
+    
+    <item>
+      <title>A postcard</title>
+      <link>/collection/day01/02-postcards/</link>
+      <pubDate>Sat, 02 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/collection/day01/02-postcards/</guid>
+      <description>Pre-requisites     First, make sure you have the latest version of the postcards package installed from CRAN:
+install.packages(&amp;quot;postcards&amp;quot;) Restart your R session. If you use RStudio, use the menu item Session &amp;gt; Restart R or the associated keyboard shortcut:
+ Ctrl + Shift + F10 (Windows and Linux) or Command + Shift + F10 (Mac OS).  packageVersion(&amp;quot;postcards&amp;quot;) [1] ‘0.2.0’  Create GitHub repo     Online.</description>
+    </item>
+    
+    <item>
+      <title>Using blogdown</title>
+      <link>/collection/day02/02-blogdown/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/collection/day02/02-blogdown/</guid>
+      <description>Pre-requisites     First, make sure you have the latest version of the blogdown package installed from CRAN:
+install.packages(&amp;quot;blogdoown&amp;quot;) Restart your R session. If you use RStudio, use the menu item Session &amp;gt; Restart R or the associated keyboard shortcut:
+ Ctrl + Shift + F10 (Windows and Linux) or Command + Shift + F10 (Mac OS).  packageVersion(&amp;quot;blogdown&amp;quot;) [1] ‘1.0’  Create GitHub repo     Online.</description>
+    </item>
+    
+    <item>
+      <title>A distill site</title>
+      <link>/collection/day01/03-distill/</link>
+      <pubDate>Sat, 02 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/collection/day01/03-distill/</guid>
+      <description>Pre-requisites     First, make sure you have the latest version of the distill package installed from CRAN:
+install.packages(&amp;quot;distill&amp;quot;)  Restart your R session. If you use RStudio, use the menu item Session &amp;gt; Restart R or the associated keyboard shortcut:
+ Ctrl + Shift + F10 (Windows and Linux) or Command + Shift + F10 (Mac OS).  &amp;lt;!-- --&amp;gt; packageVersion(&amp;quot;distill&amp;quot;) [1] ‘1.2’  Create GitHub repo     Online.</description>
+    </item>
+    
+    <item>
+      <title>Warm woolen mittens</title>
+      <link>/collection/day02/03-blogdown/</link>
+      <pubDate>Sat, 02 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/collection/day02/03-blogdown/</guid>
+      <description>Hi, I&#39;m the here-bot cat! Use me to find your way in your website.
+Here I am: content/collection/day02/03-blogdown/index.md  To remove me, delete this line inside that file: {{&amp;lt; here &amp;gt;}}
+My content section is: collection  My layout is: single-series   part 2!     does this work?      now for some very cool things     more     get ready!</description>
+    </item>
+    
+    <item>
+      <title>Automate SMS and MMS with R, Twilio, Docker, and Github Actions</title>
+      <link>/blog/docker-github-actions/</link>
+      <pubDate>Sun, 29 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/docker-github-actions/</guid>
+      <description>Salvador Dali, &amp;ldquo;The Disintegration of The Persistence of Memory&amp;rdquo; 1952.
+Introduction   My mother grew up as the youngest of 6 children in Thailand, after her family emigrated from China during the Chinese Civil Wars. While growing up in Bangkok&amp;rsquo;s Chinatown, my mother learned English from Christian missionaries, and eventually immigrated to the United States.
+First a devout Buddhist, and later a devout Christian, my mom&amp;rsquo;s core values have always included love and compassion.</description>
+    </item>
+    
+    <item>
+      <title>Reproducible data science with R, RStudio Server, and Docker</title>
+      <link>/blog/docker-rstudio/</link>
+      <pubDate>Sat, 28 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/docker-rstudio/</guid>
+      <description>Salvador Dali, &amp;ldquo;The Persistence of Memory&amp;rdquo; 1931.
+Introduction   Although Docker has been around for years, Docker in the data science community doesn&amp;rsquo;t seem as widespread as git, which I attribute to the fact that many data scientists learn to program and work independently. However, as data scientists increasingly collaborate with others or aim to make their work more reproducible, Docker deserves an equal place alongside git in the practitioner&amp;rsquo;s toolkit.</description>
+    </item>
+    
+    <item>
+      <title>Parquet, SQL, DuckDB, arrow, dbplyr and R</title>
+      <link>/blog/parquet/</link>
+      <pubDate>Sat, 06 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/parquet/</guid>
+      <description>French tapestry, &amp;ldquo;Jesuits performing astronomy with Chinese&amp;rdquo;
+Introduction     As opposed to traditional row-based storage (e.g., SQL), Parquet files (.parquet) are columnar-based, and feature efficient compression (fast read/write and small disk usage) and optimized performance for big data. Writing to parquet data format and partitioning (splitting the data across multiple files for faster querying) is relatively trivial in R with the {arrow} package which provides arrow::write_dataset(). There are a few options for querying Parquet data from R.</description>
+    </item>
+    
+    <item>
+      <title>A campfire</title>
+      <link>/talk/campfire/</link>
+      <pubDate>Tue, 12 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/campfire/</guid>
+      <description>I&amp;rsquo;m really excited to give this talk! Stay tuned for video and slides.</description>
+    </item>
+    
+    <item>
+      <title>A seedling</title>
+      <link>/talk/second-seedling/</link>
+      <pubDate>Fri, 01 Jan 2021 14:15:59 -0600</pubDate>
+      
+      <guid>/talk/second-seedling/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>A water quality portal for California</title>
+      <link>/blog/cawdc-2019/</link>
+      <pubDate>Fri, 20 Nov 2020 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/cawdc-2019/</guid>
+      <description>⛅ ✅  Checking the weather for a given location is simple. 🚰 ❌  Checking the water quality is not as easy.</description>
+    </item>
+    
+    <item>
+      <title>Install RStudio Server on Microsoft Azure</title>
+      <link>/blog/azure/</link>
+      <pubDate>Sat, 14 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/azure/</guid>
+      <description>How to install R and RStudio Server on an Azure Virtual Machine.</description>
+    </item>
+    
+    <item>
+      <title>Automating R scripts on Linux with cron</title>
+      <link>/blog/crontabs/</link>
+      <pubDate>Tue, 21 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/crontabs/</guid>
+      <description>Automate R scripts with crontabs.</description>
+    </item>
+    
+    <item>
+      <title>A seedling</title>
+      <link>/talk/seedling/</link>
+      <pubDate>Mon, 13 Jan 2020 14:15:59 -0600</pubDate>
+      
+      <guid>/talk/seedling/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>How to link a custom domain to Github Pages with HTTPS</title>
+      <link>/blog/gh-custom-url/</link>
+      <pubDate>Fri, 15 Nov 2019 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/gh-custom-url/</guid>
+      <description>How to host a personal or project page on your username.github.io site and configure every little detail.</description>
+    </item>
+    
+    <item>
+      <title>Race to the Bottom</title>
+      <link>/blog/race-to-the-bottom/</link>
+      <pubDate>Wed, 11 Sep 2019 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/race-to-the-bottom/</guid>
+      <description>In California, groundwater extraction for agriculture has boomed over the past 75 years, and the average well drilled today has more than doubled in depth compared to wells drilled in 1940, according to Department of Water Resources data.</description>
+    </item>
+    
+    <item>
+      <title>Using Twilio To Text Myself After Long Running Jobs</title>
+      <link>/blog/textme/</link>
+      <pubDate>Wed, 11 Sep 2019 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/textme/</guid>
+      <description>Text yourself from R using Twilio so you can leave the comptuer but be notified the instant a long-running job completes.</description>
+    </item>
+    
+    <item>
+      <title>Tachyons for Style</title>
+      <link>/project/giraffes/</link>
+      <pubDate>Wed, 03 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/project/giraffes/</guid>
+      <description>Tachyons is a design system that allows you to design gorgeous interfaces in the browser with little effort.      Because Speed     Building this static site generator theme was the first time I used an Atomic (or Functional) CSS system like Tachyons. It&amp;rsquo;s a design system that provides very small (which means fast) CSS modules that you can use in your HTML. So, rather than writing every line of CSS, you apply the style you need as you write your HTML with easy to understand shorthand class names.</description>
+    </item>
+    
+    <item>
+      <title>Palmer Penguins</title>
+      <link>/project/penguins/</link>
+      <pubDate>Tue, 02 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/project/penguins/</guid>
+      <description>“Grid is the very first CSS module created specifically to solve the layout problems we&amp;rsquo;ve all been hacking our way around for as long as we&amp;rsquo;ve been making websites.”     — Chris House, A Complete Guide to CSS Grid Layout 1
+ Since I began building websites in Y2K, I&amp;rsquo;ve lost count how many times the phrase &amp;ldquo;&amp;hellip;there&amp;rsquo;s got to be a better way to do this&amp;rdquo; has passed my lips.</description>
+    </item>
+    
+    <item>
+      <title>Bakeoff</title>
+      <link>/project/bakeoff/</link>
+      <pubDate>Mon, 01 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/project/bakeoff/</guid>
+      <description>Formspree makes it easy to receive submissions from HTML forms on your static website.      Functional Form     This theme has a form-to-email feature built in, thanks to the simple Formspree integration. All you need to activate the form is a valid recipient email address saved in the front matter of the form (/content/forms/contact.md). Of course, the example shown below (your@email.here) must not be used.</description>
+    </item>
+    
+    <item>
+      <title>Text analysis of the Mueller Report</title>
+      <link>/blog/mueller/</link>
+      <pubDate>Fri, 19 Apr 2019 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/mueller/</guid>
+      <description>After years of investigation, the Department of Justice released a redacted copy of the Mueller Report on Thursday April 18, 2019. A simple sentiment analysis reveals the report is incredibly negative. Honing in on positive sections is misleading, as they concern the infamous loyaltly conversations with Comey.</description>
+    </item>
+    
+    <item>
+      <title>Contact</title>
+      <link>/contact/</link>
+      <pubDate>Mon, 25 Feb 2019 13:38:41 -0600</pubDate>
+      
+      <guid>/contact/</guid>
+      <description>** Contact page don&amp;rsquo;t contain a body, just the front matter above. See form.html in the layouts folder.
+Formspree requires a (free) account and new form to be set up. The link is made on the final published url in the field: Restrict to Domain. It is possible to register up to 2 emails free and you can select which one you want the forms to go to within Formspree in the Settings tab.</description>
+    </item>
+    
+    <item>
+      <title>Typography Styles &amp; Element Examples</title>
+      <link>/elements/</link>
+      <pubDate>Mon, 18 Feb 2019 12:27:33 -0600</pubDate>
+      
+      <guid>/elements/</guid>
+      <description>Font Sizes   A A A A A A A A   6rem
+(96px) 5rem
+(80px) 3rem
+(48px) 2.25rem
+(36px) 1.5rem
+(24px) 1.25rem
+(20px) 1rem
+(16px) .875rem
+(14px)     Type Samples Head&amp;shy;line Sub&amp;shy;head&amp;shy;line Level 1 Heading One page to rule them all...well, not really. This page displays sample typography and page elements to illustrate their style. Things like headings and paragraphs showing the beautiful type scale, form elements, tabular data, and image layouts just to name a few.</description>
+    </item>
+    
+    <item>
+      <title>Reflections on the 2018 California Water Data Challenge</title>
+      <link>/blog/reflect-cawdc-2018/</link>
+      <pubDate>Thu, 11 Oct 2018 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/reflect-cawdc-2018/</guid>
+      <description>UPDATE: I am so honored to have won an award in the 2018 CA Water Data Challenge! You can view the wining project here.
+After graduate school, I&amp;rsquo;ll probably apply to as many jobs as I can and see what sticks. But deep down, a career that integrates my domain knowledge of groundwater and California water with the broad field of data science is what I seek.
+So when the California Water Data Challenge was announced earlier this year, I was pretty excited.</description>
+    </item>
+    
+    <item>
+      <title>Installing the R kernel in Jupyter Lab</title>
+      <link>/blog/jupyter/</link>
+      <pubDate>Wed, 16 May 2018 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/jupyter/</guid>
+      <description>I was recently pretty impressed with Jupyter&amp;rsquo;s newest creation, the Jupyter Lab IDE. You can test drive an online demostration of Jupyter Lab with a Python and R kernel here.
+I downloaded a version, and found that the R Kernel was missing! To get the R kernel up and running in Jupyter Lab was a bit more complicated than expected. This guide is meant to break things down step by step.</description>
+    </item>
+    
+    <item>
+      <title>Aquifer thickness calculated from ~300,000 well logs</title>
+      <link>/blog/aquifer-thickness/</link>
+      <pubDate>Thu, 15 Mar 2018 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/aquifer-thickness/</guid>
+      <description>Data visualization from hundreds of thousands of well completion reports reveals aquifer characteristics in California groundwater basins.</description>
+    </item>
+    
+    <item>
+      <title>Reflections on Rstudio::conf2018</title>
+      <link>/blog/reflect-rstudio-2018/</link>
+      <pubDate>Wed, 07 Feb 2018 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/reflect-rstudio-2018/</guid>
+      <description>That&amp;rsquo;s little ol&#39; me in the middle. Not Hadley Wickham &amp;ndash; the other non-noticable guy with the black hair. Photo credit: sharon000
+Heading North on I-5, we pass by brown hills and palm trees as San Diego fades in the rear view mirror. The smell of last night&amp;rsquo;s beach bonfire wafts from our jackets stowed in the back seat, and Google Maps notifies us we&amp;rsquo;re about 7 hours from our respective destinations: Berkeley and Davis, CA.</description>
+    </item>
+    
+    <item>
+      <title>Tidy chi-squared stats in infer</title>
+      <link>/blog/infer/</link>
+      <pubDate>Sat, 03 Feb 2018 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/infer/</guid>
+      <description>Using the infer package for inference, with attention towards chi-squared tests.</description>
+    </item>
+    
+    <item>
+      <title>Using tidytext to make word clouds</title>
+      <link>/blog/word-cloud/</link>
+      <pubDate>Fri, 29 Dec 2017 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/word-cloud/</guid>
+      <description>How to make a word cloud in R. In this example, I use the research prospectus I just submitted in preparation for my qualifying examination.</description>
+    </item>
+    
+    <item>
+      <title>Contributors</title>
+      <link>/archive/contributors/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/archive/contributors/</guid>
+      <description>Thank you to all the folks who have contributed both technical and creative skills to this project:
+   Desirée De Leon 🦒 (designed 5 of the custom color themes, made illustrations for the workshop, and provided general aesthetic feedback along the way)
+   Garrick Aden-Buie 🧙‍♀️ (debugged headroom.js and lent his panelset.js code to the theme)
+   Allison Horst 🐕 (awesome illustrations of campfires, seedlings, and evergreens, as well as my R Markdown hedgehog mascot 🦔)</description>
+    </item>
+    
+    <item>
+      <title>License</title>
+      <link>/license/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/license/</guid>
+      <description>My blog posts are released under a Creative Commons Attribution-ShareAlike 4.0 International License.
+  </description>
+    </item>
+    
+  </channel>
+</rss>

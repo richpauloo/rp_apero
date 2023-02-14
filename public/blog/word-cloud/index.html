@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.87.0" />
+<title>Using tidytext to make word clouds | Rich Paulo</title>
+
+
+<meta property="twitter:site" content="@richpauloo">
+<meta property="twitter:creator" content="@richpauloo">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="A digital garden.">
+
+
+<meta property="og:site_name" content="Rich Paulo">
+<meta property="og:title" content="Using tidytext to make word clouds | Rich Paulo">
+<meta property="og:description" content="A digital garden." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/word-cloud/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/img/avatar.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/img/avatar.png" >
+    
+  <meta itemprop="name" content="Using tidytext to make word clouds">
+<meta itemprop="description" content="How to make a word cloud in R. In this example, I use the research prospectus I just submitted in preparation for my qualifying examination."><meta itemprop="datePublished" content="2017-12-29T02:57:45+00:00" />
+<meta itemprop="dateModified" content="2017-12-29T02:57:45+00:00" />
+<meta itemprop="wordCount" content="765">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="/img/lim.png" type="image/x-icon">
+  <link rel="icon" href="/img/lim.png" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.b2b53637e7df317c1f6797766023f56585f02a9b0dc12e0bdf7170b8b9491456.css" integrity="sha256-srU2N&#43;ffMXwfZ5d2YCP1ZYXwKpsNwS4L33FwuLlJFFY=" media="screen">
+  
+  
+  <script src="/panelset.min.078a92db9bd3228df502db3d9e0453c3cf3d910abe3f8deca0ad196c7071ad41.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.5bbc5e8c6f53ca77d4369c357de1620be5c1a88cbd54c65d0b67e98c936c22d8.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/img/lim.png" class="dib db-l h2 w-auto" alt="Rich Paulo">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About Blogophonic">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Project Portfolio">Projects</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/pubs/" title="Pubs">Pubs</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/contact/" title="Contact">Contact</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/cv" title="CV">CV</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Using tidytext to make word clouds</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Rich</p>
+        <p class="f7 db mv0 ttu">December 29, 2017</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+<blockquote>
+<p>I’ve since turned this code into a simple <a href="https://richpauloo.shinyapps.io/word_cloud_app">Shiny app that makes word clouds out of .txt files</a>.</p>
+</blockquote>
+<p>I recently came across the <code>tidytext</code> R package, and the accompanying book, <a href="https://www.tidytextmining.com/">Text Mining in R</a> by David Robinson and Julia Silge. I found it very practical for basic text mining and NLP problems spanning tf, idf, tf-idf, word vectorization, cosine similarity, sentiment analysis, and topic modeling.</p>
+<p>There are a pleathora of out-of-the-box functions and data that help with common natural language processing (NLP) tasks, like:</p>
+<ul>
+<li>tokenizing documents</li>
+<li>removing stop-words (e.g. - a, an, and, the, but)</li>
+<li>calculating tf, idf, and tf-idf</li>
+</ul>
+<p>After playing around a bit with examples, I thought it would be interesting to see what the 38 page research prospectus I spent months slaving over boiled down to in terms of term frequency.</p>
+<hr />
+<div id="bring-in-data" class="section level1">
+<h1>Bring in Data</h1>
+<p>I first saved my <em>.docx</em> file as a <em>.txt</em> in <em>UTF-8</em> encoding because it’s easier for R to read. The result is a very messy table, which I won’t print here.</p>
+</div>
+<div id="load-libraries-and-read-data" class="section level1">
+<h1>Load libraries and read data</h1>
+<pre class="r"><code>library(dplyr) # for data wrangling
+library(tidytext) # for NLP
+library(stringr) # to deal with strings
+library(wordcloud) # to render wordclouds
+library(knitr) # for tables
+library(tidyr)
+
+# the local file path to my research prospectus
+path &lt;- &#39;~/Documents/Github/rp/static/data/rp.txt&#39; 
+
+# fill = TRUE b/c rows are of unequal length
+dat &lt;- read.table(path, header = FALSE, fill = TRUE) </code></pre>
+</div>
+<div id="tidy" class="section level1">
+<h1>1. Tidy</h1>
+<p>Since the package we’re using adheres to tidy data principles, step 1 is to get this messy table into a one column data frame, with one word in each row.</p>
+<pre class="r"><code># reshape the .txt data frame into one column
+tidy_dat &lt;- tidyr::gather(dat, key, word) %&gt;% select(word)
+
+tidy_dat$word %&gt;% length() # there are 10,480 tokens in my document</code></pre>
+<pre><code>## [1] 10480</code></pre>
+<pre class="r"><code>unique(tidy_dat$word) %&gt;% length() # and of these, 2,866 are unique </code></pre>
+<pre><code>## [1] 2866</code></pre>
+</div>
+<div id="tokenize" class="section level1">
+<h1>2. Tokenize</h1>
+<p>The next step is to <em>tokenize</em>, or boil the dataframe down down to only unique observations, and count the number of each observation. To perform this, we use <code>unnest_tokens()</code>, which takes 3 arguments:</p>
+<ul>
+<li>a tidy data frame</li>
+<li>name of the output column to be created</li>
+<li>name of the input column to be split into tokens</li>
+</ul>
+<p>Then we use the <code>count()</code> function from <code>dplyr</code> to group by words and tally observations. Becauase <code>count()</code> performs a <code>group_by()</code> on the <em>word</em> column, we <code>ungroup()</code>.</p>
+<pre class="r"><code># tokenize
+tokens &lt;- tidy_dat %&gt;% 
+  unnest_tokens(word, word) %&gt;% 
+  count(word, sort = TRUE) %&gt;% 
+  ungroup()</code></pre>
+<p>Just because a token is common doesn’t mean it’s important. For instance, take a look at the most 10 common tokens in my research prospectus.</p>
+<pre class="r"><code>tokens %&gt;% head(10)</code></pre>
+<pre><code>##           word   n
+## 1          the 487
+## 2          and 368
+## 3           of 344
+## 4           in 235
+## 5           to 235
+## 6  groundwater 193
+## 7        water 138
+## 8            a 137
+## 9           is 112
+## 10         for  92</code></pre>
+<p>Of the 10, only 2 actually tell us something about what’s written about: <em>groundwater</em>, and <em>water</em>. Cleaning natural language is like panning for gold: most of language is useless, but every once in a while we find a gold nugget. We want to get only the nuggets.</p>
+<figure><img src="/img/gold.jpg"/><figcaption>
+            <h4>This is you tokenizing.</h4>
+        </figcaption>
+</figure>
+
+</div>
+<div id="remove-stop-words-numbers-etc." class="section level1">
+<h1>3. Remove Stop Words, Numbers, Etc.</h1>
+<p><code>tidytext</code> has some built-in libraries of stop words. We’ll use an <code>anti_join()</code> to get rid of stop words anc clean our tokens.</p>
+<pre class="r"><code># remove stop words
+data(&quot;stop_words&quot;)
+tokens_clean &lt;- tokens %&gt;%
+  anti_join(stop_words)</code></pre>
+<pre><code>## Joining, by = &quot;word&quot;</code></pre>
+<p>While we’re at it, we’ll use a regex to clean all numbers.</p>
+<pre class="r"><code># remove numbers
+nums &lt;- tokens_clean %&gt;% filter(str_detect(word, &quot;^[0-9]&quot;)) %&gt;% select(word) %&gt;% unique()
+
+tokens_clean &lt;- tokens_clean %&gt;% 
+  anti_join(nums, by = &quot;word&quot;)</code></pre>
+<p>I also did a quick pass over <code>tokens_clean</code> to look for other meaningless tokens that escaped the stop-word dictionary and the numbers. It’s not surprising that the tokens that made it by were:</p>
+<ul>
+<li>al - from citations (e.g. - et. al)</li>
+<li>figure - figure captions and references in my prospectus</li>
+<li>i.e. - gotta love those parentheticals</li>
+<li>etc…</li>
+</ul>
+<p>I’ll store these unique stop words in a vector and perform another <code>anti_join</code>, et voila. A tidy, clean list of tokens and counts.</p>
+<pre class="r"><code># remove unique stop words that snuck in there
+uni_sw &lt;- data.frame(word = c(&quot;al&quot;,&quot;figure&quot;,&quot;i.e&quot;, &quot;l3&quot;))
+
+tokens_clean &lt;- tokens_clean %&gt;% 
+  anti_join(uni_sw, by = &quot;word&quot;)</code></pre>
+</div>
+<div id="make-a-word-cloud-of-the-top-50-words" class="section level1">
+<h1>4. Make a Word Cloud of the top 50 words</h1>
+<p>And just like that, an easy word cloud. In fact, this code was so simple and fun that I wrapped it into a <a href="https://richpauloo.shinyapps.io/word_cloud_app">Shiny App</a>.</p>
+<pre class="r"><code># define a nice color palette
+pal &lt;- brewer.pal(8,&quot;Dark2&quot;)
+
+# plot the 50 most common words
+tokens_clean %&gt;% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 50, colors=pal))</code></pre>
+<p><img src="/blog/word-cloud/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<figure><img src="/img/YES.gif"/>
+</figure>
+
+</div>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">December 29, 2017</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">4 minute read, 765 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/blog/infer/">&larr; Tidy chi-squared stats in infer</a>
+  
+  
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+
+</div>
+
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2023 Rich Pauloo
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/richpauloo" title="github" target="_blank" rel="me noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/richpauloo" title="twitter" target="_blank" rel="me noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-6231-9530" title="orcid" target="_blank" rel="me noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=LDere-YAAAAJ&amp;hl=en" title="google-scholar" target="_blank" rel="me noopener">
+      <i class="ai ai-google-scholar fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://stackoverflow.com/users/8367943/rich-pauloo" title="stack-overflow" target="_blank" rel="me noopener">
+      <i class="fab fa-stack-overflow fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://www.linkedin.com/in/rpauloo/" title="linkedin" target="_blank" rel="me noopener">
+      <i class="fab fa-linkedin fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

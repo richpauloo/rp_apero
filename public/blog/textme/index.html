@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.87.0" />
+<title>Using Twilio To Text Myself After Long Running Jobs | Rich Paulo</title>
+
+
+<meta property="twitter:site" content="@richpauloo">
+<meta property="twitter:creator" content="@richpauloo">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="A digital garden.">
+
+
+<meta property="og:site_name" content="Rich Paulo">
+<meta property="og:title" content="Using Twilio To Text Myself After Long Running Jobs | Rich Paulo">
+<meta property="og:description" content="A digital garden." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/textme/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/textme/featured.jpg" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/textme/featured.jpg" >
+    
+    
+  <meta itemprop="name" content="Using Twilio To Text Myself After Long Running Jobs">
+<meta itemprop="description" content="Text yourself from R using Twilio so you can leave the comptuer but be notified the instant a long-running job completes."><meta itemprop="datePublished" content="2019-09-11T02:57:45+00:00" />
+<meta itemprop="dateModified" content="2019-09-11T02:57:45+00:00" />
+<meta itemprop="wordCount" content="372"><meta itemprop="image" content="/blog/textme/featured.jpg">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="/img/lim.png" type="image/x-icon">
+  <link rel="icon" href="/img/lim.png" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.b2b53637e7df317c1f6797766023f56585f02a9b0dc12e0bdf7170b8b9491456.css" integrity="sha256-srU2N&#43;ffMXwfZ5d2YCP1ZYXwKpsNwS4L33FwuLlJFFY=" media="screen">
+  
+  
+  <script src="/panelset.min.078a92db9bd3228df502db3d9e0453c3cf3d910abe3f8deca0ad196c7071ad41.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.5bbc5e8c6f53ca77d4369c357de1620be5c1a88cbd54c65d0b67e98c936c22d8.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/img/lim.png" class="dib db-l h2 w-auto" alt="Rich Paulo">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About Blogophonic">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Project Portfolio">Projects</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/pubs/" title="Pubs">Pubs</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/contact/" title="Contact">Contact</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/cv" title="CV">CV</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Using Twilio To Text Myself After Long Running Jobs</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Rich</p>
+        <p class="f7 db mv0 ttu">September 11, 2019</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        <p>Update: I&rsquo;ve written a small package containing (1) the function below, and (2) another function that configures and saves your twilio credentials. You can view the package 
+<a href="https://github.com/richpauloo/textme" target="_blank" rel="noopener">here on Github</a>, and install it via:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">devtools<span style="color:#ff6ac1">::</span><span style="color:#57c7ff">install_github</span>(<span style="color:#5af78e">&#34;richpauloo/textme&#34;</span>)
+</code></pre></div><hr>
+<p>First and foremost, tremendous credit is due to 
+<a href="">Sean Kross</a> for the awesome 
+<a href="https://github.com/seankross/twilio" target="_blank" rel="noopener">twilio</a> <code>R</code> package.</p>
+<p>I was running a pretty long geocoding job, and I ended up throwing a 
+<a href="https://www.r-project.org/nosvn/pandoc/beepr.html" target="_blank" rel="noopener"><code>beepr::beep()</code></a> into the console just so I would get a notification when the job completed.</p>
+<p>But the beep alerts me over the computer, so I was tied to it&hellip;  darn.</p>
+<p>Then I thought about how nice it would be to go on a walk outside, get some lunch, grab coffee with a colleague, or even go to the gym, but be notified while I&rsquo;m away from the computer.</p>
+<p>If only I could get a <strong>text message</strong> when the job was done. That would be cool.</p>
+<p>So while my job was running (it still is)&hellip; I wrote this little script that I can stick in my <code>.RProfile</code> that loads a function <code>textme()</code>. The function has one purpose: text me at my phone number when my job is done running. Beauty.</p>
+
+
+
+
+<h2 id="heres-the-function">Here&rsquo;s the function
+  <a href="#heres-the-function"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>You&rsquo;ll need to sign up for a free 
+<a href="https://www.twilio.com/" target="_blank" rel="noopener">Twilio account</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#78787e"># the following is no more than Sean Kross&#39; example wrapped in a function</span>
+textme <span style="color:#ff6ac1">&lt;-</span> <span style="color:#57c7ff">function</span>(){
+  
+  <span style="color:#78787e"># First you need to set up your accound SID and token as environmental variables</span>
+  <span style="color:#57c7ff">Sys.setenv</span>(TWILIO_SID <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;SID_goes_here&#34;</span>)
+  <span style="color:#57c7ff">Sys.setenv</span>(TWILIO_TOKEN <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;secret_key_goes_here&#34;</span>)
+ 
+  <span style="color:#78787e"># Then we&#39;re just going to store the numbers in some variables</span>
+  my_phone_number <span style="color:#ff6ac1">&lt;-</span> <span style="color:#5af78e">&#34;your_phone_number_here&#34;</span>
+  twilios_phone_number <span style="color:#ff6ac1">&lt;-</span> <span style="color:#5af78e">&#34;your_twilio_phone_number_here&#34;</span>
+  
+  <span style="color:#78787e"># Now we can send away!</span>
+  twilio<span style="color:#ff6ac1">::</span><span style="color:#57c7ff">tw_send_message</span>(from <span style="color:#ff6ac1">=</span> twilios_phone_number, 
+                          to <span style="color:#ff6ac1">=</span> my_phone_number, 
+                          body <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;👋 Rejoice! The dark deed you have requested has been done. 🎉&#34;</span>)
+  
+}
+</code></pre></div><p>Edit your <code>.Rprofile</code>, paste the function above, and save.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#57c7ff">if</span>(<span style="color:#ff6ac1">!</span><span style="color:#57c7ff">file.exists</span>(<span style="color:#5af78e">&#34;~/.Rprofile&#34;</span>)) <span style="color:#78787e"># only create if not already there</span>
+    <span style="color:#57c7ff">file.create</span>(<span style="color:#5af78e">&#34;~/.Rprofile&#34;</span>)  <span style="color:#78787e"># (don&#39;t overwrite it)</span>
+<span style="color:#57c7ff">file.edit</span>(<span style="color:#5af78e">&#34;~/.Rprofile&#34;</span>)
+</code></pre></div><p>Now if start a fresh RStudio session, all you need to do is add <code>textme()</code> to the end of a long-running process, and you&rsquo;ll get a text!</p>
+<p>Since my job is STILL running, I&rsquo;m going to go for a walk and breathe some fresh air &ndash; but not before asking my computer to alert me once it&rsquo;s done working.</p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">September 11, 2019</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">2 minute read, 372 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/blog/race-to-the-bottom/">&larr; Race to the Bottom</a>
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/mueller/">Text analysis of the Mueller Report &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+
+</div>
+
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2023 Rich Pauloo
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/richpauloo" title="github" target="_blank" rel="me noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/richpauloo" title="twitter" target="_blank" rel="me noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-6231-9530" title="orcid" target="_blank" rel="me noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=LDere-YAAAAJ&amp;hl=en" title="google-scholar" target="_blank" rel="me noopener">
+      <i class="ai ai-google-scholar fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://stackoverflow.com/users/8367943/rich-pauloo" title="stack-overflow" target="_blank" rel="me noopener">
+      <i class="fab fa-stack-overflow fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://www.linkedin.com/in/rpauloo/" title="linkedin" target="_blank" rel="me noopener">
+      <i class="fab fa-linkedin fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

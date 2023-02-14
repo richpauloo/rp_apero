@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Another day, another blog on Rich Paulo</title>
+    <link>/blog/</link>
+    <description>Recent content in Another day, another blog on Rich Paulo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 29 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Automate SMS and MMS with R, Twilio, Docker, and Github Actions</title>
+      <link>/blog/docker-github-actions/</link>
+      <pubDate>Sun, 29 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/docker-github-actions/</guid>
+      <description>Salvador Dali, &amp;ldquo;The Disintegration of The Persistence of Memory&amp;rdquo; 1952.
+Introduction   My mother grew up as the youngest of 6 children in Thailand, after her family emigrated from China during the Chinese Civil Wars. While growing up in Bangkok&amp;rsquo;s Chinatown, my mother learned English from Christian missionaries, and eventually immigrated to the United States.
+First a devout Buddhist, and later a devout Christian, my mom&amp;rsquo;s core values have always included love and compassion.</description>
+    </item>
+    
+    <item>
+      <title>Reproducible data science with R, RStudio Server, and Docker</title>
+      <link>/blog/docker-rstudio/</link>
+      <pubDate>Sat, 28 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/docker-rstudio/</guid>
+      <description>Salvador Dali, &amp;ldquo;The Persistence of Memory&amp;rdquo; 1931.
+Introduction   Although Docker has been around for years, Docker in the data science community doesn&amp;rsquo;t seem as widespread as git, which I attribute to the fact that many data scientists learn to program and work independently. However, as data scientists increasingly collaborate with others or aim to make their work more reproducible, Docker deserves an equal place alongside git in the practitioner&amp;rsquo;s toolkit.</description>
+    </item>
+    
+    <item>
+      <title>Parquet, SQL, DuckDB, arrow, dbplyr and R</title>
+      <link>/blog/parquet/</link>
+      <pubDate>Sat, 06 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/parquet/</guid>
+      <description>French tapestry, &amp;ldquo;Jesuits performing astronomy with Chinese&amp;rdquo;
+Introduction     As opposed to traditional row-based storage (e.g., SQL), Parquet files (.parquet) are columnar-based, and feature efficient compression (fast read/write and small disk usage) and optimized performance for big data. Writing to parquet data format and partitioning (splitting the data across multiple files for faster querying) is relatively trivial in R with the {arrow} package which provides arrow::write_dataset(). There are a few options for querying Parquet data from R.</description>
+    </item>
+    
+    <item>
+      <title>A water quality portal for California</title>
+      <link>/blog/cawdc-2019/</link>
+      <pubDate>Fri, 20 Nov 2020 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/cawdc-2019/</guid>
+      <description>⛅ ✅  Checking the weather for a given location is simple. 🚰 ❌  Checking the water quality is not as easy.</description>
+    </item>
+    
+    <item>
+      <title>Install RStudio Server on Microsoft Azure</title>
+      <link>/blog/azure/</link>
+      <pubDate>Sat, 14 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/azure/</guid>
+      <description>How to install R and RStudio Server on an Azure Virtual Machine.</description>
+    </item>
+    
+    <item>
+      <title>Automating R scripts on Linux with cron</title>
+      <link>/blog/crontabs/</link>
+      <pubDate>Tue, 21 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/crontabs/</guid>
+      <description>Automate R scripts with crontabs.</description>
+    </item>
+    
+    <item>
+      <title>How to link a custom domain to Github Pages with HTTPS</title>
+      <link>/blog/gh-custom-url/</link>
+      <pubDate>Fri, 15 Nov 2019 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/gh-custom-url/</guid>
+      <description>How to host a personal or project page on your username.github.io site and configure every little detail.</description>
+    </item>
+    
+    <item>
+      <title>Race to the Bottom</title>
+      <link>/blog/race-to-the-bottom/</link>
+      <pubDate>Wed, 11 Sep 2019 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/race-to-the-bottom/</guid>
+      <description>In California, groundwater extraction for agriculture has boomed over the past 75 years, and the average well drilled today has more than doubled in depth compared to wells drilled in 1940, according to Department of Water Resources data.</description>
+    </item>
+    
+    <item>
+      <title>Using Twilio To Text Myself After Long Running Jobs</title>
+      <link>/blog/textme/</link>
+      <pubDate>Wed, 11 Sep 2019 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/textme/</guid>
+      <description>Text yourself from R using Twilio so you can leave the comptuer but be notified the instant a long-running job completes.</description>
+    </item>
+    
+    <item>
+      <title>Text analysis of the Mueller Report</title>
+      <link>/blog/mueller/</link>
+      <pubDate>Fri, 19 Apr 2019 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/mueller/</guid>
+      <description>After years of investigation, the Department of Justice released a redacted copy of the Mueller Report on Thursday April 18, 2019. A simple sentiment analysis reveals the report is incredibly negative. Honing in on positive sections is misleading, as they concern the infamous loyaltly conversations with Comey.</description>
+    </item>
+    
+    <item>
+      <title>Reflections on the 2018 California Water Data Challenge</title>
+      <link>/blog/reflect-cawdc-2018/</link>
+      <pubDate>Thu, 11 Oct 2018 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/reflect-cawdc-2018/</guid>
+      <description>UPDATE: I am so honored to have won an award in the 2018 CA Water Data Challenge! You can view the wining project here.
+After graduate school, I&amp;rsquo;ll probably apply to as many jobs as I can and see what sticks. But deep down, a career that integrates my domain knowledge of groundwater and California water with the broad field of data science is what I seek.
+So when the California Water Data Challenge was announced earlier this year, I was pretty excited.</description>
+    </item>
+    
+    <item>
+      <title>Installing the R kernel in Jupyter Lab</title>
+      <link>/blog/jupyter/</link>
+      <pubDate>Wed, 16 May 2018 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/jupyter/</guid>
+      <description>I was recently pretty impressed with Jupyter&amp;rsquo;s newest creation, the Jupyter Lab IDE. You can test drive an online demostration of Jupyter Lab with a Python and R kernel here.
+I downloaded a version, and found that the R Kernel was missing! To get the R kernel up and running in Jupyter Lab was a bit more complicated than expected. This guide is meant to break things down step by step.</description>
+    </item>
+    
+    <item>
+      <title>Aquifer thickness calculated from ~300,000 well logs</title>
+      <link>/blog/aquifer-thickness/</link>
+      <pubDate>Thu, 15 Mar 2018 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/aquifer-thickness/</guid>
+      <description>Data visualization from hundreds of thousands of well completion reports reveals aquifer characteristics in California groundwater basins.</description>
+    </item>
+    
+    <item>
+      <title>Reflections on Rstudio::conf2018</title>
+      <link>/blog/reflect-rstudio-2018/</link>
+      <pubDate>Wed, 07 Feb 2018 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/reflect-rstudio-2018/</guid>
+      <description>That&amp;rsquo;s little ol&#39; me in the middle. Not Hadley Wickham &amp;ndash; the other non-noticable guy with the black hair. Photo credit: sharon000
+Heading North on I-5, we pass by brown hills and palm trees as San Diego fades in the rear view mirror. The smell of last night&amp;rsquo;s beach bonfire wafts from our jackets stowed in the back seat, and Google Maps notifies us we&amp;rsquo;re about 7 hours from our respective destinations: Berkeley and Davis, CA.</description>
+    </item>
+    
+    <item>
+      <title>Tidy chi-squared stats in infer</title>
+      <link>/blog/infer/</link>
+      <pubDate>Sat, 03 Feb 2018 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/infer/</guid>
+      <description>Using the infer package for inference, with attention towards chi-squared tests.</description>
+    </item>
+    
+    <item>
+      <title>Using tidytext to make word clouds</title>
+      <link>/blog/word-cloud/</link>
+      <pubDate>Fri, 29 Dec 2017 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/word-cloud/</guid>
+      <description>How to make a word cloud in R. In this example, I use the research prospectus I just submitted in preparation for my qualifying examination.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.87.0" />
+<title>Reproducible data science with R, RStudio Server, and Docker | Rich Paulo</title>
+
+
+<meta property="twitter:site" content="@richpauloo">
+<meta property="twitter:creator" content="@richpauloo">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="How to set up and share an R development environment within a Docker container">
+
+
+<meta property="og:site_name" content="Rich Paulo">
+<meta property="og:title" content="Reproducible data science with R, RStudio Server, and Docker | Rich Paulo">
+<meta property="og:description" content="How to set up and share an R development environment within a Docker container" />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/docker-rstudio/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/docker-rstudio/featured.jpeg" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/docker-rstudio/featured.jpeg" >
+    
+    
+  <meta itemprop="name" content="Reproducible data science with R, RStudio Server, and Docker">
+<meta itemprop="description" content="Salvador Dali, &ldquo;The Persistence of Memory&rdquo; 1931.
+Introduction   Although Docker has been around for years, Docker in the data science community doesn&rsquo;t seem as widespread as git, which I attribute to the fact that many data scientists learn to program and work independently. However, as data scientists increasingly collaborate with others or aim to make their work more reproducible, Docker deserves an equal place alongside git in the practitioner&rsquo;s toolkit."><meta itemprop="datePublished" content="2023-01-28T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2023-01-28T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1371"><meta itemprop="image" content="/blog/docker-rstudio/featured.jpeg">
+<meta itemprop="keywords" content="" />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="/img/lim.png" type="image/x-icon">
+  <link rel="icon" href="/img/lim.png" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.b2b53637e7df317c1f6797766023f56585f02a9b0dc12e0bdf7170b8b9491456.css" integrity="sha256-srU2N&#43;ffMXwfZ5d2YCP1ZYXwKpsNwS4L33FwuLlJFFY=" media="screen">
+  
+  
+  <script src="/panelset.min.078a92db9bd3228df502db3d9e0453c3cf3d910abe3f8deca0ad196c7071ad41.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.5bbc5e8c6f53ca77d4369c357de1620be5c1a88cbd54c65d0b67e98c936c22d8.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container single">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/img/lim.png" class="dib db-l h2 w-auto" alt="Rich Paulo">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About Blogophonic">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Project Portfolio">Projects</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/pubs/" title="Pubs">Pubs</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/contact/" title="Contact">Contact</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/cv" title="CV">CV</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Reproducible data science with R, RStudio Server, and Docker</h1>
+        <h4 class="f4 mt0 mb4 lh-title measure">How to set up and share an R development environment within a Docker container</h4>
+        <p class="f6 measure lh-copy mv1">By Rich in <a href="/categories/r">R</a>  <a href="/categories/docker">Docker</a> </p>
+        <p class="f7 db mv0 ttu">January 28, 2023</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        <p><img src="featured.jpeg" alt=""><br>
+<em>Salvador Dali, &ldquo;The Persistence of Memory&rdquo; 1931.</em></p>
+
+
+
+
+<h1 id="introduction">Introduction
+  <a href="#introduction"></a>
+</h1>
+<p>Although Docker has been around for years, Docker in the data science community doesn&rsquo;t seem as widespread as git, which I attribute to the fact that many data scientists learn to program and work independently. However, as data scientists increasingly collaborate with others or aim to make their work more reproducible, Docker deserves an equal place alongside git in the practitioner&rsquo;s toolkit. Docker&rsquo;s ability to containerize applications and dependencies makes it easy to share, reproduce, and scale work, while also ensuring consistency across different environments.</p>
+<p>The motivation of this blog post is to demonstrate how Docker can help streamline your data science projects and make your team more productive. To illustrate, I&rsquo;ll use R + RStudio as a language and IDE combo, but want to note that this is just as easily accomplished with Python/Julia + VSCode/JupyterLab, or another combo of language and IDE.</p>
+<p>First, some definitions:</p>
+<ul>
+<li><code>Docker</code>: software that uses a <strong>Dockerfile</strong> to build a Docker <strong>image</strong> and run a Docker <strong>container</strong></li>
+<li><code>Dockerfile</code>: a plain text file with instructions for building a Docker image</li>
+<li><code>Docker image</code>: a computing environment which can be pushed to a repository, and pulled to run a Docker container</li>
+<li><code>Docker container</code>: a running instance of a Docker image that can evaluate code</li>
+</ul>
+
+
+
+
+<h2 id="why-docker-for-data-science-teams">Why Docker for data science teams?
+  <a href="#why-docker-for-data-science-teams"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Let&rsquo;s break this into two questions: (1) why Docker for data science, and (2) why Docker for data science <em>teams</em>?</p>
+
+
+
+
+<h3 id="1-docker-for-data-science">(1) Docker for data science
+  <a href="#1-docker-for-data-science"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>Simply put: <strong>Docker</strong> is to <strong>environments</strong> as <strong>git</strong> is to <strong>code</strong>. If git offers version control, Docker offers environment control.</p>
+<p>Docker allows us to extend reproducibility beyond our code down to the operating system, dependencies, and packages that our code runs on.</p>
+
+
+
+
+<h3 id="2-docker-for-data-science-teams">(2) Docker for data science teams
+  <a href="#2-docker-for-data-science-teams"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>Although there are plenty of PhD students and independent researchers toiling away on their own local machines (I know because I&rsquo;ve been there before), one day, your lonely data science project may become a team sport, and at that time, you&rsquo;ll need to share code across environments. And that will likely expose technical debt you didn&rsquo;t even know you had, and break your code in new and marvelous ways. And you may be filled with regret.</p>
+<p>Now imagine that your data science project has grown to a team of 10 data scientists, and you need to rapidly onboard new teammates. What&rsquo;s the plan to seamlessly set up new teammates for success? Is it <code>pip install -r requirements.txt</code> (Python) or <code>renv::restore()</code> (R)? These solutions are commonplace, but also inadequate because they only address packages, not operating systems and the system level software that build these packages.</p>
+<p>Now image that you need to develop and deploy code in some production environment. Docker allows us to mirror that production environment if we know how it was built. Or, we can deliver code in a Docker container that it&rsquo;s guaranteed to evaluate in.</p>
+<p>With Docker, teams can operate in the same environment, share that environment with a single line of code, and modify and rebuild that environment as requirements change. Onboarding a new teammate into that environment is as simple as pulling the team&rsquo;s Docker image and attaching a local volume (more on this later).</p>
+<p>Some might say, isn&rsquo;t this just like a data science workbench like JupyerHub, RStudio Connect, or Databricks? Yes and no. Cloud workbenches offer much more than environment control and tend to be <em>expensive</em>. What I&rsquo;m describing here is a workflow with Docker that&rsquo;s perfect for teams on a budget. A private Dockerhub repo is $5/month per user.</p>
+<p>Now, let&rsquo;s see how a Docker workflow might look.</p>
+
+
+
+
+<h2 id="case-study-a-rstudio-in-your-pocket">Case Study A: RStudio in your pocket
+  <a href="#case-study-a-rstudio-in-your-pocket"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>First, download, install, and open 
+<a href="https://www.docker.com/products/docker-desktop/" target="_blank" rel="noopener">Docker Desktop</a>.</p>
+<p><img src="docker_desktop.png" alt="Screenshot of Dockerhub Desktop"></p>
+<p>With Docker Desktop open, next, open a terminal and verify that Docker is installed with <code>docker --version</code>. Then, pull the latest pre-built image from the 
+<a href="https://rocker-project.org/" target="_blank" rel="noopener">Rocker project</a>, which maintains a collection of images<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> that run R and RStudio Server by running the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-docker" data-lang="docker">docker run <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>    --rm <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>    -ti <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>    -p 8787:8787 <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>    -e <span style="color:#ff5c57">DISABLE_AUTH</span><span style="color:#ff6ac1">=</span><span style="color:#ff5c57">true</span> <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>    rocker/rstudio:latest-daily<span style="color:#ff5c57">
+</span></code></pre></div><p>This silently starts RStudio Server. To access, open a browser and navigate to <code>localhost:8787</code> and you should see RStudio Server.</p>
+<p><img src="rstudio-server.png" alt="Screenshot of RStudio server in a Docker container on localhost:8787"></p>
+<p>Before we move on, let&rsquo;s explain the code above. First, you&rsquo;re pulling the <code>rocker/rstudio:latest-daily</code> image<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> and running (<code>run</code>) it in a container on port 8787 (<code>-p 8787</code>) with the environmental variable <code>-e DISABLE_AUTH=true</code><sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> so you don&rsquo;t need to supply a username and password on login. The <code>-ti</code> option is short for <code>--tty --interactive</code> which specifies that the container should be run in the terminal and the input should be accepted from the terminal, which allows us to interact with the container (through RStudio, in this case). You&rsquo;re also removing <code>--rm</code> the container once it&rsquo;s finished running instead of stashing it on your computer (this can take up a lot of space over time).</p>
+<p>Let that sink in for a moment. Given a computer with Docker, all you need to do is pull an image and open an IDE in a browser.</p>
+<p>The idea is more powerful once you build an image useful for the kind of data science you do &ndash; that might be geospatial libraries, interactive data visualization and reporting, Bayesian stats, machine learning, or something else. The idea behind pre-built 
+<a href="https://rocker-project.org/images/" target="_blank" rel="noopener">Rocker images</a> is to automate some of this time-consuming image-building. Just pull a pre-built image off the shelf and get to work. Rocker has plenty of options (although at the time of writing 2023-01-28, only the <code>rstudio:latest-daily</code> image plays well with the new Apple M1 chip when it comes to running RStudio Server).</p>
+
+
+
+
+<h2 id="linking-a-volume">Linking a volume
+  <a href="#linking-a-volume"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>A blank RStudio is not as useful as one that you can bring local files into, and moreso, what if you want to <em>create</em> and save something in that Docker container, like a plot or a script? How do you move that outside of the container?</p>
+<p>Answer: mount a <strong>volume</strong> (<code>-v</code>) to the container like so:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-docker" data-lang="docker">docker run <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>    --rm <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>    -ti <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>    -p 8787:8787 <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>    -v /Users/richpauloo/Documents/Github/twilio_dox:/home/rstudio/temp <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>    -e <span style="color:#ff5c57">DISABLE_AUTH</span><span style="color:#ff6ac1">=</span><span style="color:#ff5c57">true</span> <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>    rocker/rstudio:latest-daily<span style="color:#ff5c57">
+</span></code></pre></div><p><img src="volume.png" alt="Screenshot of a mounted volume to a container runing RStudio Server."></p>
+<p>Here I&rsquo;m mounting the directory from the host machine <code>/Users/richpauloo/Documents/Github/twilio_dox</code> to the <code>/home/rstudio/temp</code> directory in the container. Now when I fire up the container, I have access to the mounted volume (in this case, a Github subdirectory on my local machine). Once a volume is mounted to a container, it can be accessed and modified by processes running inside the container as if it were a normal directory. Changes to files in the volume persist after the container is shut down. Thus, we can write scripts, modify data, write files, and retain all of this after the volume shuts down.</p>
+<p>We might also use a volume to store sensitive data (think env vars, credentials, config files) that we don&rsquo;t want to store in the container. Or we might use volumes to share data between containers.</p>
+
+
+
+
+<h2 id="case-study-b-orchestration-eg---with-github-actions">Case Study B: Orchestration, e.g. - with Github Actions
+  <a href="#case-study-b-orchestration-eg---with-github-actions"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>A major benefit of developing and packaging code into a container is passing this code and container combo to an orchestration framework like Github Actions. I won&rsquo;t go into this much further, because there is a follow on 
+<a href="https://www.richpauloo.com/post/docker-github-actions/" target="_blank" rel="noopener">blog post on exactly the topic of using Github Actions to send daily SMS and MMS messages via the Twilio API</a>.</p>
+
+
+
+
+<h1 id="conclusion">Conclusion
+  <a href="#conclusion"></a>
+</h1>
+<p>Docker is to environments and operating systems what git is to version control. Portable, shareable, fault-tolerant data science environments are possible with R, RStudio, and Docker. You can capture your data science environment as an image and share that image with teammates, to a wider audience who may want to reproduce your work, or with yourself when you&rsquo;re called to maintain code you wrote years ago.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>Browsing the Rocker 
+<a href="https://rocker-project.org/images/" target="_blank" rel="noopener">image collection</a> is worth a moment of your time.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>Docker will first look locally for a supplied image, and if it&rsquo;s not found, it then searches for it online, and stashes it locally. This is to speed up future docker runs with cached images.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p>This is sometimes run with a password, where we swap <code>DISABLE_AUTH=true</code> with <code>PASSWORD=mypassword</code>. When doing this, the username is <code>rstudio</code> and the password is what you input. I prefer to run this without auth to go straight to RStudio Server, but your organization may have certain restrictions around this depending on network config.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">January 28, 2023</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">7 minute read, 1371 words</dd>
+  </dl>
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Categories:</dt>
+    <dd class="fw5 ml0"> <a href="/categories/r">R</a>  <a href="/categories/docker">Docker</a> </dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/blog/docker-github-actions/">&larr; Automate SMS and MMS with R, Twilio, Docker, and Github Actions</a>
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/parquet/">Parquet, SQL, DuckDB, arrow, dbplyr and R &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+
+</div>
+
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2023 Rich Pauloo
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/richpauloo" title="github" target="_blank" rel="me noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/richpauloo" title="twitter" target="_blank" rel="me noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-6231-9530" title="orcid" target="_blank" rel="me noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=LDere-YAAAAJ&amp;hl=en" title="google-scholar" target="_blank" rel="me noopener">
+      <i class="ai ai-google-scholar fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://stackoverflow.com/users/8367943/rich-pauloo" title="stack-overflow" target="_blank" rel="me noopener">
+      <i class="fab fa-stack-overflow fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://www.linkedin.com/in/rpauloo/" title="linkedin" target="_blank" rel="me noopener">
+      <i class="fab fa-linkedin fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

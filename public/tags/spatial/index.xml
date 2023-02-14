@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>spatial on Rich Paulo</title>
+    <link>/tags/spatial/</link>
+    <description>Recent content in spatial on Rich Paulo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 15 Mar 2018 02:57:45 +0000</lastBuildDate><atom:link href="/tags/spatial/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Aquifer thickness calculated from ~300,000 well logs</title>
+      <link>/blog/aquifer-thickness/</link>
+      <pubDate>Thu, 15 Mar 2018 02:57:45 +0000</pubDate>
+      
+      <guid>/blog/aquifer-thickness/</guid>
+      <description>Data visualization from hundreds of thousands of well completion reports reveals aquifer characteristics in California groundwater basins.</description>
+    </item>
+    
+  </channel>
+</rss>

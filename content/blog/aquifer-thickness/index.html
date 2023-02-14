@@ -1,0 +1,174 @@
+---
+title: Aquifer thickness calculated from ~300,000 well logs
+author: Rich
+date: '2018-03-15 02:57:45+00:00'
+slug: aquifer-thickness
+summary: Data visualization from hundreds of thousands of well completion reports reveals aquifer characteristics in California groundwater basins.
+external_link: ""
+links:
+- icon: github
+  icon_pack: fab
+  name: Github
+  url: https://github.com/richpauloo/junkyard/blob/master/aquifer_thickness/index.Rmd
+math: false
+featured: true
+tags:
+- R
+- spatial
+- water
+---
+
+<script src="{{< blogdown/postref >}}index_files/htmlwidgets/htmlwidgets.js"></script>
+<script src="{{< blogdown/postref >}}index_files/pymjs/pym.v1.js"></script>
+<script src="{{< blogdown/postref >}}index_files/widgetframe-binding/widgetframe.js"></script>
+
+
+<p>At the time of writing, the <a href="https://data.ca.gov/dataset/well-completion-reports">California DWR Online Well Completion Report Database</a> contains ~1,000,000 digitized well logs. About 1/3 of those wells have information on the top and bottom of the perforated interval, which we can use to compute and visualize regional estimates of:</p>
+<ul>
+<li>top of perforated interval - aquifer top<br />
+</li>
+<li>bottom of perforated interval - aquifer bottom<br />
+</li>
+<li>thickness of perforated interval - aquifer thickness</li>
+</ul>
+<div id="read-in-pre-computed-results" class="section level3">
+<h3>Read in pre-computed results</h3>
+<p>I realize that I’m skipping straight to the results. For how I arrived at these numbers, see <a href="https://github.com/richpauloo/junkyard/blob/master/aquifer_thickness/index.Rmd">the full code here</a>.</p>
+<pre class="r"><code>library(tidyverse)
+library(sp)
+library(sf)
+library(leaflet)
+library(widgetframe)
+
+# pre-computed results
+gwb_full &lt;- read_rds(&quot;~/Documents/Github/rp/static/data/gwb_full.rds&quot;)
+labels  &lt;- read_rds(&quot;~/Documents/Github/rp/static/data/labels.rds&quot;)</code></pre>
+</div>
+<div id="thickness-of-perforated-interval" class="section level3">
+<h3>Thickness of perforated interval</h3>
+<pre class="r"><code>bins &lt;- c(0,50, 100,200,300,400,500,600)
+pal &lt;- colorBin(&quot;inferno&quot;, gwb_full$mean_pit, bins = bins)
+
+# make another layer control group name
+gwb_full$Basin_Subb_2 &lt;- gwb_full$Basin_Subb
+
+# rename groups for legend
+temp &lt;- gwb_full %&gt;% 
+  rename(median_perforated_interval_thickness = Basin_Subb,
+         mean_perforated_interval_thickness = Basin_Subb_2)
+
+# plot
+leaflet(width = &quot;100%&quot;) %&gt;%
+  addProviderTiles(providers$CartoDB.Positron) %&gt;%
+  addPolygons(data = temp, stroke = FALSE, smoothFactor = 0.2,
+              color = ~pal(mean_pit), 
+              label = lapply(labels[[1]], htmltools::HTML),
+              fillOpacity = 0.8,
+              group = &quot;mean_perforated_interval_thickness&quot;) %&gt;%
+  addPolygons(data = temp, stroke = FALSE, smoothFactor = 0.2,
+              color = ~pal(median_pit), 
+              label = lapply(labels[[2]], htmltools::HTML),
+              fillOpacity = 0.8,
+              group = &quot;median_perforated_interval_thickness&quot;) %&gt;%
+  addLegend(pal = pal, values = temp$mean_pit,
+            title = (&quot;thickness (ft.)&quot;)) %&gt;%
+  addLayersControl(overlayGroups =
+                     c(&quot;median_perforated_interval_thickness&quot;,
+                       &quot;mean_perforated_interval_thickness&quot;)) %&gt;%
+  hideGroup(&quot;median_perforated_interval_thickness&quot;) %&gt;% 
+  frameWidget(height = &quot;400&quot;)</code></pre>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<div id="htmlwidget-1" style="width:100%;height:400px;" class="widgetframe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"url":"index_files/figure-html//widgets/widget_unnamed-chunk-2.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
+<hr />
+</div>
+<div id="top-of-perforated-interval-aquifer-top-depth-below-sea-level" class="section level3">
+<h3>Top of perforated interval: aquifer top (depth below sea level)</h3>
+<pre class="r"><code>bins &lt;- c(0,100,200,300,400,500,600,700, 800, 900, 1000)
+pal &lt;- colorBin(&quot;viridis&quot;, gwb_full$mean_top, bins = bins) 
+
+# rename groups for legend
+temp &lt;- gwb_full %&gt;% 
+  rename(median_top_perforated_interval = Basin_Subb,
+         mean_top_perforated_interval = Basin_Subb_2) 
+
+# plot
+leaflet(width = &quot;100%&quot;) %&gt;%
+  addProviderTiles(providers$CartoDB.Positron) %&gt;%
+  addPolygons(data = temp, stroke = FALSE, smoothFactor = 0.2,
+              color = ~pal(mean_top), 
+              label = lapply(labels[[3]], htmltools::HTML),
+              fillOpacity = 0.8,
+              group = &quot;mean_top_perforated_interval&quot;) %&gt;%
+  addPolygons(data = temp, stroke = FALSE, smoothFactor = 0.2,
+              color = ~pal(median_top), 
+              label = lapply(labels[[4]], htmltools::HTML),
+              fillOpacity = 0.8,
+              group = &quot;median_top_perforated_interval&quot;) %&gt;%
+  addLegend(pal = pal, values = temp$mean_top,
+            title = (&quot;depth (ft.)&quot;)) %&gt;%
+  addLayersControl(overlayGroups =
+                     c(&quot;median_top_perforated_interval&quot;,
+                       &quot;mean_top_perforated_interval&quot;)) %&gt;%
+  hideGroup(&quot;median_top_perforated_interval&quot;) %&gt;% 
+  frameWidget(height = &quot;400&quot;)</code></pre>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<div id="htmlwidget-2" style="width:100%;height:400px;" class="widgetframe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2">{"x":{"url":"index_files/figure-html//widgets/widget_unnamed-chunk-3.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
+<hr />
+</div>
+<div id="bottom-of-perforated-interval-aquifer-bottom-depth-below-sea-level" class="section level3">
+<h3>Bottom of perforated interval: aquifer bottom (depth below sea level)</h3>
+<pre class="r"><code>bins &lt;- c(0,100,200,300,400,500,600,700, 800, 900, 1000, 1100)
+pal &lt;- colorBin(&quot;viridis&quot;, gwb_full$mean_bot, bins = bins) 
+
+# rename groups for legend
+temp &lt;- gwb_full %&gt;% 
+  rename(median_bot_perforated_interval = Basin_Subb,
+         mean_bot_perforated_interval = Basin_Subb_2)
+
+# plot
+leaflet(width = &quot;100%&quot;) %&gt;%
+  addProviderTiles(providers$CartoDB.Positron) %&gt;%
+  addPolygons(data = temp, stroke = FALSE, smoothFactor = 0.2,
+              color = ~pal(mean_bot), 
+              label = lapply(labels[[5]], htmltools::HTML),
+              fillOpacity = 0.8,
+              group = &quot;mean_bot_perforated_interval&quot;) %&gt;%
+  addPolygons(data = temp, stroke = FALSE, smoothFactor = 0.2,
+              color = ~pal(median_bot), 
+              label = lapply(labels[[6]], htmltools::HTML),
+              fillOpacity = 0.8,
+              group = &quot;median_bot_perforated_interval&quot;) %&gt;%
+  addLegend(pal = pal, values = temp$mean_bot,
+            title = (&quot;depth (ft.)&quot;)) %&gt;%
+  addLayersControl(overlayGroups =
+                     c(&quot;median_bot_perforated_interval&quot;,
+                       &quot;mean_bot_perforated_interval&quot;)) %&gt;%
+  hideGroup(&quot;median_bot_perforated_interval&quot;) %&gt;% 
+  frameWidget(height = &quot;400&quot;)</code></pre>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
+<div id="htmlwidget-3" style="width:100%;height:400px;" class="widgetframe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3">{"x":{"url":"index_files/figure-html//widgets/widget_unnamed-chunk-4.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
+</div>

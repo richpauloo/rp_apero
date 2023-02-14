@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>data engineering on Rich Paulo</title>
+    <link>/tags/data-engineering/</link>
+    <description>Recent content in data engineering on Rich Paulo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 06 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/data-engineering/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Parquet, SQL, DuckDB, arrow, dbplyr and R</title>
+      <link>/blog/parquet/</link>
+      <pubDate>Sat, 06 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/parquet/</guid>
+      <description>French tapestry, &amp;ldquo;Jesuits performing astronomy with Chinese&amp;rdquo;
+Introduction     As opposed to traditional row-based storage (e.g., SQL), Parquet files (.parquet) are columnar-based, and feature efficient compression (fast read/write and small disk usage) and optimized performance for big data. Writing to parquet data format and partitioning (splitting the data across multiple files for faster querying) is relatively trivial in R with the {arrow} package which provides arrow::write_dataset(). There are a few options for querying Parquet data from R.</description>
+    </item>
+    
+  </channel>
+</rss>

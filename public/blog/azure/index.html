@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.87.0" />
+<title>Install RStudio Server on Microsoft Azure | Rich Paulo</title>
+
+
+<meta property="twitter:site" content="@richpauloo">
+<meta property="twitter:creator" content="@richpauloo">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="A practical step-by-step guide">
+
+
+<meta property="og:site_name" content="Rich Paulo">
+<meta property="og:title" content="Install RStudio Server on Microsoft Azure | Rich Paulo">
+<meta property="og:description" content="A practical step-by-step guide" />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/azure/" />
+<meta property="og:locale" content="en">
+
+
+
+
+    
+        <meta property="og:image" content="/blog/azure/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/blog/azure/featured.png" >
+    
+    
+  <meta itemprop="name" content="Install RStudio Server on Microsoft Azure">
+<meta itemprop="description" content="How to install R and RStudio Server on an Azure Virtual Machine."><meta itemprop="datePublished" content="2020-11-14T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2020-11-14T00:00:00+00:00" />
+<meta itemprop="wordCount" content="624"><meta itemprop="image" content="/blog/azure/featured.png">
+<meta itemprop="keywords" content="R," />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="/img/lim.png" type="image/x-icon">
+  <link rel="icon" href="/img/lim.png" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.b2b53637e7df317c1f6797766023f56585f02a9b0dc12e0bdf7170b8b9491456.css" integrity="sha256-srU2N&#43;ffMXwfZ5d2YCP1ZYXwKpsNwS4L33FwuLlJFFY=" media="screen">
+  
+  
+  <script src="/panelset.min.078a92db9bd3228df502db3d9e0453c3cf3d910abe3f8deca0ad196c7071ad41.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.5bbc5e8c6f53ca77d4369c357de1620be5c1a88cbd54c65d0b67e98c936c22d8.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/img/lim.png" class="dib db-l h2 w-auto" alt="Rich Paulo">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About Blogophonic">About</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blog">Blog</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Project Portfolio">Projects</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/pubs/" title="Pubs">Pubs</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/contact/" title="Contact">Contact</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/cv" title="CV">CV</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Install RStudio Server on Microsoft Azure</h1>
+        <h4 class="f4 mt0 mb4 lh-title measure">A practical step-by-step guide</h4>
+        <p class="f6 measure lh-copy mv1">By Rich</p>
+        <p class="f7 db mv0 ttu">November 14, 2020</p>
+
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        <p><img src="featured.png" alt=""></p>
+
+
+
+
+<h1 id="introduction">Introduction
+  <a href="#introduction"></a>
+</h1>
+<p>Setting up RStudio online is easier than you may think.</p>
+<p>I needed to set up an Azure Virtual Machine to create an online development environment, and went through a few different blogs troubleshooting some of the aspects of configuring RStudio Server (
+<a href="https://medium.com/techinpieces/practical-azure-how-to-enable-ssh-on-azure-vm-84d8fba8103e" target="_blank" rel="noopener">this</a> and 
+<a href="https://techcommunity.microsoft.com/t5/educator-developer-blog/hosting-rserver-and-rstudio-on-azure/ba-p/744389" target="_blank" rel="noopener">this</a> were particularly helpful but also dated, hence this guide).</p>
+<p>The setup guide below is my attempt to remember this workflow for the future, but hopefully it will help you sail through the setup.</p>
+
+
+
+
+<h1 id="1-create-the-vm">1. Create the VM
+  <a href="#1-create-the-vm"></a>
+</h1>
+<p>Head to 
+<a href="poral.azure.com">Azure</a> and create a new <strong>Ubtuntu 18.04</strong> resource.</p>
+<p>Accept default settings. These can be changed later, so don&rsquo;t worry about these too much.</p>
+<p>Download the key pair, which will help you <code>ssh</code> into the VM later.</p>
+<p>Allow inbound Network Rules for ports 22, 80, and 443 (SSH, HTTP, and HTTPS respectively).</p>
+<p>Example:</p>
+<pre><code>Source: Any (default)
+Source port range: * (default)
+Destination: Any (default)
+Destination port ranges: 22
+Protocol: TCP
+Action: Allow
+Priority: 330 (default)
+Name: Enable 22 (can be anything you can identify)
+Select &quot;Add&quot;
+</code></pre>
+
+
+
+<h1 id="2-ssh-into-the-vm">2. <code>ssh</code> into the VM
+  <a href="#2-ssh-into-the-vm"></a>
+</h1>
+<p>Download the key pair and move it to <code>~/.ssh</code> on your computer. You can either <code>mv</code> the file, or use <code>Shift + Cmd + .</code> in your finder to show hidden files, and navigate to <code>~/.ssh</code>.</p>
+<p>The <code>.pem</code> file must be properly protected in order to use it to ssh into the VM. Once you&rsquo;ve moved the file to <code>~/.ssh</code>, make it so that only you can read it:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">chmod <span style="color:#ff9f43">400</span> ~/.ssh/username.pem
+</code></pre></div><p>Now you&rsquo;re ready to access the VM. In the terminal enter:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh -i ~/.ssh/username.pem &lt;username&gt;@&lt;ipaddress&gt;
+</code></pre></div><p>where the username is what you input in set 1 while setting up the VM, and the ipaddress is the public IP address of the VM.</p>
+
+
+
+
+<h1 id="3-install-r-and-rstudio-server">3. Install R and RStudio Server
+  <a href="#3-install-r-and-rstudio-server"></a>
+</h1>
+<p>Once you&rsquo;re in, ensure Ubuntu is up to date, upgrade, and install <code>R</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo apt-get update
+sudo apt-get upgrade
+sudo add-apt-repository ppa:marutter/rrutter
+sudo apt update
+sudo apt-get install r-base
+</code></pre></div><p>Now it&rsquo;s time to install Linux libraries that many popular R packages depend on. For example, I rely on <code>gdal</code> for geospatial processing with <code>sf</code>. Below are the libraries that help me get by in daily life:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo apt-get install <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>  <span style="color:#78787e"># v8</span>
+  libv8-3.14-dev <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>  <span style="color:#78787e"># geospatial libs</span>
+  libgdal-dev gdal-bin libproj-dev proj-data proj-bin libgeos-dev <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>  <span style="color:#78787e"># interactive web graphics</span>
+  libudunits2-dev <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>  <span style="color:#78787e"># igraph</span>
+  libxml2 libxml2-dev <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>  <span style="color:#78787e"># Graphics packages</span>
+  libcairo2-dev <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>  <span style="color:#78787e"># httr</span>
+  libssl-dev libcurl4-openssl-dev <span style="color:#5af78e">\
+</span><span style="color:#5af78e"></span>  <span style="color:#78787e"># for redirects</span>
+  apache2
+</code></pre></div><p>Now it&rsquo;s time to install RStudio Server. The the most up to date version of RStudio Server 
+<a href="https://rstudio.com/products/rstudio/download-server/debian-ubuntu/0" target="_blank" rel="noopener">can be found here</a>. At the time of writing, for Ubtuntu 18.04, it&rsquo;s given in line 2 below, but may be different when you read this. Copy and paste the appropriate link:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo apt-get install gdebi-core
+wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-1.3.1093-amd64.deb
+sudo gdebi rstudio-server-1.3.1093-amd64.deb
+</code></pre></div><p>Now we need to make sure there&rsquo;s a port open for RStudio Server. Under the &ldquo;Networking&rdquo; tab in the Azure VM dashboard, add an inbound port 8787, which is the default RStudio Server port.</p>
+<p>Lastly, you need to add a password for the user to log in (we&rsquo;ve been doing it with a <code>.pem</code> key file via ssh so far). In the console for the VM, go to <code>Support + Troubleshooting -&gt; reset password</code>, enter a new password and click the &ldquo;save&rdquo; button. It will be a new password because you haven&rsquo;t yet set one.</p>
+<p><img src="password.png" alt=""></p>
+<p>Now you should be able to navigate to <code>&lt;public IP address&gt;:8787</code> and login with your username and password.</p>
+<p><img src="ip.png" alt=""></p>
+
+
+
+
+<h1 id="4-confgure-dns">4. Confgure DNS
+  <a href="#4-confgure-dns"></a>
+</h1>
+<p>It&rsquo;s nice to navigate to a non-IP address. Go to &ldquo;Settings -&gt; Configuration&rdquo; in the VM dashboard and add a DNS alias label.</p>
+<p><img src="config.png" alt=""></p>
+<p>For instance, I added <code>wadl</code> for 
+<a href="waterdatalab.com">waterdatalab.com</a>, and now the RStudio port is available at <code>wadl.westus2.cloudapp.azure.com:8787</code>.</p>
+<p><img src="dns.png" alt=""></p>
+<p>And that&rsquo;s it! Time to enjoy RStudio Server.</p>
+<p><img src="featured.png" alt=""></p>
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">November 14, 2020</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">3 minute read, 624 words</dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Tags:</dt>
+    <dd class="fw5 ml0"> <a href="/tags/r">R</a> </dd>
+  </dl>
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+    <dd class="fw5 ml0"><a href="/blog/docker-github-actions/">Automate SMS and MMS with R, Twilio, Docker, and Github Actions</a></dd>
+    
+    <dd class="fw5 ml0"><a href="/blog/parquet/">Parquet, SQL, DuckDB, arrow, dbplyr and R</a></dd>
+    
+    <dd class="fw5 ml0"><a href="/blog/aquifer-thickness/">Aquifer thickness calculated from ~300,000 well logs</a></dd>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/blog/cawdc-2019/">&larr; A water quality portal for California</a>
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/crontabs/">Automating R scripts on Linux with cron &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+      
+<div class="post-comments pa0 pa4-l mt4">
+
+</div>
+
+
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      &copy; 2023 Rich Pauloo
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/richpauloo" title="github" target="_blank" rel="me noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://twitter.com/richpauloo" title="twitter" target="_blank" rel="me noopener">
+      <i class="fab fa-twitter fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://orcid.org/0000-0002-6231-9530" title="orcid" target="_blank" rel="me noopener">
+      <i class="ai ai-orcid fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=LDere-YAAAAJ&amp;hl=en" title="google-scholar" target="_blank" rel="me noopener">
+      <i class="ai ai-google-scholar fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="/blog" title="rss" >
+      <i class="fas fa-rss fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://stackoverflow.com/users/8367943/rich-pauloo" title="stack-overflow" target="_blank" rel="me noopener">
+      <i class="fab fa-stack-overflow fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://www.linkedin.com/in/rpauloo/" title="linkedin" target="_blank" rel="me noopener">
+      <i class="fab fa-linkedin fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+      <a class="dib pv1 ph2 link" href="/license/" title="License">License</a>
+      
+      <a class="dib pv1 ph2 link" href="/contact/" title="Contact form">Contact</a>
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

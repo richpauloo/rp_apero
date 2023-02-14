@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Github Actions on Rich Paulo</title>
+    <link>/tags/github-actions/</link>
+    <description>Recent content in Github Actions on Rich Paulo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 29 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="/tags/github-actions/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Automate SMS and MMS with R, Twilio, Docker, and Github Actions</title>
+      <link>/blog/docker-github-actions/</link>
+      <pubDate>Sun, 29 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/docker-github-actions/</guid>
+      <description>Salvador Dali, &amp;ldquo;The Disintegration of The Persistence of Memory&amp;rdquo; 1952.
+Introduction   My mother grew up as the youngest of 6 children in Thailand, after her family emigrated from China during the Chinese Civil Wars. While growing up in Bangkok&amp;rsquo;s Chinatown, my mother learned English from Christian missionaries, and eventually immigrated to the United States.
+First a devout Buddhist, and later a devout Christian, my mom&amp;rsquo;s core values have always included love and compassion.</description>
+    </item>
+    
+  </channel>
+</rss>
