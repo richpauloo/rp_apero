@@ -173,9 +173,6 @@ jobs:
       TWILIO_TOKEN: ${{ secrets.TWILIO_TOKEN }}
       TWILIO_PHONE_NUMBER: ${{ secrets.TWILIO_PHONE_NUMBER }}
       TARGET_PHONE_NUMBER: ${{ secrets.TARGET_PHONE_NUMBER }}
-      TARGET_PHONE_NUMBER2: ${{ secrets.TARGET_PHONE_NUMBER2 }}
-      TARGET_PHONE_NUMBER3: ${{ secrets.TARGET_PHONE_NUMBER3 }}
-      TARGET_PHONE_NUMBER4: ${{ secrets.TARGET_PHONE_NUMBER4 }}
     runs-on: ubuntu-latest
     container:
      image: docker.io/richpauloo/tdox:prod.0.0.01
@@ -203,7 +200,7 @@ jobs:
         shell: Rscript {0} 
 ```
 
-Notice that I have 4 environmental variables for four different target phone numbers that I don't want to push directly to the Github repo. There's certainly a more elegant way to scale the code to multiple target phone numbers without creating a new environmental variable for each, for instance, by stashing in a private S3 bucket or another cloud service and giving the Github Action credentials to access this file to read them all at once. For a quick one-off project, this works just fine. You can pass R code directly into the `run:` part of a workflow step by specifying the `shell: Rscript {0}`.  
+Notice that you can pass R code directly into the `run:` part of a workflow step by specifying the `shell: Rscript {0}`. Similarly, you can pass bash and specify `shell: bash`.  
 
 
 Also note that the final task in this workflow prints the `sessionInfo()` to the workflow log, which is helpful for debugging (example output below).  
