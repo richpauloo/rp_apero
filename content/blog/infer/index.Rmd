@@ -13,6 +13,9 @@ projects: ""
 featured: true
 ---
 
+![](featured.jpeg)  
+_MC Escher, "Ascending and Descending" 1960._
+
 This blog post expands on the excellent talk delivered by Andrew Bray at rstudio::conf2018. [The slides (PDF) from Andrew's presentation can be found at this github link](https://github.com/andrewpbray/talks/blob/master/2018/infer-rstudioconf-2018.pdf).  
 
 From the `infer` [homepage](http://infer.netlify.com/):  
@@ -140,7 +143,7 @@ These premutations represent what we would expect to see **if the relationship b
 Infer makes this programatic approach very simple.  
 
 ```{r, echo=FALSE}
-blogdown::shortcode("figure", src="/img/infer_flow.png")
+blogdown::shortcode("figure", src="/static/img/infer_flow.png")
 ```
 
 **Main Verbs:**  
@@ -286,11 +289,6 @@ data_frame(diff = obs_stat) %>%
 ```
 
 Et voila. Confidence intervals made easy via bootstrapping in `infer`.  
-
-```{r, echo=FALSE}
-blogdown::shortcode("figure", src="/img/carey_dancing.gif")
-```
-
 
 
 # Conclusion  

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Data sccience on Rich Paulo</title>
+    <link>/tags/data-sccience/</link>
+    <description>Recent content in Data sccience on Rich Paulo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 30 Oct 2019 00:00:00 +0000</lastBuildDate><atom:link href="/tags/data-sccience/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>cal water quality .com</title>
+      <link>/project/cawdc-2019/</link>
+      <pubDate>Wed, 30 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/project/cawdc-2019/</guid>
+      <description>Automated water quality reports for &amp;gt; 3,000 California public water systems. 🏆 Winner 2019 California Water Data Challenge.</description>
+    </item>
+    
+  </channel>
+</rss>

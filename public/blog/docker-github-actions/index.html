@@ -48,7 +48,7 @@
 Introduction   My mother grew up as the youngest of 6 children in Thailand, after her family emigrated from China during the Chinese Civil Wars. While growing up in Bangkok&rsquo;s Chinatown, my mother learned English from Christian missionaries, and eventually immigrated to the United States.
 First a devout Buddhist, and later a devout Christian, my mom&rsquo;s core values have always included love and compassion."><meta itemprop="datePublished" content="2023-01-29T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2023-01-29T00:00:00+00:00" />
-<meta itemprop="wordCount" content="2028"><meta itemprop="image" content="/blog/docker-github-actions/featured.jpg">
+<meta itemprop="wordCount" content="1942"><meta itemprop="image" content="/blog/docker-github-actions/featured.jpg">
 <meta itemprop="keywords" content="R,Github Actions,Docker,Twilio," />
   
   
@@ -280,9 +280,6 @@ i <span style="color:#ff6ac1">&lt;-</span> <span style="color:#57c7ff">as.numeri
       <span style="color:#ff6ac1">TWILIO_TOKEN</span>: ${{ secrets.TWILIO_TOKEN }}
       <span style="color:#ff6ac1">TWILIO_PHONE_NUMBER</span>: ${{ secrets.TWILIO_PHONE_NUMBER }}
       <span style="color:#ff6ac1">TARGET_PHONE_NUMBER</span>: ${{ secrets.TARGET_PHONE_NUMBER }}
-      <span style="color:#ff6ac1">TARGET_PHONE_NUMBER2</span>: ${{ secrets.TARGET_PHONE_NUMBER2 }}
-      <span style="color:#ff6ac1">TARGET_PHONE_NUMBER3</span>: ${{ secrets.TARGET_PHONE_NUMBER3 }}
-      <span style="color:#ff6ac1">TARGET_PHONE_NUMBER4</span>: ${{ secrets.TARGET_PHONE_NUMBER4 }}
     <span style="color:#ff6ac1">runs-on</span>: ubuntu-latest
     <span style="color:#ff6ac1">container</span>:
      <span style="color:#ff6ac1">image</span>: docker.io/richpauloo/tdox:prod.0.0.01
@@ -308,7 +305,7 @@ i <span style="color:#ff6ac1">&lt;-</span> <span style="color:#57c7ff">as.numeri
         <span style="color:#ff6ac1">run</span>: |<span style="color:#5af78e">
 </span><span style="color:#5af78e">          </span>          sessionInfo()
         <span style="color:#ff6ac1">shell</span>: Rscript {0} 
-</code></pre></div><p>Notice that I have 4 environmental variables for four different target phone numbers that I don&rsquo;t want to push directly to the Github repo. There&rsquo;s certainly a more elegant way to scale the code to multiple target phone numbers without creating a new environmental variable for each, for instance, by stashing in a private S3 bucket or another cloud service and giving the Github Action credentials to access this file to read them all at once. For a quick one-off project, this works just fine. You can pass R code directly into the <code>run:</code> part of a workflow step by specifying the <code>shell: Rscript {0}</code>.</p>
+</code></pre></div><p>Notice that you can pass R code directly into the <code>run:</code> part of a workflow step by specifying the <code>shell: Rscript {0}</code>. Similarly, you can pass bash and specify <code>shell: bash</code>.</p>
 <p>Also note that the final task in this workflow prints the <code>sessionInfo()</code> to the workflow log, which is helpful for debugging (example output below).</p>
 <p><img src="session_info.png" alt="Screenshot of SessionInfo as part of a Github Action workflow task."></p>
 <p>Next, the <code>01_download_plot.R</code> step downloads data from a United States Geologic Survey IoT sensor that measures dissolved oxygen in the surface water body that we wish to monitor, then writes a plot and csv.</p>
@@ -474,7 +471,7 @@ msg_low <span style="color:#ff6ac1">&lt;-</span> <span style="color:#57c7ff">pas
   </dl>
   <dl class="f6 lh-copy">
     <dt class="fw7">Length:</dt>
-    <dd class="fw5 ml0">10 minute read, 2028 words</dd>
+    <dd class="fw5 ml0">10 minute read, 1942 words</dd>
   </dl>
   
   

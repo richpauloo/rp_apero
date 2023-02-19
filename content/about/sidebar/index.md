@@ -1,7 +1,7 @@
 ---
 ## Configure sidebar content in narrow column
 author: "Rich Pauloo"
-role: "Data Scientist & Hydrogeologist"
+role: "Data Scientist & Utilities Consultant"
 avatar_shape: circle # circle, square, rounded, leave blank to exclude
 show_social_links: true # specify social accounts in site config
 ## audio_link_label: "" # leave blank to exclude

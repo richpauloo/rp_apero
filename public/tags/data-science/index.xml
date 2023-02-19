@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Data science on Rich Paulo</title>
+    <link>/tags/data-science/</link>
+    <description>Recent content in Data science on Rich Paulo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 28 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/data-science/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>r4wrds</title>
+      <link>/project/r4wrds/</link>
+      <pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/r4wrds/</guid>
+      <description>R for water Resources Data Science.</description>
+    </item>
+    
+    <item>
+      <title>gsp dry wells .com</title>
+      <link>/project/gspdrywells/</link>
+      <pubDate>Thu, 21 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/gspdrywells/</guid>
+      <description>Domestic well failure prediction and cost estimates in critically overdrafted basins.</description>
+    </item>
+    
+    <item>
+      <title>low cost sensor networks</title>
+      <link>/project/lcsn/</link>
+      <pubDate>Mon, 30 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/project/lcsn/</guid>
+      <description>Real-time sensor networks and dashboards for monitoring environmental data.</description>
+    </item>
+    
+    <item>
+      <title>interpretable random forests</title>
+      <link>/project/rf/</link>
+      <pubDate>Wed, 30 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/project/rf/</guid>
+      <description>Cumulative variable importance.</description>
+    </item>
+    
+    <item>
+      <title>textme</title>
+      <link>/project/textme/</link>
+      <pubDate>Wed, 30 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/project/textme/</guid>
+      <description>Text yourself from R when long running jobs complete.</description>
+    </item>
+    
+    <item>
+      <title>Tulare basin TDS</title>
+      <link>/project/tulare-tds/</link>
+      <pubDate>Sun, 27 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/project/tulare-tds/</guid>
+      <description>Groundwater quality data visualization.</description>
+    </item>
+    
+    <item>
+      <title>CA well reports</title>
+      <link>/project/oswcr-eda/</link>
+      <pubDate>Sat, 27 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/project/oswcr-eda/</guid>
+      <description>Exploratory data analysis of California&amp;rsquo;s Online State Well Completion Report Database.</description>
+    </item>
+    
+    <item>
+      <title>Fatal landslide prediction</title>
+      <link>/project/landslides/</link>
+      <pubDate>Thu, 27 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/project/landslides/</guid>
+      <description>Using random forests, boosting, LDA, and QDA with variable probability thresholds for global landslide classification.</description>
+    </item>
+    
+    <item>
+      <title>AbstR</title>
+      <link>/project/abstr/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/project/abstr/</guid>
+      <description>An adaptation of PapR to 30,000 American Geophysical Union abstracts.</description>
+    </item>
+    
+  </channel>
+</rss>

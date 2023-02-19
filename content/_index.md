@@ -2,13 +2,13 @@
 action_label: Learn More About Me &rarr;
 action_link: /about
 action_type: text
-description: I'm an innovation strategist, analytical tool-builder, educator, and applied water resources scientist. My maternal Chinese surname is 林 (the characters are two trees and mean "forest"). My paternal surname is Pauloo, Americanized at Ellis Island from the Polish "Paulowski". 
+description: I consult for water and energy utilities, build data-driven models and dashboards, and develop strategy for complex challenges at the intersection of resource management, data governance, and technology. My maternal Chinese surname is 林 (the characters are two trees and mean "forest"). My paternal surname is Pauloo, Americanized at Ellis Island from the Polish "Paulowski". 
 image_left: true
 images:
 - img/avatar.png
 show_action_link: true
 show_social_links: true
-subtitle: Data Scientist & Hydrogeologist
+subtitle: Data Scientist & Utilities Consultant
 text_align_left: false
 title: Rich Pauloo, PhD
 type: home

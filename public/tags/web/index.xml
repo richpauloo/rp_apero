@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Web on Rich Paulo</title>
+    <link>/tags/web/</link>
+    <description>Recent content in Web on Rich Paulo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 21 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/web/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>gsp dry wells .com</title>
+      <link>/project/gspdrywells/</link>
+      <pubDate>Thu, 21 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/gspdrywells/</guid>
+      <description>Domestic well failure prediction and cost estimates in critically overdrafted basins.</description>
+    </item>
+    
+    <item>
+      <title>low cost sensor networks</title>
+      <link>/project/lcsn/</link>
+      <pubDate>Mon, 30 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/project/lcsn/</guid>
+      <description>Real-time sensor networks and dashboards for monitoring environmental data.</description>
+    </item>
+    
+    <item>
+      <title>cal water quality .com</title>
+      <link>/project/cawdc-2019/</link>
+      <pubDate>Wed, 30 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/project/cawdc-2019/</guid>
+      <description>Automated water quality reports for &amp;gt; 3,000 California public water systems. 🏆 Winner 2019 California Water Data Challenge.</description>
+    </item>
+    
+    <item>
+      <title>AbstR</title>
+      <link>/project/abstr/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/project/abstr/</guid>
+      <description>An adaptation of PapR to 30,000 American Geophysical Union abstracts.</description>
+    </item>
+    
+  </channel>
+</rss>

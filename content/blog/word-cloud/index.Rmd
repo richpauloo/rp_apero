@@ -12,6 +12,9 @@ image:
 projects: ""
 ---
 
+![](featured.png)  
+_MC Escher, "Concentric Rinds" 1953._
+
 > I've since turned this code into a simple [Shiny app that makes word clouds out of .txt files](https://richpauloo.shinyapps.io/word_cloud_app).
 
 I recently came across the `tidytext` R package, and the accompanying book, [Text Mining in R](https://www.tidytextmining.com/) by David Robinson and Julia Silge. I found it very practical for basic text mining and NLP problems spanning tf, idf, tf-idf, word vectorization, cosine similarity, sentiment analysis, and topic modeling. 
@@ -82,12 +85,6 @@ tokens %>% head(10)
 ```
 Of the 10, only 2 actually tell us something about what's written about: *groundwater*, and *water*. Cleaning natural language is like panning for gold: most of language is useless, but every once in a while we find a gold nugget. We want to get only the nuggets.
 
-```{r, echo=FALSE}
-blogdown::shortcode("figure", 
-                    src="/img/gold.jpg",
-                    title="This is you tokenizing.")
-```
-
 
 # 3. Remove Stop Words, Numbers, Etc.
 
@@ -138,8 +135,3 @@ pal <- brewer.pal(8,"Dark2")
 tokens_clean %>% 
   with(wordcloud(word, n, random.order = FALSE, max.words = 50, colors=pal))
 ```
-
-```{r, echo=FALSE}
-blogdown::shortcode("figure", src = "/img/YES.gif")
-```
-

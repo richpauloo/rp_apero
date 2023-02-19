@@ -38,14 +38,15 @@
 
 
     
-        <meta property="og:image" content="/img/avatar.png" >
+        <meta property="og:image" content="/blog/infer/featured.jpeg" >
         <meta property="twitter:card" content="summary_large_image">
-        <meta name="twitter:image" content="/img/avatar.png" >
+        <meta name="twitter:image" content="/blog/infer/featured.jpeg" >
+    
     
   <meta itemprop="name" content="Tidy chi-squared stats in infer">
 <meta itemprop="description" content="Using the infer package for inference, with attention towards chi-squared tests."><meta itemprop="datePublished" content="2018-02-03T02:57:45+00:00" />
 <meta itemprop="dateModified" content="2018-02-03T02:57:45+00:00" />
-<meta itemprop="wordCount" content="2237">
+<meta itemprop="wordCount" content="2277"><meta itemprop="image" content="/blog/infer/featured.jpeg">
 <meta itemprop="keywords" content="" />
   
   
@@ -119,35 +120,43 @@
 
       </header>
       <section class="post-body pt5 pb4">
-        
-
-
-<p>This blog post expands on the excellent talk delivered by Andrew Bray at rstudio::conf2018. <a href="https://github.com/andrewpbray/talks/blob/master/2018/infer-rstudioconf-2018.pdf">The slides (PDF) from Andrew’s presentation can be found at this github link</a>.</p>
-<p>From the <code>infer</code> <a href="http://infer.netlify.com/">homepage</a>:</p>
+        <p><img src="featured.jpeg" alt=""><br>
+<em>MC Escher, “Ascending and Descending” 1960.</em></p>
+<p>This blog post expands on the excellent talk delivered by Andrew Bray at rstudio::conf2018. 
+<a href="https://github.com/andrewpbray/talks/blob/master/2018/infer-rstudioconf-2018.pdf" target="_blank" rel="noopener">The slides (PDF) from Andrew’s presentation can be found at this github link</a>.</p>
+<p>From the <code>infer</code> 
+<a href="http://infer.netlify.com/" target="_blank" rel="noopener">homepage</a>:</p>
 <blockquote>
 <p>The objective of this package is to perform statistical inference using an expressive statistical grammar that coheres with the tidyverse design framework.</p>
 </blockquote>
-<p><img src="https://raw.githubusercontent.com/andrewpbray/infer/master/figs/ht-diagram.png" /></p>
+<p><img src="https://raw.githubusercontent.com/andrewpbray/infer/master/figs/ht-diagram.png" alt=""></p>
 <p>Let’s see how that’s done. First we install <code>infer</code> and load it into our environment.</p>
-<pre class="r"><code># install.packages(&quot;infer&quot;)
-library(infer)
-library(cowplot) # for nice plots</code></pre>
-<p><code>infer</code> is supposed to play well within the tidyverse, so we load that too, along with some data from the <a href="http://gss.norc.org/">General Social Survey</a>.</p>
-<pre class="r"><code>library(tidyverse)
-# loads some data from the general social survey
-load(url(&quot;http://bit.ly/2E65g15&quot;)) 
-names(gss)</code></pre>
-<pre><code>##  [1] &quot;id&quot;       &quot;year&quot;     &quot;age&quot;      &quot;class&quot;    &quot;degree&quot;   &quot;sex&quot;     
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#78787e"># install.packages(&#34;infer&#34;)</span>
+<span style="color:#57c7ff">library</span>(infer)
+<span style="color:#57c7ff">library</span>(cowplot) <span style="color:#78787e"># for nice plots</span>
+</code></pre></div><p><code>infer</code> is supposed to play well within the tidyverse, so we load that too, along with some data from the 
+<a href="http://gss.norc.org/" target="_blank" rel="noopener">General Social Survey</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#57c7ff">library</span>(tidyverse)
+<span style="color:#78787e"># loads some data from the general social survey</span>
+<span style="color:#57c7ff">load</span>(<span style="color:#57c7ff">url</span>(<span style="color:#5af78e">&#34;http://bit.ly/2E65g15&#34;</span>)) 
+<span style="color:#57c7ff">names</span>(gss)
+</code></pre></div><pre><code>##  [1] &quot;id&quot;       &quot;year&quot;     &quot;age&quot;      &quot;class&quot;    &quot;degree&quot;   &quot;sex&quot;     
 ##  [7] &quot;marital&quot;  &quot;race&quot;     &quot;region&quot;   &quot;partyid&quot;  &quot;happy&quot;    &quot;relig&quot;   
 ## [13] &quot;cappun&quot;   &quot;finalter&quot; &quot;natspac&quot;  &quot;natarms&quot;  &quot;conclerg&quot; &quot;confed&quot;  
 ## [19] &quot;conpress&quot; &quot;conjudge&quot; &quot;consci&quot;   &quot;conlegis&quot; &quot;zodiac&quot;   &quot;oversamp&quot;
-## [25] &quot;postlife&quot; &quot;party&quot;    &quot;space&quot;    &quot;NASA&quot;</code></pre>
-<hr />
-<div id="question-is-funding-for-space-exploration-nasa-a-partisan-issue" class="section level1">
-<h1>Question: Is funding for space exploration (NASA) a partisan issue?</h1>
+## [25] &quot;postlife&quot; &quot;party&quot;    &quot;space&quot;    &quot;NASA&quot;
+</code></pre>
+<hr>
+
+
+
+
+<h1 id="question-is-funding-for-space-exploration-nasa-a-partisan-issue">Question: Is funding for space exploration (NASA) a partisan issue?
+  <a href="#question-is-funding-for-space-exploration-nasa-a-partisan-issue"></a>
+</h1>
 <p>Let’s start by looking at responses to the question: <strong>“Do you think funding for space exploration is too little, about right, or too much?”</strong></p>
-<pre class="r"><code>gss %&gt;% select(party, NASA)</code></pre>
-<pre><code>## # A tibble: 149 x 2
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">gss <span style="color:#ff6ac1">%&gt;%</span> <span style="color:#57c7ff">select</span>(party, NASA)
+</code></pre></div><pre><code>## # A tibble: 149 × 2
 ##    party NASA       
 ##    &lt;fct&gt; &lt;fct&gt;      
 ##  1 Ind   TOO LITTLE 
@@ -160,254 +169,267 @@ names(gss)</code></pre>
 ##  8 Dem   ABOUT RIGHT
 ##  9 Dem   TOO LITTLE 
 ## 10 Ind   TOO LITTLE 
-## # … with 139 more rows</code></pre>
+## # … with 139 more rows
+</code></pre>
 <p>We see that people can either select <em>too little</em>, <em>about right</em>, or <em>too much</em>. We can visualize this pretty easily:</p>
-<pre class="r"><code>gss %&gt;% 
-  select(party, NASA) %&gt;% 
-  ggplot(aes(x=party, fill = NASA)) + 
-  geom_bar()</code></pre>
-<p><img src="/post/infer/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<p>Count data can be misleading when we’re looking for trends between categorical variables within groups, so let’s normalize within-group-percentages with a <code>position = "fill"</code> argument in <code>geom_bar()</code>.</p>
-<pre class="r"><code>gss %&gt;% 
-  select(party, NASA) %&gt;% 
-  ggplot(aes(x=party, fill = NASA)) + 
-  geom_bar(position = &quot;fill&quot;) + 
-  ylab(&quot;within group percentage&quot;)</code></pre>
-<p><img src="/post/infer/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">gss <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">select</span>(party, NASA) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">ggplot</span>(<span style="color:#57c7ff">aes</span>(x<span style="color:#ff6ac1">=</span>party, fill <span style="color:#ff6ac1">=</span> NASA)) <span style="color:#ff6ac1">+</span> 
+  <span style="color:#57c7ff">geom_bar</span>()
+</code></pre></div><p><img src="/blog/infer/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Count data can be misleading when we’re looking for trends between categorical variables within groups, so let’s normalize within-group-percentages with a <code>position = &quot;fill&quot;</code> argument in <code>geom_bar()</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">gss <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">select</span>(party, NASA) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">ggplot</span>(<span style="color:#57c7ff">aes</span>(x<span style="color:#ff6ac1">=</span>party, fill <span style="color:#ff6ac1">=</span> NASA)) <span style="color:#ff6ac1">+</span> 
+  <span style="color:#57c7ff">geom_bar</span>(position <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;fill&#34;</span>) <span style="color:#ff6ac1">+</span> 
+  <span style="color:#57c7ff">ylab</span>(<span style="color:#5af78e">&#34;within group percentage&#34;</span>)
+</code></pre></div><p><img src="/blog/infer/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>It doesn’t look like there’s much of a difference in how Democrats, Independents, and Republicans support space exploration, but let’s now drill down into this with some hypothesis testing, comparing base <code>R</code> and <code>infer</code>.</p>
 <p>What we essentially have is a contingency table of party affiliation and attitude towards space exploration, and we want to see if there’s a relationship between these variables. The chi-squared test of independence is used to determine if a significant relationship exists between two categorical variables, so we will use this test.</p>
 <ul>
-<li>Null hypothesis: There is no realationship between party (Democrat, Independent, Republican) and attitude towards space exploration (too little, about right, too much).<br />
-</li>
+<li>Null hypothesis: There is no realationship between party (Democrat, Independent, Republican) and attitude towards space exploration (too little, about right, too much).</li>
 <li>Alternative hypothesis: There is a relationship between party and attitude towards space exploration.</li>
 </ul>
-<hr />
+<hr>
 <p>Before we perform a chi-squared test, in base R and <code>infer</code>, let’s quickly break down what a chi-squared test is all about.</p>
 <p>We have our data (party and attitude towards space exploration), we assume:</p>
 <ul>
 <li><strong>Assumption #1:</strong> Variable are categorical. There are 3 types of categorical data:
 <ul>
-<li><em>Dichotomous</em>: 2 groups (eg - Male and Female)<br />
+<li><em>Dichotomous</em>: 2 groups (eg - Male and Female)</li>
+<li><em>Nominal</em>: 3 or more categorical groups (eg - undergrad, professor, graduate student, postdoctoral scholar)</li>
+<li><em>Ordinal</em>: ordered groups (eg - Pain Level 1, Pain Level 2, Pain Level 3, …)</li>
+</ul>
 </li>
-<li><em>Nominal</em>: 3 or more categorical groups (eg - undergrad, professor, graduate student, postdoctoral scholar)<br />
-</li>
-<li><em>Ordinal</em>: ordered groups (eg - Pain Level 1, Pain Level 2, Pain Level 3, …)<br />
-</li>
-</ul></li>
-<li><strong>Assumption #2:</strong> Observations are independent of one another (eg - no relationship between any of the cases).<br />
-</li>
-<li><strong>Assumption #3:</strong> Categorical variable groupings must be mutually exclusive. In other words, we can’t have one participant as “Democrat” and “Independent”.<br />
-</li>
+<li><strong>Assumption #2:</strong> Observations are independent of one another (eg - no relationship between any of the cases).</li>
+<li><strong>Assumption #3:</strong> Categorical variable groupings must be mutually exclusive. In other words, we can’t have one participant as “Democrat” and “Independent”.</li>
 <li><strong>Assumption #4:</strong> There must be at least 5 expected frequencies in each group of your categorical variable (only important for the analytical solution ).</li>
 </ul>
 <p>We meet those assumptions, so let’s power ahead!</p>
 <p>There are two main ways to solve this problem:</p>
-<ol style="list-style-type: decimal">
-<li>Analytically (mathmematically)<br />
-</li>
+<ol>
+<li>Analytically (mathmematically)</li>
 <li>Programatically</li>
 </ol>
-</div>
-<div id="analytical-solution" class="section level1">
-<h1>Analytical Solution</h1>
-<div class="figure">
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Chi-square_pdf.svg/600px-Chi-square_pdf.svg.png" alt="" />
-<p class="caption"><em>Chi-squared probability density function (Wikipedia). k = degrees of freedom</em></p>
-</div>
+
+
+
+
+<h1 id="analytical-solution">Analytical Solution
+  <a href="#analytical-solution"></a>
+</h1>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Chi-square_pdf.svg/600px-Chi-square_pdf.svg.png" alt="Chi-squared probability density function (Wikipedia). k = degrees of freedom"></p>
 <p>We assume the expected values follow a Chi-squared distribution, with a probability density function that depends on the degrees of freedom. The plot above shows how the distribution varies with the degrees of freedom (<em>k</em>). On the x axis is the Chi-squared statistic, which we can calculate in <code>R</code>. We could then see where it falls in the distribution, and observe the probability of arriving at that combination of variables, or a more extreme example. As our Chi-squared test statistic increases, we move further along the x axis to the right. There is less area under the curve to the right, and our p-value (the area under the curve to the right of the observed statistic) decreases.</p>
 <p>Generally speaking, a larger Chi-squared statistic suggests stronger evidence for rejecting our null hhypothesis. If we observe a p-value &lt;= .05, we would reject our null hypothesis.</p>
 <p>What would it mean to accept our alternative hypothesis?</p>
 <p>In the case of our example, if we we lived in a completely random universe, less than 5% of the time we would arrive at the particular combination of <em>party</em> and <em>attitude towards space exporlation</em> we observe in our data. In other words, the relationship between <em>party</em> and <em>attitude towards space exploration</em> we see in our data is <strong>significant</strong>.</p>
 <p><strong>But is there actually a significant relationship between these variables? We will calculate a Chi-squared statistic for our data to find out.</strong></p>
 <p>Base <code>R</code>’s <code>stats</code> package has a function that takes two vectors of data, and returns a chi-squared test statistic, degrees of freedom, and p-value. Let’s save this observed chi statistic for later use.</p>
-<pre class="r"><code>chisq.test(gss$party, gss$NASA) </code></pre>
-<pre><code>## 
-##  Pearson&#39;s Chi-squared test
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#57c7ff">chisq.test</span>(gss<span style="color:#ff6ac1">$</span>party, gss<span style="color:#ff6ac1">$</span>NASA) 
+</code></pre></div><pre><code>## 
+## 	Pearson's Chi-squared test
 ## 
 ## data:  gss$party and gss$NASA
-## X-squared = 1.3261, df = 4, p-value = 0.8569</code></pre>
-<pre class="r"><code>observed_stat &lt;- chisq.test(gss$party, gss$NASA)$stat</code></pre>
-<p>We might be tempted to look at this and say, “there’s a high p-value.” No significant relationship exists. Job done. This is what we expected looking at the bar plots earlier. But let’s go a step further with <code>infer</code>.</p>
-</div>
-<div id="programatic-solution" class="section level1">
-<h1>Programatic Solution</h1>
+## X-squared = 1.3261, df = 4, p-value = 0.8569
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">observed_stat <span style="color:#ff6ac1">&lt;-</span> <span style="color:#57c7ff">chisq.test</span>(gss<span style="color:#ff6ac1">$</span>party, gss<span style="color:#ff6ac1">$</span>NASA)<span style="color:#ff6ac1">$</span>stat
+</code></pre></div><p>We might be tempted to look at this and say, “there’s a high p-value.” No significant relationship exists. Job done. This is what we expected looking at the bar plots earlier. But let’s go a step further with <code>infer</code>.</p>
+
+
+
+
+<h1 id="programatic-solution">Programatic Solution
+  <a href="#programatic-solution"></a>
+</h1>
 <p>Another way to test if there is a significant relationship in our data is to take a programatic approach.</p>
 <p>In his talk, Andrew Bray says:</p>
 <blockquote>
 <p>If we live in world where variables are totally unrelated, the ties between variables are arbitrary, so they might just as well have been shuffled.</p>
 </blockquote>
 <p>What would that random world look like? Let’s take one of the columns of our data_frame and scramble it.</p>
-<pre class="r"><code>gss %&gt;% select(party, NASA) %&gt;% 
-  mutate(permutation_1 = sample(NASA),
-         permutation_2 = sample(NASA))</code></pre>
-<pre><code>## # A tibble: 149 x 4
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">gss <span style="color:#ff6ac1">%&gt;%</span> <span style="color:#57c7ff">select</span>(party, NASA) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">mutate</span>(permutation_1 <span style="color:#ff6ac1">=</span> <span style="color:#57c7ff">sample</span>(NASA),
+         permutation_2 <span style="color:#ff6ac1">=</span> <span style="color:#57c7ff">sample</span>(NASA))
+</code></pre></div><pre><code>## # A tibble: 149 × 4
 ##    party NASA        permutation_1 permutation_2
 ##    &lt;fct&gt; &lt;fct&gt;       &lt;fct&gt;         &lt;fct&gt;        
-##  1 Ind   TOO LITTLE  TOO MUCH      TOO MUCH     
-##  2 Ind   ABOUT RIGHT ABOUT RIGHT   TOO LITTLE   
-##  3 Dem   ABOUT RIGHT TOO LITTLE    TOO MUCH     
-##  4 Ind   TOO LITTLE  TOO MUCH      ABOUT RIGHT  
-##  5 Ind   TOO MUCH    ABOUT RIGHT   TOO MUCH     
-##  6 Ind   TOO LITTLE  TOO MUCH      ABOUT RIGHT  
-##  7 Ind   ABOUT RIGHT ABOUT RIGHT   TOO LITTLE   
+##  1 Ind   TOO LITTLE  ABOUT RIGHT   ABOUT RIGHT  
+##  2 Ind   ABOUT RIGHT TOO MUCH      ABOUT RIGHT  
+##  3 Dem   ABOUT RIGHT ABOUT RIGHT   ABOUT RIGHT  
+##  4 Ind   TOO LITTLE  TOO LITTLE    TOO LITTLE   
+##  5 Ind   TOO MUCH    TOO MUCH      ABOUT RIGHT  
+##  6 Ind   TOO LITTLE  ABOUT RIGHT   TOO LITTLE   
+##  7 Ind   ABOUT RIGHT ABOUT RIGHT   TOO MUCH     
 ##  8 Dem   ABOUT RIGHT ABOUT RIGHT   TOO MUCH     
-##  9 Dem   TOO LITTLE  TOO MUCH      ABOUT RIGHT  
-## 10 Ind   TOO LITTLE  TOO LITTLE    TOO MUCH     
-## # … with 139 more rows</code></pre>
+##  9 Dem   TOO LITTLE  ABOUT RIGHT   TOO MUCH     
+## 10 Ind   TOO LITTLE  TOO MUCH      ABOUT RIGHT  
+## # … with 139 more rows
+</code></pre>
 <p>These premutations represent what we would expect to see <strong>if the relationship between variables was completeley random</strong>. We could generate many, many permuations, calcualte an Chi-squared statistic for each, and we would expect their distribution to approach the density functions shown above. Then we could plot our data on that distribution and see where it fell. If the area under the curve to the right of the point was less than 5%, we could reject the null hypothesis.</p>
 <p>Infer makes this programatic approach very simple.</p>
-<figure><img src="/img/infer_flow.png"/>
+<figure><img src="/static/img/infer_flow.png"/>
 </figure>
-
 <p><strong>Main Verbs:</strong></p>
 <ul>
-<li><code>specify()</code> is like <code>dplyr::select()</code>: choose the variables from your df to test<br />
-</li>
-<li><code>hypothesize()</code> is where we select the null hypothesis<br />
-</li>
-<li><code>generate()</code> creates permutated values<br />
-</li>
-<li><code>calculate()</code> lets you choose what test statistic to calculate<br />
-</li>
+<li><code>specify()</code> is like <code>dplyr::select()</code>: choose the variables from your df to test</li>
+<li><code>hypothesize()</code> is where we select the null hypothesis</li>
+<li><code>generate()</code> creates permutated values</li>
+<li><code>calculate()</code> lets you choose what test statistic to calculate</li>
 <li><code>visualize()</code> automatically plots permutated values with ggplot, making it easy to add geoms onto it</li>
 </ul>
 <p><strong>Highlights:</strong></p>
 <ul>
-<li>dataframe in dataframe out<br />
-</li>
-<li>compose tests with pipes<br />
-</li>
+<li>dataframe in dataframe out</li>
+<li>compose tests with pipes</li>
 <li>reading an inferential chain describes an inferential procedure</li>
 </ul>
-<pre class="r"><code>gss %&gt;% 
-  specify(NASA ~ party)  %&gt;% 
-  hypothesize(null = &quot;independence&quot;) %&gt;% 
-  generate(reps = 1000, type = &quot;permute&quot;) %&gt;% 
-  calculate(stat = &quot;Chisq&quot;) %&gt;% 
-  visualize() +
-  # add a vertical line for gss data
-  geom_vline(aes(xintercept = observed_stat), color = &quot;red&quot;) </code></pre>
-<p><img src="/post/infer/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">gss <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">specify</span>(NASA <span style="color:#ff6ac1">~</span> party)  <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">hypothesize</span>(null <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;independence&#34;</span>) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">generate</span>(reps <span style="color:#ff6ac1">=</span> <span style="color:#ff9f43">1000</span>, type <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;permute&#34;</span>) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">calculate</span>(stat <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;Chisq&#34;</span>) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">visualize</span>() <span style="color:#ff6ac1">+</span>
+  <span style="color:#78787e"># add a vertical line for gss data</span>
+  <span style="color:#57c7ff">geom_vline</span>(<span style="color:#57c7ff">aes</span>(xintercept <span style="color:#ff6ac1">=</span> observed_stat), color <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;red&#34;</span>) 
+</code></pre></div><p><img src="/blog/infer/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <p>If we wanted to get a p-value from this programatic appraoch, we can calculate the area under the curve to the right of the observed statistic.</p>
-<pre class="r"><code>gss %&gt;% 
-  specify(NASA ~ party)  %&gt;% 
-  hypothesize(null = &quot;independence&quot;) %&gt;% 
-  generate(reps = 1000, type = &quot;permute&quot;) %&gt;% 
-  calculate(stat = &quot;Chisq&quot;) %&gt;% 
-  summarise(p_val = mean(stat &gt; observed_stat))</code></pre>
-<pre><code>## # A tibble: 1 x 1
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">gss <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">specify</span>(NASA <span style="color:#ff6ac1">~</span> party)  <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">hypothesize</span>(null <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;independence&#34;</span>) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">generate</span>(reps <span style="color:#ff6ac1">=</span> <span style="color:#ff9f43">1000</span>, type <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;permute&#34;</span>) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">calculate</span>(stat <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;Chisq&#34;</span>) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">summarise</span>(p_val <span style="color:#ff6ac1">=</span> <span style="color:#57c7ff">mean</span>(stat <span style="color:#ff6ac1">&gt;</span> observed_stat))
+</code></pre></div><pre><code>## # A tibble: 1 × 1
 ##   p_val
 ##   &lt;dbl&gt;
-## 1 0.856</code></pre>
+## 1 0.862
+</code></pre>
 <p>If we omit <code>visualize</code>, we get a dataframe of the permuted values:</p>
-<pre class="r"><code>gss %&gt;% 
-  specify(NASA ~ party)  %&gt;% 
-  hypothesize(null = &quot;independence&quot;) %&gt;% 
-  generate(reps = 1000, type = &quot;permute&quot;) %&gt;% 
-  calculate(stat = &quot;Chisq&quot;) #%&gt;% </code></pre>
-<pre><code>## # A tibble: 1,000 x 2
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">gss <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">specify</span>(NASA <span style="color:#ff6ac1">~</span> party)  <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">hypothesize</span>(null <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;independence&#34;</span>) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">generate</span>(reps <span style="color:#ff6ac1">=</span> <span style="color:#ff9f43">1000</span>, type <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;permute&#34;</span>) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">calculate</span>(stat <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;Chisq&#34;</span>) <span style="color:#78787e">#%&gt;% </span>
+</code></pre></div><pre><code>## Response: NASA (factor)
+## Explanatory: party (factor)
+## Null Hypothesis: independence
+## # A tibble: 1,000 × 2
 ##    replicate  stat
 ##        &lt;int&gt; &lt;dbl&gt;
-##  1         1 2.85 
-##  2         2 1.36 
-##  3         3 0.342
-##  4         4 3.17 
-##  5         5 1.82 
-##  6         6 6.10 
-##  7         7 2.73 
-##  8         8 2.11 
-##  9         9 0.846
-## 10        10 2.24 
-## # … with 990 more rows</code></pre>
-<pre class="r"><code>  # visualize() +
-  # geom_vline(aes(xintercept = observed_stat), color = &quot;red&quot;) # add a vertical line for gss data</code></pre>
-<p>If we omit <code>hypothesize</code>, we can bootstrap samples from our data.</p>
-<pre class="r"><code>gss %&gt;% 
-  specify(NASA ~ party)  %&gt;% 
-  #hypothesize(null = &quot;independence&quot;) %&gt;% 
-  generate(reps = 1000, type = &quot;bootstrap&quot;) %&gt;% 
-  calculate(stat = &quot;Chisq&quot;) %&gt;% 
-  visualize() +
-  geom_vline(aes(xintercept = observed_stat), color = &quot;red&quot;)</code></pre>
-<p><img src="/post/infer/index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-</div>
-<div id="reusable-parts" class="section level1">
-<h1>Reusable Parts</h1>
+##  1         1 3.98 
+##  2         2 2.00 
+##  3         3 0.712
+##  4         4 2.14 
+##  5         5 4.41 
+##  6         6 1.38 
+##  7         7 4.61 
+##  8         8 1.82 
+##  9         9 4.89 
+## 10        10 1.47 
+## # … with 990 more rows
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">  <span style="color:#78787e"># visualize() +</span>
+  <span style="color:#78787e"># geom_vline(aes(xintercept = observed_stat), color = &#34;red&#34;) # add a vertical line for gss data</span>
+</code></pre></div><p>If we omit <code>hypothesize</code>, we can bootstrap samples from our data.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">gss <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">specify</span>(NASA <span style="color:#ff6ac1">~</span> party)  <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#78787e">#hypothesize(null = &#34;independence&#34;) %&gt;% </span>
+  <span style="color:#57c7ff">generate</span>(reps <span style="color:#ff6ac1">=</span> <span style="color:#ff9f43">1000</span>, type <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;bootstrap&#34;</span>) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">calculate</span>(stat <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;Chisq&#34;</span>) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">visualize</span>() <span style="color:#ff6ac1">+</span>
+  <span style="color:#57c7ff">geom_vline</span>(<span style="color:#57c7ff">aes</span>(xintercept <span style="color:#ff6ac1">=</span> observed_stat), color <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;red&#34;</span>)
+</code></pre></div><p><img src="/blog/infer/index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+
+
+
+
+<h1 id="reusable-parts">Reusable Parts
+  <a href="#reusable-parts"></a>
+</h1>
 <p>One of the key features of <code>infer</code> is that the functions are reusable. To illustrate, let’s consider the differences between men and women in their reported level of happiness in our dataset. We could observe this with a simple bar plot.</p>
 <p>This is sample from a population, and there’s going to be some uncertainty associated with that sample. We can bound the uncertainty by adding <strong>confidence intervals</strong>, and accomplish this with reusable <code>infer</code> verbs.</p>
-<pre class="r"><code>gss %&gt;% select(sex, happy) %&gt;% 
-  ggplot() +
-  geom_bar(aes(x = sex, fill = happy), position = &quot;fill&quot;)</code></pre>
-<p><img src="/post/infer/index_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">gss <span style="color:#ff6ac1">%&gt;%</span> <span style="color:#57c7ff">select</span>(sex, happy) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">ggplot</span>() <span style="color:#ff6ac1">+</span>
+  <span style="color:#57c7ff">geom_bar</span>(<span style="color:#57c7ff">aes</span>(x <span style="color:#ff6ac1">=</span> sex, fill <span style="color:#ff6ac1">=</span> happy), position <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;fill&#34;</span>)
+</code></pre></div><p><img src="/blog/infer/index_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <p>We could go on to measure the difference between male and female happiness by looking at the difference in the proportion of respondents claiming to be “Happy” or “Unhappy”. Let’s save these proportions for later.</p>
-<pre class="r"><code>gss %&gt;% select(sex, happy) %&gt;% 
-  group_by(sex, happy) %&gt;% 
-  summarise(n = n()) %&gt;% 
-  mutate(prop = n / sum(n))</code></pre>
-<pre><code>## # A tibble: 4 x 4
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">gss <span style="color:#ff6ac1">%&gt;%</span> <span style="color:#57c7ff">select</span>(sex, happy) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">group_by</span>(sex, happy) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">summarise</span>(n <span style="color:#ff6ac1">=</span> <span style="color:#57c7ff">n</span>()) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">mutate</span>(prop <span style="color:#ff6ac1">=</span> n <span style="color:#ff6ac1">/</span> <span style="color:#57c7ff">sum</span>(n))
+</code></pre></div><pre><code>## `summarise()` has grouped output by 'sex'. You can override using the `.groups`
+## argument.
+
+## # A tibble: 4 × 4
 ## # Groups:   sex [2]
 ##   sex    happy       n  prop
 ##   &lt;fct&gt;  &lt;fct&gt;   &lt;int&gt; &lt;dbl&gt;
 ## 1 MALE   HAPPY      37 0.638
 ## 2 MALE   UNHAPPY    21 0.362
 ## 3 FEMALE HAPPY      78 0.857
-## 4 FEMALE UNHAPPY    13 0.143</code></pre>
+## 4 FEMALE UNHAPPY    13 0.143
+</code></pre>
 <p>This table suggest that females in our sample population are on average, 12% happier than males. We can visualize that difference in a plot.</p>
-<pre class="r"><code>obs_stat &lt;- gss %&gt;% # p_female - p_male
-  group_by(sex) %&gt;%
-  summarize(p = mean(happy == &quot;HAPPY&quot;)) %&gt;%
-  summarize(diff(p)) %&gt;%
-  pull()
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">obs_stat <span style="color:#ff6ac1">&lt;-</span> gss <span style="color:#ff6ac1">%&gt;%</span> <span style="color:#78787e"># p_female - p_male</span>
+  <span style="color:#57c7ff">group_by</span>(sex) <span style="color:#ff6ac1">%&gt;%</span>
+  <span style="color:#57c7ff">summarize</span>(p <span style="color:#ff6ac1">=</span> <span style="color:#57c7ff">mean</span>(happy <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;HAPPY&#34;</span>)) <span style="color:#ff6ac1">%&gt;%</span>
+  <span style="color:#57c7ff">summarize</span>(<span style="color:#57c7ff">diff</span>(p)) <span style="color:#ff6ac1">%&gt;%</span>
+  <span style="color:#57c7ff">pull</span>()
 
-x_pos &lt;- &quot;diff in happiness&quot;
+x_pos <span style="color:#ff6ac1">&lt;-</span> <span style="color:#5af78e">&#34;diff in happiness&#34;</span>
 
-p &lt;- data_frame(diff = obs_stat) %&gt;% 
-  mutate(x = x_pos) %&gt;% 
-  ggplot() +
-  geom_point(aes(x = x, y = diff), stat=&quot;identity&quot;, size = 4)</code></pre>
-<pre><code>## Warning: `data_frame()` is deprecated, use `tibble()`.
-## This warning is displayed once per session.</code></pre>
+p <span style="color:#ff6ac1">&lt;-</span> <span style="color:#57c7ff">data_frame</span>(diff <span style="color:#ff6ac1">=</span> obs_stat) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">mutate</span>(x <span style="color:#ff6ac1">=</span> x_pos) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">ggplot</span>() <span style="color:#ff6ac1">+</span>
+  <span style="color:#57c7ff">geom_point</span>(<span style="color:#57c7ff">aes</span>(x <span style="color:#ff6ac1">=</span> x, y <span style="color:#ff6ac1">=</span> diff), stat<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;identity&#34;</span>, size <span style="color:#ff6ac1">=</span> <span style="color:#ff9f43">4</span>)
+</code></pre></div><pre><code>## Warning: `data_frame()` was deprecated in tibble 1.1.0.
+## Please use `tibble()` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
+</code></pre>
 <p>We’re not quite done. <code>infer</code> helps us assess our uncertainty in this statistic by calculating a confidence interval, which adds two standard errors to the point estimate.</p>
 <p>The standard error is the variablility we would expect in our data if we drew many new samples from the population (eg - more surveys). Assuming normality in our population, we can estimate that variability by bootstraping. The result will be centered on our statistic, rather than a null value.</p>
-<pre class="r"><code>boot &lt;- gss %&gt;%
-  specify(happy ~ sex, success = &quot;HAPPY&quot;) %&gt;%
-  generate(reps = 500, type = &quot;bootstrap&quot;) %&gt;%
-  calculate(stat = &quot;diff in props&quot;, order = c(&quot;FEMALE&quot;, &quot;MALE&quot;))
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">boot <span style="color:#ff6ac1">&lt;-</span> gss <span style="color:#ff6ac1">%&gt;%</span>
+  <span style="color:#57c7ff">specify</span>(happy <span style="color:#ff6ac1">~</span> sex, success <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;HAPPY&#34;</span>) <span style="color:#ff6ac1">%&gt;%</span>
+  <span style="color:#57c7ff">generate</span>(reps <span style="color:#ff6ac1">=</span> <span style="color:#ff9f43">500</span>, type <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;bootstrap&#34;</span>) <span style="color:#ff6ac1">%&gt;%</span>
+  <span style="color:#57c7ff">calculate</span>(stat <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;diff in props&#34;</span>, order <span style="color:#ff6ac1">=</span> <span style="color:#57c7ff">c</span>(<span style="color:#5af78e">&#34;FEMALE&#34;</span>, <span style="color:#5af78e">&#34;MALE&#34;</span>))
 
-visualize(boot) + 
-  geom_vline(aes(xintercept = obs_stat), color = &quot;red&quot;)</code></pre>
-<p><img src="/post/infer/index_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<span style="color:#57c7ff">visualize</span>(boot) <span style="color:#ff6ac1">+</span> 
+  <span style="color:#57c7ff">geom_vline</span>(<span style="color:#57c7ff">aes</span>(xintercept <span style="color:#ff6ac1">=</span> obs_stat), color <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;red&#34;</span>)
+</code></pre></div><p><img src="/blog/infer/index_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <p>We can easily calculate the standard error (SD) of the distribution of bootstrapped samples, and then formulate confidence intervals.</p>
 <p>95.45% of a normal population lies between two standard deviations below and above the mean. If we take the more memorbale <em>‘2’ standard errors</em> (compared to the less memorable ‘1.96’) above and below our sample statistic, we enclose 95% of the population.</p>
-<pre class="r"><code>SE &lt;- boot %&gt;%
-  summarize(sd(stat)) %&gt;%
-  pull()
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">SE <span style="color:#ff6ac1">&lt;-</span> boot <span style="color:#ff6ac1">%&gt;%</span>
+  <span style="color:#57c7ff">summarize</span>(<span style="color:#57c7ff">sd</span>(stat)) <span style="color:#ff6ac1">%&gt;%</span>
+  <span style="color:#57c7ff">pull</span>()
 
-SE</code></pre>
-<pre><code>## [1] 0.06946399</code></pre>
-<pre class="r"><code>CI &lt;- c(obs_stat - 2 * SE, obs_stat + 2 * SE)
+SE
+</code></pre></div><pre><code>## [1] 0.0732147
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">CI <span style="color:#ff6ac1">&lt;-</span> <span style="color:#57c7ff">c</span>(obs_stat <span style="color:#ff6ac1">-</span> <span style="color:#ff9f43">2</span> <span style="color:#ff6ac1">*</span> SE, obs_stat <span style="color:#ff6ac1">+</span> <span style="color:#ff9f43">2</span> <span style="color:#ff6ac1">*</span> SE)
 
-CI</code></pre>
-<pre><code>## [1] 0.08028384 0.35813981</code></pre>
+CI
+</code></pre></div><pre><code>## [1] 0.07278243 0.36564122
+</code></pre>
 <p>And now we can add these confidence intervals to our etimate of the measured difference in happiness between men and women in our population with <code>geom_segment</code>.</p>
-<pre class="r"><code>x_pos &lt;- &quot;diff in happiness&quot;
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">x_pos <span style="color:#ff6ac1">&lt;-</span> <span style="color:#5af78e">&#34;diff in happiness&#34;</span>
 
-data_frame(diff = obs_stat) %&gt;% 
-  mutate(x = x_pos) %&gt;% 
-  ggplot() +
-  geom_point(aes(x = x, y = diff), stat=&quot;identity&quot;, size = 4) +
-  geom_segment(aes(x = x_pos, xend = x_pos, y = CI[1], yend = CI[2]))</code></pre>
-<p><img src="/post/infer/index_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<span style="color:#57c7ff">data_frame</span>(diff <span style="color:#ff6ac1">=</span> obs_stat) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">mutate</span>(x <span style="color:#ff6ac1">=</span> x_pos) <span style="color:#ff6ac1">%&gt;%</span> 
+  <span style="color:#57c7ff">ggplot</span>() <span style="color:#ff6ac1">+</span>
+  <span style="color:#57c7ff">geom_point</span>(<span style="color:#57c7ff">aes</span>(x <span style="color:#ff6ac1">=</span> x, y <span style="color:#ff6ac1">=</span> diff), stat<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;identity&#34;</span>, size <span style="color:#ff6ac1">=</span> <span style="color:#ff9f43">4</span>) <span style="color:#ff6ac1">+</span>
+  <span style="color:#57c7ff">geom_segment</span>(<span style="color:#57c7ff">aes</span>(x <span style="color:#ff6ac1">=</span> x_pos, xend <span style="color:#ff6ac1">=</span> x_pos, y <span style="color:#ff6ac1">=</span> CI[1], yend <span style="color:#ff6ac1">=</span> CI[2]))
+</code></pre></div><p><img src="/blog/infer/index_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p>Et voila. Confidence intervals made easy via bootstrapping in <code>infer</code>.</p>
-<figure><img src="/img/carey_dancing.gif"/>
-</figure>
 
-</div>
-<div id="conclusion" class="section level1">
-<h1>Conclusion</h1>
+
+
+
+<h1 id="conclusion">Conclusion
+  <a href="#conclusion"></a>
+</h1>
 <p>Two things stand out to me about <code>infer</code>. One is that it makes me think through the steps of what I’m doing, and the verbs in <code>infer</code> are reusable. Two, I save time because everything happens in a tidy way that plays well with <code>dplyr</code>. This makes it easy to hypothesis test, mutate and summarise new variables, pipe results into a <code>ggplot</code>. The workflow and results are readable and memorable.</p>
 <p>I look forward to seeing what’s down the line from <code>infer</code>. It seems like a powerful and concise way to perform statistical inference and hypothesis test. I’m very grateful to Andrew Bray for the excellent talk, and the developers of <code>infer</code> for their hard work on tidy and expressive statistical inference.</p>
-</div>
 
         
         <details closed class="f6 fw7 input-reset">
@@ -417,7 +439,7 @@ data_frame(diff = obs_stat) %&gt;%
   </dl>
   <dl class="f6 lh-copy">
     <dt class="fw7">Length:</dt>
-    <dd class="fw5 ml0">11 minute read, 2237 words</dd>
+    <dd class="fw5 ml0">11 minute read, 2277 words</dd>
   </dl>
   
   

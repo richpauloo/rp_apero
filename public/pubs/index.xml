@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Publications on Rich Paulo</title>
+    <link>/pubs/</link>
+    <description>Recent content in Publications on Rich Paulo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 18 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="/pubs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Sustainability of Regional Groundwater Quality in Response to Managed Aquifer Recharge</title>
+      <link>/pubs/mar/</link>
+      <pubDate>Sun, 18 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/pubs/mar/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Assessing the utility of remote sensing data to accurately estimate changes in groundwater storage</title>
+      <link>/pubs/hydra/</link>
+      <pubDate>Thu, 10 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/pubs/hydra/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hydraulic Gradients Modulate Non-Fickian Transport in Heterogeneous Porous Media</title>
+      <link>/pubs/vhgr/</link>
+      <pubDate>Thu, 04 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/pubs/vhgr/</guid>
+      <description>Fluid flow and contaminant transport in heterogeneous porous media is critical in many applications from sustainable groundwater quality management to radioactive waste disposal and water filtration. Accurate contaminant transport modeling is challenged by anomalous (non-Fickian) transport, characterized by early breakthrough, long tailing, non-Gaussian or multipeaked plume shapes, and non-linear scaling of the mean square displacement.</description>
+    </item>
+    
+    <item>
+      <title>Anthropogenic Basin Closure and Groundwater Salinization (ABCSAL)</title>
+      <link>/pubs/abcsal/</link>
+      <pubDate>Tue, 01 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/pubs/abcsal/</guid>
+      <description>We describe how groundwater pumping may convert an open, fresh basin into a closed-basin system that gradually salinates. We then develop a method to estimate the rate of ongoing salinization in a groundwater basin, and apply it to the Tulare Basin in California.</description>
+    </item>
+    
+    <item>
+      <title>Low-Cost, Open Source Wireless Sensor Network for Real-Time, Scalable Groundwater Monitoring</title>
+      <link>/pubs/lcsn/</link>
+      <pubDate>Thu, 09 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/pubs/lcsn/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Domestic Well Vulnerability to Drought Duration and Unsustainable Groundwater Management in California&#39;s Central Valley</title>
+      <link>/pubs/well-failure/</link>
+      <pubDate>Wed, 18 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/pubs/well-failure/</guid>
+      <description> Backstory     This publication grew out of the 2018 California water data Challenge, for which our team was awarded a winning prize.
+Me &amp;amp; my team (@alfencl,@AlvarEscriva,Hervé) are honored to win at the #CAWaterDataChallenge. Big thanks to my mom! @CAGovOps @westbigdatahub pic.twitter.com/x4E5GVltC5
+&amp;mdash; Rich Pauloo (@RichPauloo) October 19, 2018   </description>
+    </item>
+    
+    <item>
+      <title>Domestic Well Vulnerability to Drought Duration and Unsustainable Groundwater Management in California&#39;s Central Valley</title>
+      <link>/pubs/well-failure/</link>
+      <pubDate>Wed, 18 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/pubs/well-failure/</guid>
+      <description> Backstory     This publication grew out of the 2018 California water data Challenge, for which our team was awarded a winning prize.
+Me &amp;amp; my team (@alfencl,@AlvarEscriva,Hervé) are honored to win at the #CAWaterDataChallenge. Big thanks to my mom! @CAGovOps @westbigdatahub pic.twitter.com/x4E5GVltC5
+&amp;mdash; Rich Pauloo (@RichPauloo) October 19, 2018   </description>
+    </item>
+    
+    <item>
+      <title>Assessing Impact of Outreach through Software Citation for Community Software in Geodynamics</title>
+      <link>/pubs/cig/</link>
+      <pubDate>Mon, 10 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/pubs/cig/</guid>
+      <description>The Computational Infrastructure for Geodynamics is a community of software users and user-developers who model physical processes in the Earth and planetary interiors. From 2010-2018, the community of researchers published upward of 638 peer reviewed papers in more than 124 venues. We analyzed this corpus of publications to understand the impact of CIG workshops and tutorials, measured through software citation. We automated article analysis using text extraction and tokenization techniques. Patterns in co-mentioned software suggest that usage for some tools cross-cuts many domains, indicating their broad impact. Network analysis of co-authorship and participation in tutorials and hackathons reveal both are effective methods to grow software communities and the importance of developers in bridging research groups and expanding networks. Networks show that workshops broaden the reach of users beyond the developers while hackathons broaden the developer base creating greater collaboration opportunities for hackathon participants.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -115,6 +115,24 @@ Introduction     As opposed to traditional row-based storage (e.g., SQL), Parque
     </item>
     
     <item>
+      <title>r4wrds</title>
+      <link>/project/r4wrds/</link>
+      <pubDate>Wed, 28 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/r4wrds/</guid>
+      <description>R for water Resources Data Science.</description>
+    </item>
+    
+    <item>
+      <title>gsp dry wells .com</title>
+      <link>/project/gspdrywells/</link>
+      <pubDate>Thu, 21 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/gspdrywells/</guid>
+      <description>Domestic well failure prediction and cost estimates in critically overdrafted basins.</description>
+    </item>
+    
+    <item>
       <title>A campfire</title>
       <link>/talk/campfire/</link>
       <pubDate>Tue, 12 Jan 2021 00:00:00 +0000</pubDate>
@@ -169,12 +187,48 @@ Introduction     As opposed to traditional row-based storage (e.g., SQL), Parque
     </item>
     
     <item>
+      <title>low cost sensor networks</title>
+      <link>/project/lcsn/</link>
+      <pubDate>Mon, 30 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/project/lcsn/</guid>
+      <description>Real-time sensor networks and dashboards for monitoring environmental data.</description>
+    </item>
+    
+    <item>
       <title>How to link a custom domain to Github Pages with HTTPS</title>
       <link>/blog/gh-custom-url/</link>
       <pubDate>Fri, 15 Nov 2019 02:57:45 +0000</pubDate>
       
       <guid>/blog/gh-custom-url/</guid>
       <description>How to host a personal or project page on your username.github.io site and configure every little detail.</description>
+    </item>
+    
+    <item>
+      <title>cal water quality .com</title>
+      <link>/project/cawdc-2019/</link>
+      <pubDate>Wed, 30 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/project/cawdc-2019/</guid>
+      <description>Automated water quality reports for &amp;gt; 3,000 California public water systems. 🏆 Winner 2019 California Water Data Challenge.</description>
+    </item>
+    
+    <item>
+      <title>interpretable random forests</title>
+      <link>/project/rf/</link>
+      <pubDate>Wed, 30 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/project/rf/</guid>
+      <description>Cumulative variable importance.</description>
+    </item>
+    
+    <item>
+      <title>textme</title>
+      <link>/project/textme/</link>
+      <pubDate>Wed, 30 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/project/textme/</guid>
+      <description>Text yourself from R when long running jobs complete.</description>
     </item>
     
     <item>
@@ -196,34 +250,6 @@ Introduction     As opposed to traditional row-based storage (e.g., SQL), Parque
     </item>
     
     <item>
-      <title>Tachyons for Style</title>
-      <link>/project/giraffes/</link>
-      <pubDate>Wed, 03 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/project/giraffes/</guid>
-      <description>Tachyons is a design system that allows you to design gorgeous interfaces in the browser with little effort.      Because Speed     Building this static site generator theme was the first time I used an Atomic (or Functional) CSS system like Tachyons. It&amp;rsquo;s a design system that provides very small (which means fast) CSS modules that you can use in your HTML. So, rather than writing every line of CSS, you apply the style you need as you write your HTML with easy to understand shorthand class names.</description>
-    </item>
-    
-    <item>
-      <title>Palmer Penguins</title>
-      <link>/project/penguins/</link>
-      <pubDate>Tue, 02 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/project/penguins/</guid>
-      <description>“Grid is the very first CSS module created specifically to solve the layout problems we&amp;rsquo;ve all been hacking our way around for as long as we&amp;rsquo;ve been making websites.”     — Chris House, A Complete Guide to CSS Grid Layout 1
- Since I began building websites in Y2K, I&amp;rsquo;ve lost count how many times the phrase &amp;ldquo;&amp;hellip;there&amp;rsquo;s got to be a better way to do this&amp;rdquo; has passed my lips.</description>
-    </item>
-    
-    <item>
-      <title>Bakeoff</title>
-      <link>/project/bakeoff/</link>
-      <pubDate>Mon, 01 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/project/bakeoff/</guid>
-      <description>Formspree makes it easy to receive submissions from HTML forms on your static website.      Functional Form     This theme has a form-to-email feature built in, thanks to the simple Formspree integration. All you need to activate the form is a valid recipient email address saved in the front matter of the form (/content/forms/contact.md). Of course, the example shown below (your@email.here) must not be used.</description>
-    </item>
-    
-    <item>
       <title>Text analysis of the Mueller Report</title>
       <link>/blog/mueller/</link>
       <pubDate>Fri, 19 Apr 2019 02:57:45 +0000</pubDate>
@@ -233,7 +259,7 @@ Introduction     As opposed to traditional row-based storage (e.g., SQL), Parque
     </item>
     
     <item>
-      <title>Contact</title>
+      <title>Contact me</title>
       <link>/contact/</link>
       <pubDate>Mon, 25 Feb 2019 13:38:41 -0600</pubDate>
       
@@ -318,6 +344,42 @@ Heading North on I-5, we pass by brown hills and palm trees as San Diego fades i
     </item>
     
     <item>
+      <title>Tulare basin TDS</title>
+      <link>/project/tulare-tds/</link>
+      <pubDate>Sun, 27 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/project/tulare-tds/</guid>
+      <description>Groundwater quality data visualization.</description>
+    </item>
+    
+    <item>
+      <title>CA well reports</title>
+      <link>/project/oswcr-eda/</link>
+      <pubDate>Sat, 27 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/project/oswcr-eda/</guid>
+      <description>Exploratory data analysis of California&amp;rsquo;s Online State Well Completion Report Database.</description>
+    </item>
+    
+    <item>
+      <title>Fatal landslide prediction</title>
+      <link>/project/landslides/</link>
+      <pubDate>Thu, 27 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/project/landslides/</guid>
+      <description>Using random forests, boosting, LDA, and QDA with variable probability thresholds for global landslide classification.</description>
+    </item>
+    
+    <item>
+      <title>AbstR</title>
+      <link>/project/abstr/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/project/abstr/</guid>
+      <description>An adaptation of PapR to 30,000 American Geophysical Union abstracts.</description>
+    </item>
+    
+    <item>
       <title>Contributors</title>
       <link>/archive/contributors/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -337,6 +399,17 @@ Heading North on I-5, we pass by brown hills and palm trees as San Diego fades i
       <guid>/license/</guid>
       <description>My blog posts are released under a Creative Commons Attribution-ShareAlike 4.0 International License.
   </description>
+    </item>
+    
+    <item>
+      <title>Publications</title>
+      <link>/pubs/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/pubs/</guid>
+      <description>María G. Castrellón, Rich Pauloo, Ioana Popescu, José Fábrega (2023). ONASP: A web application for groundwater data visualization in Panama. 14th International Conference on Hydroinformatics.
+  Paper  Website   Zhilin Guo, Graham E. Fogg, Rich Pauloo, Chunmiao Zheng (2022). Sustainability of Regional Groundwater Quality in Response to Managed Aquifer Recharge. WRR.
+  Paper   Aakash Ahamed, Rosemary Knight, Sarfaraz Alam, Rich Pauloo, Forrest Melton (2022).</description>
     </item>
     
   </channel>

@@ -13,6 +13,9 @@ projects: ""
 featured: true
 ---
 
+![](featured.jpeg)  
+*MC Escher, “Ascending and Descending” 1960.*
+
 This blog post expands on the excellent talk delivered by Andrew Bray at rstudio::conf2018. [The slides (PDF) from Andrew’s presentation can be found at this github link](https://github.com/andrewpbray/talks/blob/master/2018/infer-rstudioconf-2018.pdf).
 
 From the `infer` [homepage](http://infer.netlify.com/):
@@ -171,23 +174,23 @@ gss %>% select(party, NASA) %>%
     ## # A tibble: 149 × 4
     ##    party NASA        permutation_1 permutation_2
     ##    <fct> <fct>       <fct>         <fct>        
-    ##  1 Ind   TOO LITTLE  TOO MUCH      TOO MUCH     
-    ##  2 Ind   ABOUT RIGHT ABOUT RIGHT   ABOUT RIGHT  
-    ##  3 Dem   ABOUT RIGHT TOO MUCH      ABOUT RIGHT  
-    ##  4 Ind   TOO LITTLE  TOO MUCH      TOO LITTLE   
-    ##  5 Ind   TOO MUCH    ABOUT RIGHT   ABOUT RIGHT  
-    ##  6 Ind   TOO LITTLE  TOO MUCH      ABOUT RIGHT  
-    ##  7 Ind   ABOUT RIGHT ABOUT RIGHT   TOO LITTLE   
-    ##  8 Dem   ABOUT RIGHT ABOUT RIGHT   ABOUT RIGHT  
-    ##  9 Dem   TOO LITTLE  ABOUT RIGHT   TOO LITTLE   
-    ## 10 Ind   TOO LITTLE  ABOUT RIGHT   TOO MUCH     
+    ##  1 Ind   TOO LITTLE  ABOUT RIGHT   ABOUT RIGHT  
+    ##  2 Ind   ABOUT RIGHT TOO MUCH      ABOUT RIGHT  
+    ##  3 Dem   ABOUT RIGHT ABOUT RIGHT   ABOUT RIGHT  
+    ##  4 Ind   TOO LITTLE  TOO LITTLE    TOO LITTLE   
+    ##  5 Ind   TOO MUCH    TOO MUCH      ABOUT RIGHT  
+    ##  6 Ind   TOO LITTLE  ABOUT RIGHT   TOO LITTLE   
+    ##  7 Ind   ABOUT RIGHT ABOUT RIGHT   TOO MUCH     
+    ##  8 Dem   ABOUT RIGHT ABOUT RIGHT   TOO MUCH     
+    ##  9 Dem   TOO LITTLE  ABOUT RIGHT   TOO MUCH     
+    ## 10 Ind   TOO LITTLE  TOO MUCH      ABOUT RIGHT  
     ## # … with 139 more rows
 
 These premutations represent what we would expect to see **if the relationship between variables was completeley random**. We could generate many, many permuations, calcualte an Chi-squared statistic for each, and we would expect their distribution to approach the density functions shown above. Then we could plot our data on that distribution and see where it fell. If the area under the curve to the right of the point was less than 5%, we could reject the null hypothesis.
 
 Infer makes this programatic approach very simple.
 
-{{% figure src="/img/infer_flow.png" %}}
+{{% figure src="/static/img/infer_flow.png" %}}
 
 **Main Verbs:**
 
@@ -230,7 +233,7 @@ gss %>%
     ## # A tibble: 1 × 1
     ##   p_val
     ##   <dbl>
-    ## 1 0.856
+    ## 1 0.862
 
 If we omit `visualize`, we get a dataframe of the permuted values:
 
@@ -248,16 +251,16 @@ gss %>%
     ## # A tibble: 1,000 × 2
     ##    replicate  stat
     ##        <int> <dbl>
-    ##  1         1  7.42
-    ##  2         2  1.32
-    ##  3         3  5.89
-    ##  4         4  4.39
-    ##  5         5  2.94
-    ##  6         6 11.5 
-    ##  7         7  5.61
-    ##  8         8  1.28
-    ##  9         9  5.47
-    ## 10        10  4.97
+    ##  1         1 3.98 
+    ##  2         2 2.00 
+    ##  3         3 0.712
+    ##  4         4 2.14 
+    ##  5         5 4.41 
+    ##  6         6 1.38 
+    ##  7         7 4.61 
+    ##  8         8 1.82 
+    ##  9         9 4.89 
+    ## 10        10 1.47 
     ## # … with 990 more rows
 
 ``` r
@@ -364,7 +367,7 @@ SE <- boot %>%
 SE
 ```
 
-    ## [1] 0.07419929
+    ## [1] 0.0732147
 
 ``` r
 CI <- c(obs_stat - 2 * SE, obs_stat + 2 * SE)
@@ -372,7 +375,7 @@ CI <- c(obs_stat - 2 * SE, obs_stat + 2 * SE)
 CI
 ```
 
-    ## [1] 0.07081324 0.36761040
+    ## [1] 0.07278243 0.36564122
 
 And now we can add these confidence intervals to our etimate of the measured difference in happiness between men and women in our population with `geom_segment`.
 
@@ -389,8 +392,6 @@ data_frame(diff = obs_stat) %>%
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-18-1.png" width="672" />
 
 Et voila. Confidence intervals made easy via bootstrapping in `infer`.
-
-{{% figure src="/img/carey_dancing.gif" %}}
 
 # Conclusion
 
