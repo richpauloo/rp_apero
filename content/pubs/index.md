@@ -57,7 +57,14 @@ Aakash Ahamed, Rosemary Knight, Sarfaraz Alam, **Rich Pauloo**, Forrest Melton (
 ![](img/vhgr.png)
 ![](img/vhgr_part_traj.gif)
 
-***  
+*** 
+
+**Rich Pauloo** and Alvar Escriva-Bou (2021). _How Better Data Can Help California Avoid a Drinking Water Crisis_. Public Policy Institute of California.  
+- [Website](https://www.ppic.org/blog/commentary-how-better-data-can-help-california-avoid-a-drinking-water-crisis/)  
+
+![](img/ppic_well.png)
+
+*** 
 
 **Rich Pauloo**, Graham E. Fogg, Thomas Harter, Zhilin Guo (2020). _Anthropogenic Basin Closure and Groundwater Salinization (ABCSAL)_. JoH.  
 - [Paper](https://doi.org/10.1016/j.jhydrol.2020.125787)  
@@ -68,7 +75,6 @@ Aakash Ahamed, Rosemary Knight, Sarfaraz Alam, **Rich Pauloo**, Forrest Melton (
 
 ***  
 
-
 Andrew Calderwood, **Rich Pauloo**, PhD, Graham E. Fogg (2020). _Low-Cost, Open Source Wireless Sensor Network for Real-Time, Scalable Groundwater Monitoring_. Water.  
 - [Paper](https://doi.org/10.3390/w12041066)  
 - [Code](https://github.com/richpauloo/cosumnes_shiny)  
@@ -78,20 +84,26 @@ Andrew Calderwood, **Rich Pauloo**, PhD, Graham E. Fogg (2020). _Low-Cost, Open 
     
 ***  
 
-
 **Rich Pauloo**, Graham E. Fogg, Helen Dahlke, Alvar Escriva-Bou, Amanda Fencl, Hervé Guillon (2020). _Domestic Well Vulnerability to Drought Duration and Unsustainable Groundwater Management in California's Central Valley_. ERL.  
 - [Paper](https://doi.org/10.1088/1748-9326/ab6f10)  
+- [Website](https://www.gspdrywells.com)  
     
 ![](img/well_failure.png)  
 
 ***  
 
+Darcy Bostic, Kristin Dobbin, **Rich Pauloo**, Jessica Mendoza, Michael Kuo, and Jonathan London (2020). _Sustainable for Whom? The Impact of Groundwater Sustainability Plans on Domestic Wells_. Pacific Institute.  
+- [Paper](https://pacinst.org/wp-content/uploads/2020/09/Sustainable-for-Whom_UC-Davis_Sept-2020.pdf)  
+- [Website](https://www.gspdrywells.com)  
+    
+![](img/pacific_well.png)  
+
+***  
 
 Lorraine J. Hwang, **Rich Pauloo**, Jane Carlen (2020). _Assessing Impact of Outreach through Software Citation for Community Software in Geodynamics_. IEEE.  
 - [Paper](https://doi.org/10.1109/MCSE.2019.2940221)  
 - [Code](https://github.com/richpauloo/cig_nlp)  
 - [Website](https://richpauloo.shinyapps.io/cig_nlp/)  
-
 
 ![](img/cig.png)  
 
