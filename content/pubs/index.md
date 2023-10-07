@@ -27,6 +27,14 @@ title: Publications
 
 ***  
 
+Darcy Bostic, Linda Mendez-Barrientos, **Rich Pauloo**, Kristin Dobbin, Victoria MacClements  (2023). _Thousands of domestic and public supply wells face failure despite groundwater sustainability reform in California’s Central Valley_. Nature Scientific Reports.  
+- [Paper](https://www.nature.com/articles/s41598-023-41379-9)  
+- [LA Times article](https://www.latimes.com/environment/story/2023-09-20/thousands-of-central-valley-water-wells-risk-failure)  
+
+![](img/nature_gsp.png)
+
+***  
+
 María G. Castrellón, **Rich Pauloo**, Ioana Popescu, José Fábrega (2023). _ONASP: A web application for groundwater data visualization in Panama_. 14th International Conference on Hydroinformatics.  
 - [Paper](https://iopscience.iop.org/article/10.1088/1755-1315/1136/1/012028)  
 - [Website](https://mgcastre.shinyapps.io/ONASP/)  
