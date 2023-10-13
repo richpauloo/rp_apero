@@ -7,6 +7,7 @@ description: Chuang Tzu once warned, "_Your life has a limit, but knowledge has 
 image_left: true
 images:
 - img/avatar_lensa.JPG
+# - img/avatar_real.png
 show_action_link: true
 show_social_links: true
 subtitle: 
