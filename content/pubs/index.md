@@ -58,7 +58,7 @@ Aakash Ahamed, Rosemary Knight, Sarfaraz Alam, **Rich Pauloo**, Forrest Melton (
 
 ***  
 
-**Rich Pauloo**, Graham E. Fogg, Zhilin Guo, Christopher V. Henri (2021). _Hydraulic Gradients Modulate Non-Fickian Transport in Heterogeneous Porous Media_. WRR.  
+**Rich Pauloo**, Graham E. Fogg, Zhilin Guo, Christopher V. Henri (2021). _Mean Flow Direction Modulates Non-Fickian Transport in a Heterogeneous Alluvial Aquifer-Aquitard System_. WRR.  
 - [Paper](https://doi.org/10.1029/2020WR028655)  
 - [Poster](https://essoar.org/doi/10.1002/essoar.10501680.1)  
 
