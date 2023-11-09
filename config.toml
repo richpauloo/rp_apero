@@ -142,17 +142,17 @@ enableEmoji = true
     name = "Blog"
     title = "Blog"
     url = "/blog/"
-    weight = 2
+    weight = 4
   [[menu.header]]
     name = "Projects"
     title = "Project Portfolio"
     url = "/project/"
     weight = 3
   [[menu.header]]
-    name = "Pubs"
-    title = "Pubs"
-    url = "/pubs/"
-    weight = 4
+    name = "Research"
+    title = "Research"
+    url = "/research/"
+    weight = 2
   [[menu.header]]
     name = "Contact"
     title = "Contact"
@@ -161,7 +161,8 @@ enableEmoji = true
   [[menu.header]]
     name = "CV"
     title = "CV"
-    url = "/cv"
+    #url = "/cv"
+    url = "/pauloo_cv.pdf"
     weight = 6
   #[[menu.header]]
   #  name = "A collection"

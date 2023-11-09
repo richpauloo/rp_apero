@@ -1,6 +1,6 @@
 ---
 ## Configure sidebar content in narrow column
-author: "Rich Pauloo"
+author: "Rich Pauloo, PhD"
 role: "Thinker, Tea Drinker"
 avatar_shape: circle # circle, square, rounded, leave blank to exclude
 show_social_links: true # specify social accounts in site config
