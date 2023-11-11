@@ -112,7 +112,7 @@ enableEmoji = true
   [[params.social]]
       icon      = "google-scholar" # icon name without the 'fa-'
       icon_pack = "ai"
-      url       = "https://scholar.google.com/citations?user=LDere-YAAAAJ&hl=en"
+      url       = "https://scholar.google.com/citations?user=39VtrnEAAAAJ"
   [[params.social]]
       icon      = "rss" # icon name without the 'fa-'
       icon_pack = "fas"
