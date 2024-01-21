@@ -25,6 +25,15 @@ sidebar:
 title: Publications
 ---
 
+
+***  
+
+Chao Wang, Graham E. Fogg, **Rich Pauloo** (2024). _Groundwater Basin Openness and Sustainability_. Water Resources Research.  
+- [Paper](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2023WR035446)  
+
+![](img/abcsal2.png)
+
+
 ***  
 
 Darcy Bostic, Linda Mendez-Barrientos, **Rich Pauloo**, Kristin Dobbin, Victoria MacClements  (2023). _Thousands of domestic and public supply wells face failure despite groundwater sustainability reform in California’s Central Valley_. Nature Scientific Reports.  
