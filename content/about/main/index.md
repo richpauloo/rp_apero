@@ -13,7 +13,7 @@ intro: |
   
   My work has appeared in <a href="https://www.nature.com/articles/s41598-023-41379-9" target="_blank">Nature</a>, the <a href="https://www.latimes.com/environment/story/2021-12-16/its-a-race-to-the-bottom-for-agricultural-wells" target="_blank">Los Angeles Times</a>, <a href="https://www.newscientist.com/article/2264206-groundwater-that-supports-world-food-chain-may-become-too-salty-to-use/" target="_blank">NewScientist</a>, and <a href="https://www.newsweek.com/california-drought-rain-reservoirs-groundwater-1772590" target="_blank">Newsweek</a>.
   
-  Currently, I lead data and software teams in the energy sector. We build tools to help utilities adapt to climate change, assess wildfire risk, and make equitable electrification investments. I still enjoy contributing to the academic literature and to open source projects when I have time. Long ago, I taught environmental science 5th graders and led National Geographic expeditions for high school students. I hope that one day, once I have more to contribute to the next generation, I can return to teaching.  
+  Currently, I lead data and software teams in the energy sector. We build tools to help utilities adapt to climate change, assess wildfire risk, and make equitable electrification investments. I still enjoy contributing to the academic literature and to open source projects from time to time. Long ago, I taught environmental science to 5th graders and led National Geographic expeditions for high school students. I hope that one day I can return to teaching.  
   
   
   <!--
