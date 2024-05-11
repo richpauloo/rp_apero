@@ -18,7 +18,3 @@ type: home
 
 ** index doesn't contain a body, just front matter above.
 See index.html in the layouts folder **
-
-These days, I'm more at peace with all I'll never learn. I try to learn about others, about myself, about the bewildering world we live in. I like to puzzle over how we fit together, what we can accomplish together, what it's all about.
-
-Chuang Tzu once warned, "_Your life is finite, but knowledge is infinite. If you use what is finite to pursue what is infinite, you will be in danger_." I didn't understand this until midway through a PhD. I was building 3D computer simulations that describe the physics of how groundwater flows underground, how contaminants advect, disperse, and diffuse through rocks. I was far and away, on a slippery slope towards the infinite. If given the choice to do it all over again, I wouldn't hesitate. Learning is simply too much fun.
