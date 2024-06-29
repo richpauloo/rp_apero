@@ -27,7 +27,7 @@ title: Publications
 
 ***  
 
-Georgios Kourakos, Thomas Harter, **Rich Pauloo** (2024). _An Imputation Method for Simulating 3D Well Screen Locations from Limited Regional Well Log Data_. Groundwater.  
+Georgios Kourakos, **Rich Pauloo**, Thomas Harter (2024). _An Imputation Method for Simulating 3D Well Screen Locations from Limited Regional Well Log Data_. Groundwater.  
 - [Paper](https://ngwa.onlinelibrary.wiley.com/doi/10.1111/gwat.13424)  
 
 ![](img/wcr_impute.jpg)
