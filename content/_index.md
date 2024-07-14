@@ -7,7 +7,7 @@ description: My maternal Chinese surname is _林_ (the characters represent 2 tr
 image_left: true
 images:
 #- img/avatar_lensa.JPG
-- img/avatar_real.png
+- img/avatar_agu.png
 show_action_link: true
 show_social_links: true
 subtitle: 
