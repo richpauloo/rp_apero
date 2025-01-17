@@ -9,31 +9,18 @@ show_outro: false
 intro: |
 
 
-  I work at the intersection of data science, hydrology, and climate to measure and model the water and energy systems that sustain humanity. My expertise spans modeling, geospatial programming, and natural resource management.
+  I work at the intersection of data science, hydrology, and climate to measure and model the water and energy systems that sustain humanity. My expertise spans modeling, geospatial programming, and natural resource management. I currently lead innovation teams that build technology for electric utilities. 
 
-  During my career, I've:  
-
-  - Built 3D models to predict <a href="https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2020WR028655" target="_blank">groundwater flow</a> and <a href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2023WR035446" target="_blank">contaminant transport</a> in aquifers critical to global food and water supply.  
-  - Developed <a href="https://iopscience.iop.org/article/10.1088/1748-9326/ab6f10" target="_blank">regional-scale models</a> to predict drought-driven well failures, with a focus on disadvantaged communities.  
-  - Created interactive, geospatial <a href="https://www.gspdrywells.com/" target="_blank">decision-support tools</a> to inform sustainable resource management.  
-
-  I’ve also automated municipal <a href="https://www.calwaterquality.com" target="_blank">water quality reports</a> in California and co-developed the nation’s largest public spatial database of <a href="https://www.policyinnovation.org/technology/water-utility-service-area-boundaries" target="_blank">water system boundaries</a>, now used by the US EPA. As co-founder of Water Data Lab, I've trained 400+ scientists and engineers through the <a href="https://www.r4wrds.com" target="_blank">R for Water Resources Data Science</a> curriculum.  
-
-  My work has been featured in <a href="https://www.pbs.org/video/water-whiplash-5ficzw/" target="_blank">PBS</a>, <a href="https://www.nature.com/articles/s41598-023-41379-9" target="_blank">Nature</a>, the <a href="https://www.latimes.com/environment/story/2021-12-16/its-a-race-to-the-bottom-for-agricultural-wells" target="_blank">Los Angeles Times</a>, and <a href="https://www.newscientist.com/article/2264206-groundwater-that-supports-world-food-chain-may-become-too-salty-to-use/" target="_blank">NewScientist</a>. I lead Innovation teams that build technology for electric utilities. 
-
-  When time permits, I enjoy contributing to open-source projects and science communication. My early career included teaching environmental science to 5th graders and leading National Geographic expeditions in Thailand for high school students.  
-  I work at the intersection of data science, and hydrology, and climate to measure and model the water and energy systems that sustain human populations. My expertise spans statistical modeling, geospatial programming, and natural resource management.
-
-  During my career, I've:  
+During my career, I've:  
 
   - Built 3D models to predict <a href="https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2020WR028655" target="_blank">groundwater flow</a> and <a href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2023WR035446" target="_blank">contaminant transport</a> in aquifers critical to global food and water supply.  
   - Developed <a href="https://iopscience.iop.org/article/10.1088/1748-9326/ab6f10" target="_blank">regional-scale models</a> to predict drought-driven well failures, with a focus on <a href="https://www.nature.com/articles/s41598-023-41379-9" target="_blank">disadvantaged communities</a>.  
   - Created interactive, geospatial <a href="https://www.gspdrywells.com/" target="_blank">decision-support tools</a> to inform sustainable resource management.  
   - Leveraged <a href="https://www.sciencedirect.com/science/article/pii/S0048969721057132?via%3Dihub" target="_blank">satellite remote sensing</a> for near-real time environmental monitoring. 
 
-  As co-founder of the Water Data Lab, I've automated municipal <a href="https://www.calwaterquality.com" target="_blank">water quality reports</a> in California, co-developed the nation’s largest public spatial database of <a href="https://www.policyinnovation.org/technology/water-utility-service-area-boundaries" target="_blank">water system boundaries</a> (since adapted and stewarded by the US EPA), and trained 400+ scientists and engineers through the <a href="https://www.r4wrds.com" target="_blank">R for Water Resources Data Science</a> curriculum.  
+  I’ve also automated municipal <a href="https://www.calwaterquality.com" target="_blank">water quality reports</a> in California and co-developed the nation’s largest public spatial database of <a href="https://www.policyinnovation.org/technology/water-utility-service-area-boundaries" target="_blank">water system boundaries</a>, now used by the US EPA. As co-founder of Water Data Lab, I've trained 400+ scientists and engineers through the <a href="https://www.r4wrds.com" target="_blank">R for Water Resources Data Science</a> curriculum.  
 
-  My work has been featured in <a href="https://www.pbs.org/video/water-whiplash-5ficzw/" target="_blank">PBS</a>, <a href="https://www.nature.com/articles/s41598-023-41379-9" target="_blank">Nature</a>, the <a href="https://www.latimes.com/environment/story/2021-12-16/its-a-race-to-the-bottom-for-agricultural-wells" target="_blank">Los Angeles Times</a>, and <a href="https://www.newscientist.com/article/2264206-groundwater-that-supports-world-food-chain-may-become-too-salty-to-use/" target="_blank">NewScientist</a>. I lead Innovation teams that build technology for electric utilities. 
+  My work has been featured in <a href="https://www.pbs.org/video/water-whiplash-5ficzw/" target="_blank">PBS</a>, <a href="https://www.nature.com/articles/s41598-023-41379-9" target="_blank">Nature</a>, the <a href="https://www.latimes.com/environment/story/2021-12-16/its-a-race-to-the-bottom-for-agricultural-wells" target="_blank">Los Angeles Times</a>, and <a href="https://www.newscientist.com/article/2264206-groundwater-that-supports-world-food-chain-may-become-too-salty-to-use/" target="_blank">NewScientist</a>. 
 
   In my early years after college, I taught environmental science to 5th graders and led National Geographic expeditions in Thailand for high school students. 
   
