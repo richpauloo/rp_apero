@@ -11,12 +11,12 @@ intro: |
 
   I work at the intersection of data science, hydrology, and climate to measure and model the water and energy systems that sustain humanity. My expertise spans modeling, geospatial programming, and natural resource management. I currently lead innovation teams that build technology for electric utilities. 
 
-During my career, I've:  
+  During my career, I've:  
 
   - Built 3D models to predict <a href="https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2020WR028655" target="_blank">groundwater flow</a> and <a href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2023WR035446" target="_blank">contaminant transport</a> in aquifers critical to global food and water supply.  
   - Developed <a href="https://iopscience.iop.org/article/10.1088/1748-9326/ab6f10" target="_blank">regional-scale models</a> to predict well failures due to drought and unsustainable management, with a focus on <a href="https://www.nature.com/articles/s41598-023-41379-9" target="_blank">disadvantaged communities</a>.  
   - Created interactive, geospatial <a href="https://www.gspdrywells.com/" target="_blank">decision-support tools</a> to inform sustainable resource management.  
-  - Leveraged <a href="https://www.sciencedirect.com/science/article/pii/S0048969721057132?via%3Dihub" target="_blank">satellite remote sensing</a> for near-real time environmental monitoring. 
+  - Leveraged <a href="https://www.sciencedirect.com/science/article/pii/S0048969721057132?via%3Dihub" target="_blank">satellite remote sensing</a> for near-real time environmental monitoring.  
 
   I’ve also automated municipal <a href="https://www.calwaterquality.com" target="_blank">water quality reports</a> in California and co-developed the nation’s largest public spatial database of <a href="https://www.policyinnovation.org/technology/water-utility-service-area-boundaries" target="_blank">water system boundaries</a>, now used by the US EPA. As co-founder of Water Data Lab, I've trained 400+ scientists and engineers through the <a href="https://www.r4wrds.com" target="_blank">R for Water Resources Data Science</a> curriculum.  
 
