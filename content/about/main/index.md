@@ -9,7 +9,7 @@ show_outro: false
 intro: |
 
 
-  I work at the intersection of data science, and hydrology, and climate to measure and model the water and energy systems that sustain human populations. My expertise spans statistical modeling, geospatial programming, and natural resource management.
+  I work at the intersection of data science, hydrology, and climate to measure and model the water and energy systems that sustain human populations. My expertise spans statistical modeling, geospatial programming, and natural resource management.
 
   During my career, I've:  
 
