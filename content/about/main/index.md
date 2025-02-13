@@ -20,7 +20,7 @@ intro: |
 
   I’ve also automated municipal <a href="https://www.calwaterquality.com" target="_blank">water quality reports</a> in California and co-developed the nation’s largest public spatial database of <a href="https://www.policyinnovation.org/technology/water-utility-service-area-boundaries" target="_blank">water system boundaries</a>, now used by the US EPA. As co-founder of Water Data Lab, I've trained 400+ scientists and engineers through the <a href="https://www.r4wrds.com" target="_blank">R for Water Resources Data Science</a> curriculum.  
 
-  My work has been featured in <a href="https://www.pbs.org/video/water-whiplash-5ficzw/" target="_blank">PBS</a>, <a href="https://www.nature.com/articles/s41598-023-41379-9" target="_blank">Nature</a>, the <a href="https://www.latimes.com/environment/story/2021-12-16/its-a-race-to-the-bottom-for-agricultural-wells" target="_blank">Los Angeles Times</a>, and <a href="https://www.newscientist.com/article/2264206-groundwater-that-supports-world-food-chain-may-become-too-salty-to-use/" target="_blank">NewScientist</a>. 
+  My work has been featured in <a href="https://www.youtube.com/watch?v=7ALeNj7cp_s" target="_blank">PBS</a>, <a href="https://www.nature.com/articles/s41598-023-41379-9" target="_blank">Nature</a>, the <a href="https://www.latimes.com/environment/story/2021-12-16/its-a-race-to-the-bottom-for-agricultural-wells" target="_blank">Los Angeles Times</a>, and <a href="https://www.newscientist.com/article/2264206-groundwater-that-supports-world-food-chain-may-become-too-salty-to-use/" target="_blank">NewScientist</a>. 
 
   In my early years after college, I taught environmental science to 5th graders and led National Geographic expeditions in Thailand for high school students. 
   
