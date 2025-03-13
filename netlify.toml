@@ -16,8 +16,3 @@ command = 'hugo -F -b $DEPLOY_PRIME_URL'
 [context.production.environment]
 HUGO_ENV = 'production'
 
-[[redirects]]
-  from = "https://www.r4wrds.netlify.app/*"
-  to = "https://r4wrds.netlify.app/:splat"
-  status = 301
-  force = true

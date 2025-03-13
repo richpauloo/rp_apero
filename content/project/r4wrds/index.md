@@ -21,7 +21,7 @@ links:
 - icon: globe
   icon_pack: fas
   name: Website
-  url: https://www.r4wrds.com
+  url: https://r4wrds.netlify.app
 
 url_code: ""
 url_pdf: ""
