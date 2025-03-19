@@ -33,7 +33,7 @@ enableEmoji = true
   description = "A digital garden."
   favicon = "/img/lim.png"
   logo = "/img/lim.png"
-  mainSections = ["project"]
+  mainSections = ["project", "blog"]
   navallcaps = true
   # show/hide social icons in site header & footer
   # configure social icons and links below in [[params.social]]
@@ -113,10 +113,10 @@ enableEmoji = true
       icon      = "google-scholar" # icon name without the 'fa-'
       icon_pack = "ai"
       url       = "https://scholar.google.com/citations?user=39VtrnEAAAAJ"
-  #[[params.social]]
-  #    icon      = "rss" # icon name without the 'fa-'
-  #    icon_pack = "fas"
-  #    url       = "/blog"
+  [[params.social]]
+      icon      = "rss" # icon name without the 'fa-'
+      icon_pack = "fas"
+      url       = "/blog"
   [[params.social]]
       icon      = "stack-overflow" # icon name without the 'fa-'
       icon_pack = "fab"
@@ -138,11 +138,11 @@ enableEmoji = true
     title = "About Rich"
     url = "/about/"
     weight = 1
-  #[[menu.header]]
-  #  name = "Blog"
-  #  title = "Blog"
-  #  url = "/blog/"
-  #  weight = 4
+  [[menu.header]]
+    name = "Blog"
+    title = "Blog"
+    url = "/blog/"
+    weight = 4
   [[menu.header]]
     name = "Projects"
     title = "Project Portfolio"
