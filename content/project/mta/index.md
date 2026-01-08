@@ -8,7 +8,7 @@ date: "2025-01-16T00:00:00Z"
 share: true
 
 # Optional external URL for project (replaces project detail page).
-#external_link: "https://www.gspdrywells.com"
+#external_link: "https://gspdrywells.netlify.app"
 
 #header:
 #  image: "shasta.png"

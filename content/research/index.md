@@ -110,7 +110,7 @@ Andrew Calderwood, **Rich Pauloo**, PhD, Graham E. Fogg (2020). _Low-Cost, Open 
 
 **Rich Pauloo**, Graham E. Fogg, Helen Dahlke, Alvar Escriva-Bou, Amanda Fencl, Hervé Guillon (2020). _Domestic Well Vulnerability to Drought Duration and Unsustainable Groundwater Management in California's Central Valley_. ERL.  
 - [Paper](https://doi.org/10.1088/1748-9326/ab6f10)  
-- [Website](https://www.gspdrywells.com)  
+- [Website](https://gspdrywells.netlify.app)  
     
 ![](img/well_failure.png)  
 
@@ -118,7 +118,7 @@ Andrew Calderwood, **Rich Pauloo**, PhD, Graham E. Fogg (2020). _Low-Cost, Open 
 
 Darcy Bostic, Kristin Dobbin, **Rich Pauloo**, Jessica Mendoza, Michael Kuo, and Jonathan London (2020). _Sustainable for Whom? The Impact of Groundwater Sustainability Plans on Domestic Wells_. Pacific Institute.  
 - [Paper](https://pacinst.org/wp-content/uploads/2020/09/Sustainable-for-Whom_UC-Davis_Sept-2020.pdf)  
-- [Website](https://www.gspdrywells.com)  
+- [Website](https://gspdrywells.netlify.app)  
     
 ![](img/pacific_well.png)  
 
