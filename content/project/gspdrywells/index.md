@@ -1,5 +1,5 @@
 ---
-title: gsp dry wells .com
+title: gsp dry wells .netlify.app
 summary: Domestic well failure prediction and cost estimates in critically overdrafted basins.
 tags: 
   - Data science
