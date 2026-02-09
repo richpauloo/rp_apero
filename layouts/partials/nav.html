@@ -1,0 +1,33 @@
+<nav class="nav" id="nav">
+  <a href="{{ "/" | absURL }}" class="nav-brand" title="My maternal Chinese surname is &#26519; (the characters represent two trees and mean forest). My paternal surname is Pauloo, Americanized at Ellis Island from the Polish &#8220;Paulowski&#8221;.">&#26519;</a>
+  {{ if .IsHome }}
+  <div class="mode-toggle" id="modeToggle">
+    <button class="mode-btn active" data-mode="flow">Flow Field</button>
+    <button class="mode-btn" data-mode="voronoi">Voronoi</button>
+  </div>
+  {{ end }}
+  <div class="nav-right">
+    <ul class="nav-links">
+      {{ range .Site.Menus.header }}
+        <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+      {{ end }}
+    </ul>
+    {{ if .IsHome }}
+    <div class="nav-gear">
+      <button class="ctrl-toggle" id="ctrlToggle" title="Settings">&#9881;</button>
+    </div>
+    {{ else }}
+    <div class="nav-gear">
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme"><span class="theme-icon"></span></button>
+    </div>
+    {{ end }}
+    <button class="nav-hamburger" id="navHamburger" aria-label="Menu">
+      <span class="nav-hamburger-icon"></span>
+    </button>
+  </div>
+</nav>
+<div class="nav-mobile-menu" id="navMobileMenu">
+  {{ range .Site.Menus.header }}
+    <a href="{{ .URL }}">{{ .Name }}</a>
+  {{ end }}
+</div>

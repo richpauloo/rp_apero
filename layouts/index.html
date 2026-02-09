@@ -1,0 +1,53 @@
+{{ define "main" }}
+
+{{ partial "hero.html" . }}
+{{ partial "controls.html" . }}
+
+<section class="section" id="garden">
+  <h2 class="section-title">Garden</h2>
+  <p class="section-subtitle">Projects and publications at various stages of growth.</p>
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="project">Project</button>
+    <button class="filter-btn" data-filter="publication">Publication</button>
+  </div>
+  <div class="card-grid" id="card-grid">
+    {{/* Collect all items into a scratch slice for sorting */}}
+    {{ $items := slice }}
+
+    {{/* Projects from content/project/ */}}
+    {{ range where .Site.RegularPages "Section" "project" }}
+      {{- $url := .Permalink -}}
+      {{- $external := false -}}
+      {{/* Check external_link first, then find globe/website link */}}
+      {{ with .Params.external_link }}
+        {{- $url = . -}}
+        {{- $external = true -}}
+      {{ end }}
+      {{ if not $external }}
+        {{ range .Params.links }}
+          {{ if and (not $external) (or (eq .icon "globe") (eq (lower .name) "website") (eq (lower .name) "dashboard")) }}
+            {{- $url = .url -}}
+            {{- $external = true -}}
+          {{ end }}
+        {{ end }}
+      {{ end }}
+      {{- $dateFormatted := .Date.Format "Jan 2006" -}}
+      {{ $items = $items | append (dict "title" .Title "description" (.Params.summary | default .Summary) "date" .Date "dateFormatted" $dateFormatted "tags" .Params.tags "type" "project" "url" $url "external" $external) }}
+    {{ end }}
+
+    {{/* Publications from data/publications.yaml */}}
+    {{ range .Site.Data.publications }}
+      {{- $d := time .date -}}
+      {{- $dateFormatted := $d.Format "Jan 2006" -}}
+      {{ $items = $items | append (dict "title" .title "description" .description "date" $d "dateFormatted" $dateFormatted "tags" .tags "type" "publication" "url" .url "external" true) }}
+    {{ end }}
+
+    {{/* Sort by date descending */}}
+    {{ range sort $items "date" "desc" }}
+      {{ partial "card.html" (dict "type" .type "title" .title "description" .description "date" .dateFormatted "tags" .tags "url" .url "external" .external) }}
+    {{ end }}
+  </div>
+</section>
+
+{{ end }}

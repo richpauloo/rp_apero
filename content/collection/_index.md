@@ -1,6 +1,12 @@
 ---
+build:
+  render: never
+  list: never
 author: Alison Hill
 cascade:
+  build:
+    render: never
+    list: never
   layout: single-series
   sidebar:
     author: Alison Hill

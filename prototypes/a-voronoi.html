@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rich Pauloo — Voronoi Terrain</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    body.theme-light {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+
+    /* Hero canvas sizing */
+    #voronoi-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+    }
+
+    /* Card badge row */
+    .card-badges {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+
+    /* Tag pills row */
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: var(--space-sm);
+    }
+
+    /* Card date line */
+    .card-date {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    /* Smooth card appearance */
+    .card {
+      opacity: 1;
+      transition: background var(--transition-base),
+                  border-color var(--transition-base),
+                  transform var(--transition-base),
+                  opacity var(--transition-base);
+    }
+
+    .card.hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body class="theme-light">
+
+  <!-- Controls Toggle -->
+  <button class="ctrl-toggle" id="ctrlToggle" title="Toggle controls">&#9881;</button>
+
+  <!-- Control Panel -->
+  <div class="ctrl-panel" id="ctrlPanel">
+    <h3>Voronoi Controls</h3>
+
+    <div class="ctrl-group">
+      <div class="ctrl-group-label">Points</div>
+      <div class="ctrl-row">
+        <label>Count</label>
+        <input type="range" id="c-count" min="10" max="200" step="1" value="70">
+        <span class="ctrl-val" id="v-count">70</span>
+      </div>
+      <div class="ctrl-row">
+        <label>Speed</label>
+        <input type="range" id="c-speed" min="0.05" max="2" step="0.05" value="0.4">
+        <span class="ctrl-val" id="v-speed">0.40</span>
+      </div>
+    </div>
+
+    <div class="ctrl-group">
+      <div class="ctrl-group-label">Appearance</div>
+      <div class="ctrl-row">
+        <label>Fill opacity</label>
+        <input type="range" id="c-fill" min="0" max="1" step="0.05" value="0.4">
+        <span class="ctrl-val" id="v-fill">0.40</span>
+      </div>
+      <div class="ctrl-row">
+        <label>Stroke opacity</label>
+        <input type="range" id="c-stroke" min="0" max="1" step="0.05" value="0.25">
+        <span class="ctrl-val" id="v-stroke">0.25</span>
+      </div>
+      <div class="ctrl-row">
+        <label>Stroke width</label>
+        <input type="range" id="c-strokew" min="0" max="4" step="0.1" value="0.8">
+        <span class="ctrl-val" id="v-strokew">0.8</span>
+      </div>
+      <div class="ctrl-row">
+        <label>Color speed</label>
+        <input type="range" id="c-cspeed" min="0.1" max="5" step="0.1" value="1.0">
+        <span class="ctrl-val" id="v-cspeed">1.0x</span>
+      </div>
+    </div>
+
+    <div class="ctrl-group">
+      <div class="ctrl-group-label">Palette</div>
+      <div class="ctrl-row">
+        <label>Colors</label>
+        <select id="c-palette">
+          <option value="terrain" selected>Terrain</option>
+          <option value="weather">Weather</option>
+          <option value="ocean">Ocean</option>
+          <option value="sunset">Sunset</option>
+          <option value="forest">Forest</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ctrl-group">
+      <div class="ctrl-group-label">Background</div>
+      <div class="ctrl-row">
+        <label>Color</label>
+        <select id="c-bg">
+          <option value="#FAFAF5" selected>Cream (light)</option>
+          <option value="#F0EDE4">Warm paper</option>
+          <option value="#E8E4DB">Parchment</option>
+          <option value="#0a0a1a">Dark navy</option>
+          <option value="#050816">Deep navy</option>
+          <option value="#1a1a2e">Midnight</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav" id="main-nav">
+    <a href="#" class="nav-brand">Rich Pauloo</a>
+    <ul class="nav-links">
+      <li><a href="#garden">Garden</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <canvas id="voronoi-canvas"></canvas>
+    <div class="hero-overlay">
+      <div class="hero-glass">
+        <h1 class="hero-title">Rich Pauloo</h1>
+        <p class="hero-subtitle">A digital garden &mdash; water, data, code, and the things I build.</p>
+        <p class="hero-meta">BUILDER // TINKERER // DATA SCIENTIST</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Garden Section -->
+  <section class="section" id="garden">
+    <h2 class="section-title">Garden</h2>
+    <p class="section-subtitle">Notes, projects, and publications at various stages of growth.</p>
+
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="blog">Blog</button>
+      <button class="filter-btn" data-filter="project">Project</button>
+      <button class="filter-btn" data-filter="publication">Publication</button>
+    </div>
+
+    <div class="card-grid" id="card-grid"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 Rich Pauloo. Built with curiosity.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/d3-delaunay@6"></script>
+  <script src="shared.js"></script>
+  <script>
+    // ============================================================
+    // Control Panel Toggle
+    // ============================================================
+    const ctrlToggle = document.getElementById('ctrlToggle');
+    const ctrlPanel = document.getElementById('ctrlPanel');
+    ctrlToggle.addEventListener('click', () => ctrlPanel.classList.toggle('open'));
+
+    // ============================================================
+    // Tunable Parameters
+    // ============================================================
+    const P = {
+      count: 70,
+      speed: 0.4,
+      fillOpacity: 0.4,
+      strokeOpacity: 0.25,
+      strokeWidth: 0.8,
+      colorSpeedMul: 1.0,
+      palette: 'terrain',
+      bgColor: '#FAFAF5'
+    };
+
+    // Palette definitions
+    const paletteMap = {
+      terrain: [
+        { pos: 0.0,  color: [30, 58, 95] },
+        { pos: 0.2,  color: [37, 99, 165] },
+        { pos: 0.35, color: [45, 138, 122] },
+        { pos: 0.5,  color: [80, 165, 130] },
+        { pos: 0.65, color: [143, 188, 143] },
+        { pos: 0.8,  color: [192, 187, 148] },
+        { pos: 1.0,  color: [212, 197, 169] }
+      ],
+      weather: weatherPalette,
+      ocean: [
+        { pos: 0.0,  color: [10, 30, 60] },
+        { pos: 0.25, color: [20, 70, 130] },
+        { pos: 0.5,  color: [40, 130, 170] },
+        { pos: 0.75, color: [90, 190, 200] },
+        { pos: 1.0,  color: [170, 225, 230] }
+      ],
+      sunset: [
+        { pos: 0.0,  color: [40, 20, 60] },
+        { pos: 0.2,  color: [120, 40, 90] },
+        { pos: 0.4,  color: [200, 60, 60] },
+        { pos: 0.6,  color: [240, 140, 50] },
+        { pos: 0.8,  color: [250, 200, 80] },
+        { pos: 1.0,  color: [255, 240, 180] }
+      ],
+      forest: [
+        { pos: 0.0,  color: [20, 40, 25] },
+        { pos: 0.25, color: [35, 80, 50] },
+        { pos: 0.5,  color: [70, 140, 80] },
+        { pos: 0.75, color: [140, 180, 100] },
+        { pos: 1.0,  color: [200, 210, 150] }
+      ]
+    };
+
+    function getCurrentPalette() {
+      return paletteMap[P.palette] || paletteMap.terrain;
+    }
+
+    // Wire up controls
+    function wireSlider(id, key, fmt) {
+      const input = document.getElementById('c-' + id);
+      const display = document.getElementById('v-' + id);
+      input.addEventListener('input', () => {
+        P[key] = parseFloat(input.value);
+        display.textContent = fmt(P[key]);
+      });
+    }
+
+    wireSlider('count', 'count', v => v.toFixed(0));
+    wireSlider('speed', 'speed', v => v.toFixed(2));
+    wireSlider('fill', 'fillOpacity', v => v.toFixed(2));
+    wireSlider('stroke', 'strokeOpacity', v => v.toFixed(2));
+    wireSlider('strokew', 'strokeWidth', v => v.toFixed(1));
+    wireSlider('cspeed', 'colorSpeedMul', v => v.toFixed(1) + 'x');
+
+    document.getElementById('c-palette').addEventListener('change', (e) => {
+      P.palette = e.target.value;
+    });
+
+    document.getElementById('c-bg').addEventListener('change', (e) => {
+      P.bgColor = e.target.value;
+    });
+
+    // Handle point count changes
+    let prevCount = P.count;
+    function syncPointCount() {
+      if (P.count !== prevCount) {
+        while (points.length < P.count) {
+          points.push(createPoint(Math.random() * W, Math.random() * H));
+        }
+        if (points.length > P.count) points.length = P.count;
+        prevCount = P.count;
+      }
+    }
+
+    // ============================================================
+    // Navigation scroll effect
+    // ============================================================
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // ============================================================
+    // Voronoi Canvas
+    // ============================================================
+    const canvas = document.getElementById('voronoi-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let W, H;
+    let points = [];
+    let mouseX = -1000, mouseY = -1000;
+    let mouseInCanvas = false;
+    let startTime = performance.now();
+
+    function createPoint(x, y) {
+      const angle = Math.random() * Math.PI * 2;
+      return {
+        x: x,
+        y: y,
+        vx: Math.cos(angle) * P.speed,
+        vy: Math.sin(angle) * P.speed,
+        colorOffset: Math.random() * Math.PI * 2,
+        colorSpeed: 0.0003 + Math.random() * 0.0005,
+        colorVal: Math.random()
+      };
+    }
+
+    function initPoints() {
+      points = [];
+      for (let i = 0; i < P.count; i++) {
+        points.push(createPoint(
+          Math.random() * W,
+          Math.random() * H
+        ));
+      }
+      prevCount = P.count;
+    }
+
+    function resize() {
+      const dpr = window.devicePixelRatio || 1;
+      W = canvas.clientWidth;
+      H = canvas.clientHeight;
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function updatePoints(time) {
+      for (let i = 0; i < points.length; i++) {
+        const p = points[i];
+
+        // Apply current speed setting
+        const curSpeed = P.speed;
+        const speedRatio = curSpeed / Math.sqrt(p.vx * p.vx + p.vy * p.vy || 1);
+        const moveX = p.vx * speedRatio;
+        const moveY = p.vy * speedRatio;
+
+        p.x += moveX;
+        p.y += moveY;
+
+        // Bounce off edges
+        if (p.x < 0) { p.x = 0; p.vx = Math.abs(p.vx); }
+        if (p.x > W) { p.x = W; p.vx = -Math.abs(p.vx); }
+        if (p.y < 0) { p.y = 0; p.vy = Math.abs(p.vy); }
+        if (p.y > H) { p.y = H; p.vy = -Math.abs(p.vy); }
+
+        // Oscillate color value
+        p.colorVal = 0.5 + 0.5 * Math.sin(time * p.colorSpeed * P.colorSpeedMul + p.colorOffset);
+      }
+    }
+
+    function render(time) {
+      ctx.fillStyle = P.bgColor;
+      ctx.fillRect(0, 0, W, H);
+
+      syncPointCount();
+
+      const coords = [];
+      const colorVals = [];
+
+      for (let i = 0; i < points.length; i++) {
+        coords.push(points[i].x, points[i].y);
+        colorVals.push(points[i].colorVal);
+      }
+
+      if (mouseInCanvas) {
+        coords.push(mouseX, mouseY);
+        const mouseColor = 0.5 + 0.5 * Math.sin(time * 0.001);
+        colorVals.push(mouseColor);
+      }
+
+      const numPts = coords.length / 2;
+      if (numPts < 3) return;
+
+      const delaunay = d3.Delaunay.from({ length: numPts }, (_, i) => coords[i * 2], (_, i) => coords[i * 2 + 1]);
+      const voronoi = delaunay.voronoi([0, 0, W, H]);
+
+      const pal = getCurrentPalette();
+
+      for (let i = 0; i < numPts; i++) {
+        const cell = voronoi.cellPolygon(i);
+        if (!cell) continue;
+
+        const rgb = lerpColor(colorVals[i], pal);
+
+        ctx.beginPath();
+        ctx.moveTo(cell[0][0], cell[0][1]);
+        for (let j = 1; j < cell.length; j++) {
+          ctx.lineTo(cell[j][0], cell[j][1]);
+        }
+        ctx.closePath();
+        ctx.fillStyle = colorToRgba(rgb, P.fillOpacity);
+        ctx.fill();
+
+        ctx.strokeStyle = colorToRgba(rgb, P.strokeOpacity);
+        ctx.lineWidth = P.strokeWidth;
+        ctx.stroke();
+      }
+    }
+
+    function animate(timestamp) {
+      const time = timestamp - startTime;
+      updatePoints(time);
+      render(time);
+      requestAnimationFrame(animate);
+    }
+
+    // Mouse tracking
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+    });
+
+    canvas.addEventListener('mouseenter', () => { mouseInCanvas = true; });
+    canvas.addEventListener('mouseleave', () => { mouseInCanvas = false; });
+
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches[0];
+      mouseX = touch.clientX - rect.left;
+      mouseY = touch.clientY - rect.top;
+      mouseInCanvas = true;
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', () => { mouseInCanvas = false; });
+
+    function boot() {
+      resize();
+      initPoints();
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+      resize();
+      for (const p of points) {
+        p.x = Math.min(p.x, W);
+        p.y = Math.min(p.y, H);
+      }
+    });
+
+    boot();
+
+    // ============================================================
+    // Garden Cards
+    // ============================================================
+    const grid = document.getElementById('card-grid');
+    const filtersContainer = document.getElementById('filters');
+    let activeFilter = 'all';
+
+    function buildCards() {
+      grid.innerHTML = '';
+      const sorted = sortByDate(gardenItems);
+
+      for (const item of sorted) {
+        const stage = getStageInfo(item.stage);
+        const card = document.createElement('a');
+        card.href = item.slug;
+        card.className = 'card';
+        card.dataset.type = item.type;
+
+        card.innerHTML = `
+          <div class="card-badges">
+            <span class="badge badge-type ${item.type}">${item.type}</span>
+            <span class="badge badge-stage badge-${item.stage}">${stage.emoji} ${stage.label}</span>
+          </div>
+          <h3 class="card-title">${item.title}</h3>
+          <p class="card-description">${item.description}</p>
+          <div class="card-meta">
+            <span class="card-date">${formatDate(item.date)}</span>
+          </div>
+          <div class="card-tags">
+            ${item.tags.map(t => `<span class="badge badge-tag">${t}</span>`).join('')}
+          </div>
+        `;
+
+        grid.appendChild(card);
+      }
+    }
+
+    function applyFilter(type) {
+      const cards = grid.querySelectorAll('.card');
+      cards.forEach(card => {
+        if (type === 'all' || card.dataset.type === type) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    filtersContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+
+      filtersContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      activeFilter = btn.dataset.filter;
+      applyFilter(activeFilter);
+    });
+
+    buildCards();
+  </script>
+</body>
+</html>

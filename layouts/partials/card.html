@@ -1,0 +1,17 @@
+{{- $type := .type -}}
+{{- $title := .title -}}
+{{- $description := .description -}}
+{{- $date := .date -}}
+{{- $tags := .tags -}}
+{{- $url := .url -}}
+{{- $external := .external -}}
+<a href="{{ $url }}" class="card" data-type="{{ $type }}"{{ if $external }} target="_blank" rel="noopener"{{ end }}>
+  <div class="card-badges">
+    <span class="badge badge-type {{ $type }}">{{ $type }}</span>
+  </div>
+  <h3 class="card-title">{{ $title }}</h3>
+  <p class="card-description">{{ $description }}</p>
+  <div class="card-meta">
+    <span class="card-date">{{ $date }}</span>
+  </div>
+</a>

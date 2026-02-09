@@ -1,0 +1,8 @@
+{{- $id := "" -}}
+{{- if .Get "id" -}}
+  {{- $id = .Get "id" -}}
+{{- else -}}
+  {{- $id = .Get 0 -}}
+{{- end -}}
+{{- $user := .Get "user" | default "x" -}}
+<p><a href="https://x.com/{{ $user }}/status/{{ $id }}" target="_blank" rel="noopener">View post on X</a></p>

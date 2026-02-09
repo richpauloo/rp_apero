@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rich Pauloo — Terrain Contours</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    body.theme-light {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+
+    /* Paper-like subtle texture */
+    body.theme-light::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+    }
+
+    /* Override hero title to serif */
+    .hero-title {
+      font-family: var(--font-serif);
+      font-weight: 700;
+    }
+
+    /* Nav brand serif */
+    .nav-brand {
+      font-family: var(--font-serif);
+      font-weight: 600;
+    }
+
+    /* SVG contours */
+    #contour-svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+    }
+
+    /* Card badge row */
+    .card-badges {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+
+    /* Tag pills row */
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: var(--space-sm);
+    }
+
+    /* Card date line */
+    .card-date {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    /* Bento grid: evergreen items span 2 columns on desktop */
+    .card-grid {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+
+    @media (min-width: 769px) {
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .card.card-wide {
+        grid-column: span 2;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .card-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .card.card-wide {
+        grid-column: span 2;
+      }
+    }
+
+    /* Smooth card filter transition */
+    .card {
+      opacity: 1;
+      transition: background var(--transition-base),
+                  border-color var(--transition-base),
+                  transform var(--transition-base),
+                  opacity var(--transition-base);
+    }
+
+    .card.hidden {
+      display: none;
+    }
+
+    /* Filter divider */
+    .filter-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-subtle);
+      align-self: center;
+    }
+
+    /* Section title serif for h2 */
+    .section-title {
+      font-family: var(--font-serif);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="theme-light">
+
+  <!-- Controls Toggle -->
+  <button class="ctrl-toggle" id="ctrlToggle" title="Toggle controls">&#9881;</button>
+
+  <!-- Control Panel -->
+  <div class="ctrl-panel" id="ctrlPanel">
+    <h3>Terrain Controls</h3>
+
+    <div class="ctrl-group">
+      <div class="ctrl-group-label">Animation</div>
+      <div class="ctrl-row">
+        <label>Speed</label>
+        <input type="range" id="c-speed" min="0" max="0.01" step="0.0002" value="0.002">
+        <span class="ctrl-val" id="v-speed">0.0020</span>
+      </div>
+      <div class="ctrl-row">
+        <button class="ctrl-btn" id="c-pause">Pause</button>
+        <button class="ctrl-btn" id="c-reset">Reset time</button>
+      </div>
+    </div>
+
+    <div class="ctrl-group">
+      <div class="ctrl-group-label">Contour geometry</div>
+      <div class="ctrl-row">
+        <label>Noise scale</label>
+        <input type="range" id="c-noise" min="0.01" max="0.1" step="0.002" value="0.035">
+        <span class="ctrl-val" id="v-noise">0.035</span>
+      </div>
+      <div class="ctrl-row">
+        <label>Levels</label>
+        <input type="range" id="c-levels" min="3" max="30" step="1" value="12">
+        <span class="ctrl-val" id="v-levels">12</span>
+      </div>
+      <div class="ctrl-row">
+        <label>Line width</label>
+        <input type="range" id="c-linewidth" min="0.3" max="4" step="0.1" value="1.4">
+        <span class="ctrl-val" id="v-linewidth">1.4</span>
+      </div>
+      <div class="ctrl-row">
+        <label>Resolution</label>
+        <select id="c-resolution">
+          <option value="coarse">Coarse (40x30)</option>
+          <option value="medium" selected>Medium (80x60)</option>
+          <option value="fine">Fine (120x90)</option>
+          <option value="ultra">Ultra (160x120)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ctrl-group">
+      <div class="ctrl-group-label">Detail</div>
+      <div class="ctrl-row">
+        <label>Octave 2</label>
+        <input type="range" id="c-octave2" min="0" max="1" step="0.05" value="0.5">
+        <span class="ctrl-val" id="v-octave2">0.50</span>
+      </div>
+    </div>
+
+    <div class="ctrl-group">
+      <div class="ctrl-group-label">Mouse effect</div>
+      <div class="ctrl-row">
+        <label>Strength</label>
+        <input type="range" id="c-mstrength" min="0" max="2" step="0.05" value="0.5">
+        <span class="ctrl-val" id="v-mstrength">0.50</span>
+      </div>
+      <div class="ctrl-row">
+        <label>Radius</label>
+        <input type="range" id="c-mradius" min="50" max="500" step="10" value="200">
+        <span class="ctrl-val" id="v-mradius">200</span>
+      </div>
+    </div>
+
+    <div class="ctrl-group">
+      <div class="ctrl-group-label">Line opacity</div>
+      <div class="ctrl-row">
+        <label>Min</label>
+        <input type="range" id="c-opmin" min="0.1" max="1" step="0.05" value="0.4">
+        <span class="ctrl-val" id="v-opmin">0.40</span>
+      </div>
+      <div class="ctrl-row">
+        <label>Max</label>
+        <input type="range" id="c-opmax" min="0.1" max="1" step="0.05" value="0.9">
+        <span class="ctrl-val" id="v-opmax">0.90</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav" id="main-nav">
+    <a href="#" class="nav-brand">Rich Pauloo</a>
+    <ul class="nav-links">
+      <li><a href="#garden">Garden</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <svg id="contour-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div class="hero-overlay">
+      <div class="hero-glass">
+        <h1 class="hero-title">Rich Pauloo</h1>
+        <p class="hero-subtitle">A digital garden &mdash; water, data, code, and the things I build.</p>
+        <p class="hero-meta">BUILDER // TINKERER // DATA SCIENTIST</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Garden Section -->
+  <section class="section" id="garden">
+    <h2 class="section-title">Garden</h2>
+    <p class="section-subtitle">Notes, projects, and publications at various stages of growth.</p>
+
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-filter="all" data-group="type">All</button>
+      <button class="filter-btn" data-filter="blog" data-group="type">Blog</button>
+      <button class="filter-btn" data-filter="project" data-group="type">Project</button>
+      <button class="filter-btn" data-filter="publication" data-group="type">Publication</button>
+      <div class="filter-divider"></div>
+      <button class="filter-btn" data-filter="seedling" data-group="stage">Seedling</button>
+      <button class="filter-btn" data-filter="budding" data-group="stage">Budding</button>
+      <button class="filter-btn" data-filter="evergreen" data-group="stage">Evergreen</button>
+    </div>
+
+    <div class="card-grid" id="card-grid"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 Rich Pauloo. Built with curiosity.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="shared.js"></script>
+  <script>
+    // ============================================================
+    // Control Panel Toggle
+    // ============================================================
+    const ctrlToggle = document.getElementById('ctrlToggle');
+    const ctrlPanel = document.getElementById('ctrlPanel');
+    ctrlToggle.addEventListener('click', () => ctrlPanel.classList.toggle('open'));
+
+    // ============================================================
+    // Tunable Parameters
+    // ============================================================
+    const P = {
+      speed: 0.002,
+      paused: false,
+      noiseScale: 0.035,
+      numLevels: 12,
+      lineWidth: 1.4,
+      octave2: 0.5,
+      mouseStrength: 0.5,
+      mouseRadius: 200,
+      opacityMin: 0.4,
+      opacityMax: 0.9,
+      resolution: 'medium'
+    };
+
+    const resMap = {
+      coarse: [40, 30],
+      medium: [80, 60],
+      fine:   [120, 90],
+      ultra:  [160, 120]
+    };
+
+    // Wire up controls
+    function wireSlider(id, key, fmt) {
+      const input = document.getElementById('c-' + id);
+      const display = document.getElementById('v-' + id);
+      input.addEventListener('input', () => {
+        P[key] = parseFloat(input.value);
+        display.textContent = fmt(P[key]);
+      });
+    }
+
+    wireSlider('speed', 'speed', v => v.toFixed(4));
+    wireSlider('noise', 'noiseScale', v => v.toFixed(3));
+    wireSlider('levels', 'numLevels', v => v.toFixed(0));
+    wireSlider('linewidth', 'lineWidth', v => v.toFixed(1));
+    wireSlider('octave2', 'octave2', v => v.toFixed(2));
+    wireSlider('mstrength', 'mouseStrength', v => v.toFixed(2));
+    wireSlider('mradius', 'mouseRadius', v => v.toFixed(0));
+    wireSlider('opmin', 'opacityMin', v => v.toFixed(2));
+    wireSlider('opmax', 'opacityMax', v => v.toFixed(2));
+
+    document.getElementById('c-resolution').addEventListener('change', (e) => {
+      P.resolution = e.target.value;
+      applyResolution();
+      initContourPaths();
+    });
+
+    const pauseBtn = document.getElementById('c-pause');
+    pauseBtn.addEventListener('click', () => {
+      P.paused = !P.paused;
+      pauseBtn.textContent = P.paused ? 'Resume' : 'Pause';
+      pauseBtn.classList.toggle('active', P.paused);
+    });
+
+    document.getElementById('c-reset').addEventListener('click', () => {
+      time = 0;
+    });
+
+    // When levels change, reinit paths
+    document.getElementById('c-levels').addEventListener('input', () => {
+      initContourPaths();
+    });
+
+    // When line width changes, update existing paths
+    document.getElementById('c-linewidth').addEventListener('input', () => {
+      updatePathStyles();
+    });
+
+    document.getElementById('c-opmin').addEventListener('input', () => {
+      updatePathStyles();
+    });
+
+    document.getElementById('c-opmax').addEventListener('input', () => {
+      updatePathStyles();
+    });
+
+    // ============================================================
+    // Navigation scroll effect
+    // ============================================================
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // ============================================================
+    // Terrain Contour SVG — Marching Squares
+    // ============================================================
+    const svg = document.getElementById('contour-svg');
+    const noise = new SimplexNoise(42);
+
+    const contourPalette = [
+      { pos: 0.0,  color: [30,  58,  95 ] },
+      { pos: 0.25, color: [35,  90, 110 ] },
+      { pos: 0.45, color: [45, 138, 122 ] },
+      { pos: 0.6,  color: [100, 160, 120] },
+      { pos: 0.75, color: [143, 188, 143] },
+      { pos: 0.9,  color: [190, 185, 160] },
+      { pos: 1.0,  color: [212, 197, 169] }
+    ];
+
+    let COLS = 80;
+    let ROWS = 60;
+    let cellW, cellH;
+    let W, H;
+    let mouseX = -9999, mouseY = -9999;
+    let mouseInHero = false;
+    let time = 0;
+
+    let field = [];
+
+    const EDGE_TABLE = [
+      [],
+      [[3, 2]],
+      [[2, 1]],
+      [[3, 1]],
+      [[1, 0]],
+      [[1, 0], [3, 2]],
+      [[2, 0]],
+      [[3, 0]],
+      [[0, 3]],
+      [[0, 2]],
+      [[0, 3], [2, 1]],
+      [[0, 1]],
+      [[1, 3]],
+      [[1, 2]],
+      [[2, 3]],
+      []
+    ];
+
+    function applyResolution() {
+      const [c, r] = resMap[P.resolution] || resMap.medium;
+      COLS = c;
+      ROWS = r;
+      cellW = W / COLS;
+      cellH = H / ROWS;
+      field = new Float32Array((COLS + 1) * (ROWS + 1));
+    }
+
+    function resize() {
+      const hero = document.getElementById('hero');
+      W = hero.clientWidth;
+      H = hero.clientHeight;
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      applyResolution();
+    }
+
+    function getFieldIndex(col, row) {
+      return row * (COLS + 1) + col;
+    }
+
+    function buildField() {
+      const mouseRadiusSq = P.mouseRadius * P.mouseRadius;
+
+      for (let row = 0; row <= ROWS; row++) {
+        for (let col = 0; col <= COLS; col++) {
+          const x = col * cellW;
+          const y = row * cellH;
+
+          let val = noise.noise2D(col * P.noiseScale, row * P.noiseScale + time);
+          val += P.octave2 * noise.noise2D(col * P.noiseScale * 2 + 100, row * P.noiseScale * 2 + time * 1.3);
+          val = (val + 1.5) / 3.0;
+
+          if (mouseInHero) {
+            const dx = x - mouseX;
+            const dy = y - mouseY;
+            const distSq = dx * dx + dy * dy;
+            if (distSq < mouseRadiusSq) {
+              const falloff = Math.exp(-distSq / (mouseRadiusSq * 0.15));
+              val += P.mouseStrength * falloff;
+            }
+          }
+
+          field[getFieldIndex(col, row)] = val;
+        }
+      }
+    }
+
+    function interpEdge(col, row, edge, threshold) {
+      let x1, y1, x2, y2, v1, v2;
+
+      switch (edge) {
+        case 0:
+          v1 = field[getFieldIndex(col, row)];
+          v2 = field[getFieldIndex(col + 1, row)];
+          x1 = col * cellW; y1 = row * cellH;
+          x2 = (col + 1) * cellW; y2 = row * cellH;
+          break;
+        case 1:
+          v1 = field[getFieldIndex(col + 1, row)];
+          v2 = field[getFieldIndex(col + 1, row + 1)];
+          x1 = (col + 1) * cellW; y1 = row * cellH;
+          x2 = (col + 1) * cellW; y2 = (row + 1) * cellH;
+          break;
+        case 2:
+          v1 = field[getFieldIndex(col, row + 1)];
+          v2 = field[getFieldIndex(col + 1, row + 1)];
+          x1 = col * cellW; y1 = (row + 1) * cellH;
+          x2 = (col + 1) * cellW; y2 = (row + 1) * cellH;
+          break;
+        case 3:
+          v1 = field[getFieldIndex(col, row)];
+          v2 = field[getFieldIndex(col, row + 1)];
+          x1 = col * cellW; y1 = row * cellH;
+          x2 = col * cellW; y2 = (row + 1) * cellH;
+          break;
+      }
+
+      const t = (v2 === v1) ? 0.5 : (threshold - v1) / (v2 - v1);
+      return [
+        x1 + t * (x2 - x1),
+        y1 + t * (y2 - y1)
+      ];
+    }
+
+    function traceContour(threshold) {
+      const segments = [];
+
+      for (let row = 0; row < ROWS; row++) {
+        for (let col = 0; col < COLS; col++) {
+          const tl = field[getFieldIndex(col, row)];
+          const tr = field[getFieldIndex(col + 1, row)];
+          const br = field[getFieldIndex(col + 1, row + 1)];
+          const bl = field[getFieldIndex(col, row + 1)];
+
+          let caseIndex = 0;
+          if (tl >= threshold) caseIndex |= 8;
+          if (tr >= threshold) caseIndex |= 4;
+          if (br >= threshold) caseIndex |= 2;
+          if (bl >= threshold) caseIndex |= 1;
+
+          const edges = EDGE_TABLE[caseIndex];
+          if (!edges || edges.length === 0) continue;
+
+          for (const [e1, e2] of edges) {
+            const p1 = interpEdge(col, row, e1, threshold);
+            const p2 = interpEdge(col, row, e2, threshold);
+            segments.push(p1, p2);
+          }
+        }
+      }
+
+      return segments;
+    }
+
+    function buildContourPath(segments) {
+      if (segments.length === 0) return '';
+
+      const parts = [];
+      for (let i = 0; i < segments.length; i += 2) {
+        const [x1, y1] = segments[i];
+        const [x2, y2] = segments[i + 1];
+        parts.push(`M${x1.toFixed(1)},${y1.toFixed(1)}L${x2.toFixed(1)},${y2.toFixed(1)}`);
+      }
+      return parts.join('');
+    }
+
+    let contourPaths = [];
+
+    function initContourPaths() {
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      contourPaths = [];
+
+      for (let i = 0; i < P.numLevels; i++) {
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const t = i / (P.numLevels - 1);
+        const rgb = lerpColor(t, contourPalette);
+        const hex = colorToHex(rgb);
+
+        const opacity = P.opacityMin + (P.opacityMax - P.opacityMin) * (1 - t);
+        const width = P.lineWidth * (0.7 + 0.3 * (1 - t));
+
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', hex);
+        path.setAttribute('stroke-opacity', opacity.toFixed(2));
+        path.setAttribute('stroke-width', width.toFixed(2));
+        path.setAttribute('stroke-linecap', 'round');
+        path.setAttribute('stroke-linejoin', 'round');
+
+        svg.appendChild(path);
+        contourPaths.push(path);
+      }
+    }
+
+    function updatePathStyles() {
+      for (let i = 0; i < contourPaths.length; i++) {
+        const t = i / (contourPaths.length - 1 || 1);
+        const opacity = P.opacityMin + (P.opacityMax - P.opacityMin) * (1 - t);
+        const width = P.lineWidth * (0.7 + 0.3 * (1 - t));
+        contourPaths[i].setAttribute('stroke-opacity', opacity.toFixed(2));
+        contourPaths[i].setAttribute('stroke-width', width.toFixed(2));
+      }
+    }
+
+    function renderContours() {
+      buildField();
+
+      for (let i = 0; i < P.numLevels; i++) {
+        if (i >= contourPaths.length) break;
+        const threshold = 0.1 + (i / (P.numLevels - 1)) * 0.7;
+        const segments = traceContour(threshold);
+        const d = buildContourPath(segments);
+        contourPaths[i].setAttribute('d', d || 'M0,0');
+      }
+    }
+
+    function animate() {
+      if (!P.paused) {
+        time += P.speed;
+      }
+      renderContours();
+      requestAnimationFrame(animate);
+    }
+
+    // Mouse tracking on the hero section
+    const heroEl = document.getElementById('hero');
+
+    heroEl.addEventListener('mousemove', (e) => {
+      const rect = heroEl.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+    });
+
+    heroEl.addEventListener('mouseenter', () => { mouseInHero = true; });
+    heroEl.addEventListener('mouseleave', () => {
+      mouseInHero = false;
+      mouseX = -9999;
+      mouseY = -9999;
+    });
+
+    heroEl.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const rect = heroEl.getBoundingClientRect();
+      const touch = e.touches[0];
+      mouseX = touch.clientX - rect.left;
+      mouseY = touch.clientY - rect.top;
+      mouseInHero = true;
+    }, { passive: false });
+
+    heroEl.addEventListener('touchend', () => {
+      mouseInHero = false;
+      mouseX = -9999;
+      mouseY = -9999;
+    });
+
+    function boot() {
+      resize();
+      initContourPaths();
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+      resize();
+      initContourPaths();
+    });
+
+    boot();
+
+    // ============================================================
+    // Garden Cards
+    // ============================================================
+    const grid = document.getElementById('card-grid');
+    const filtersContainer = document.getElementById('filters');
+    let activeTypeFilter = 'all';
+    let activeStageFilter = null;
+
+    function buildCards() {
+      grid.innerHTML = '';
+      const sorted = sortByDate(gardenItems);
+
+      for (const item of sorted) {
+        const stage = getStageInfo(item.stage);
+        const card = document.createElement('a');
+        card.href = item.slug;
+        card.className = 'card';
+        card.dataset.type = item.type;
+        card.dataset.stage = item.stage;
+
+        if (item.stage === 'evergreen') {
+          card.classList.add('card-wide');
+        }
+
+        card.innerHTML = `
+          <div class="card-badges">
+            <span class="badge badge-type ${item.type}">${item.type}</span>
+            <span class="badge badge-stage badge-${item.stage}">${stage.emoji} ${stage.label}</span>
+          </div>
+          <h3 class="card-title">${item.title}</h3>
+          <p class="card-description">${item.description}</p>
+          <div class="card-meta">
+            <span class="card-date">${formatDate(item.date)}</span>
+          </div>
+          <div class="card-tags">
+            ${item.tags.map(t => `<span class="badge badge-tag">${t}</span>`).join('')}
+          </div>
+        `;
+
+        grid.appendChild(card);
+      }
+    }
+
+    function applyFilters() {
+      const cards = grid.querySelectorAll('.card');
+      cards.forEach(card => {
+        const matchesType = activeTypeFilter === 'all' || card.dataset.type === activeTypeFilter;
+        const matchesStage = !activeStageFilter || card.dataset.stage === activeStageFilter;
+
+        if (matchesType && matchesStage) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    filtersContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+
+      const group = btn.dataset.group;
+      const filter = btn.dataset.filter;
+
+      if (group === 'type') {
+        filtersContainer.querySelectorAll('[data-group="type"]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeTypeFilter = filter;
+      } else if (group === 'stage') {
+        if (activeStageFilter === filter) {
+          btn.classList.remove('active');
+          activeStageFilter = null;
+        } else {
+          filtersContainer.querySelectorAll('[data-group="stage"]').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeStageFilter = filter;
+        }
+      }
+
+      applyFilters();
+    });
+
+    buildCards();
+  </script>
+</body>
+</html>

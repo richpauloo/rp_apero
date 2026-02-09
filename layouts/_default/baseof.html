@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode | default "en" }}">
+{{ partial "head.html" . }}
+<body class="{{ if .IsHome }}page-home theme-dark{{ else }}page-inner theme-dark{{ end }}">
+  {{ partial "nav.html" . }}
+  {{ block "main" . }}{{ end }}
+  {{ partial "footer.html" . }}
+  {{ if .IsHome }}
+    {{ partial "scripts-home.html" . }}
+  {{ else }}
+    {{ partial "scripts-inner.html" . }}
+  {{ end }}
+</body>
+</html>
