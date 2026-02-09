@@ -27,11 +27,11 @@ links:
 - icon: ''
   icon_pack: ''
   name: Notebook
-  url: https://richpauloo.com/mtanb
+  url: https://www.richpauloo.com/mtanb
 - icon: globe
   icon_pack: fas
   name: Dashboard
-  url: https://richpauloo.com/mta
+  url: https://www.richpauloo.com/mta
 
 
 #url_pdf: ""
