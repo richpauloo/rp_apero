@@ -32,8 +32,8 @@ enableEmoji = true
   orgName = "Rich Pauloo"
   orgLocal = ""
   description = "Thinker, tea drinker, tinkerer."
-  favicon = "/img/lim.png"
-  logo = "/img/lim.png"
+  favicon = "/img/favicon.svg"
+  logo = "/img/favicon.svg"
   mainSections = ["project"]
   navallcaps = true
   # show/hide social icons in site header & footer
@@ -42,7 +42,7 @@ enableEmoji = true
   socialInFooter = true
   # Default image for social sharing and search engines. 
   # Place image file in `static` folder and specify image name here.
-  sharing_image = "/img/avatar.png"
+  sharing_image = "/img/avatar.jpeg"
   # Twitter username (without @). Used when a visitor shares your site on Twitter.
   twitter = "richpauloo"
   
