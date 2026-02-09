@@ -7,8 +7,7 @@ tags:
 date: "2025-01-16T00:00:00Z"
 share: true
 
-# Optional external URL for project (replaces project detail page).
-#external_link: "https://gspdrywells.netlify.app"
+external_link: "https://www.richpauloo.com/mtanb"
 
 #header:
 #  image: "shasta.png"
