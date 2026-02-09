@@ -1,0 +1,77 @@
+- title: "An Imputation Method for Simulating 3D Well Screen Locations from Limited Regional Well Log Data"
+  date: "2024-01-01"
+  description: "Method for simulating 3D well screen locations from limited well log data. Groundwater."
+  tags: ["groundwater", "modeling", "peer-reviewed"]
+  url: "https://ngwa.onlinelibrary.wiley.com/doi/10.1111/gwat.13424"
+
+- title: "Groundwater Basin Openness and Sustainability"
+  date: "2024-01-01"
+  description: "Framework for understanding groundwater basin openness and sustainability. Water Resources Research."
+  tags: ["groundwater", "hydrology", "peer-reviewed"]
+  url: "https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2023WR035446"
+
+- title: "Thousands of domestic and public supply wells face failure despite groundwater sustainability reform"
+  date: "2023-09-01"
+  description: "Well failure risks in Central Valley despite SGMA. Nature Scientific Reports."
+  tags: ["groundwater", "policy", "peer-reviewed"]
+  url: "https://www.nature.com/articles/s41598-023-41379-9"
+
+- title: "ONASP: A web application for groundwater data visualization in Panama"
+  date: "2023-01-01"
+  description: "Web application for groundwater data visualization. International Conference on Hydroinformatics."
+  tags: ["groundwater", "web", "peer-reviewed"]
+  url: "https://iopscience.iop.org/article/10.1088/1755-1315/1136/1/012028"
+
+- title: "Sustainability of Regional Groundwater Quality in Response to Managed Aquifer Recharge"
+  date: "2022-01-01"
+  description: "Groundwater quality response to managed aquifer recharge. Water Resources Research."
+  tags: ["groundwater", "hydrology", "peer-reviewed"]
+  url: "https://doi.org/10.1029/2021WR031459"
+
+- title: "Assessing the utility of remote sensing data to accurately estimate changes in groundwater storage"
+  date: "2022-01-01"
+  description: "Remote sensing for groundwater storage estimation. Science of the Total Environment."
+  tags: ["remote-sensing", "groundwater", "peer-reviewed"]
+  url: "https://doi.org/10.1016/j.scitotenv.2021.150635"
+
+- title: "Mean Flow Direction Modulates Non-Fickian Transport in a Heterogeneous Alluvial Aquifer-Aquitard System"
+  date: "2021-04-01"
+  description: "Contaminant transport in complex aquifer systems. Water Resources Research."
+  tags: ["groundwater", "hydrology", "peer-reviewed"]
+  url: "https://doi.org/10.1029/2020WR028655"
+
+- title: "How Better Data Can Help California Avoid a Drinking Water Crisis"
+  date: "2021-01-01"
+  description: "Commentary on data needs for California's drinking water. Public Policy Institute of California."
+  tags: ["water", "policy"]
+  url: "https://www.ppic.org/blog/commentary-how-better-data-can-help-california-avoid-a-drinking-water-crisis/"
+
+- title: "Anthropogenic Basin Closure and Groundwater Salinization (ABCSAL)"
+  date: "2020-09-01"
+  description: "Framework for understanding groundwater salinization in closed basins. Journal of Hydrology."
+  tags: ["groundwater", "hydrology", "peer-reviewed"]
+  url: "https://doi.org/10.1016/j.jhydrol.2020.125787"
+
+- title: "Domestic Well Vulnerability to Drought Duration and Unsustainable Groundwater Management"
+  date: "2020-06-01"
+  description: "Vulnerability of domestic wells in California's Central Valley. Environmental Research Letters."
+  tags: ["groundwater", "drought", "peer-reviewed"]
+  url: "https://doi.org/10.1088/1748-9326/ab6f10"
+
+- title: "Low-Cost, Open Source Wireless Sensor Network for Real-Time, Scalable Groundwater Monitoring"
+  date: "2020-04-01"
+  description: "Open-source sensor network for real-time groundwater monitoring. Water."
+  tags: ["sensors", "open-source", "peer-reviewed"]
+  url: "https://doi.org/10.3390/w12041066"
+
+- title: "Sustainable for Whom? The Impact of Groundwater Sustainability Plans on Domestic Wells"
+  date: "2020-09-01"
+  description: "Impact of GSPs on domestic wells. Pacific Institute."
+  tags: ["groundwater", "policy", "equity"]
+  url: "https://pacinst.org/wp-content/uploads/2020/09/Sustainable-for-Whom_UC-Davis_Sept-2020.pdf"
+
+- title: "Assessing Impact of Outreach through Software Citation for Community Software in Geodynamics"
+  date: "2020-01-01"
+  description: "Software citation impact assessment. IEEE Computing in Science & Engineering."
+  tags: ["open-source", "peer-reviewed"]
+  url: "https://doi.org/10.1109/MCSE.2019.2940221"

@@ -1,5 +1,4 @@
 baseURL = "/"
-theme = "hugo-apero"
 languageCode = "en"
 title = "Rich Pauloo"
 author = "Rich Pauloo"
@@ -9,9 +8,9 @@ disqusShortname = "" # see params.utterances to use utterances instead of Disqus
 metaDataFormat = "yaml"
 footnoteReturnLinkContents = "&#8617;" # ↩
 # set deliberately low for testing choose your preffered number based on the blog layout you've chosen
-paginate = 5
-preserveTaxonomyNames = true
-ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$"]
+[pagination]
+  pagerSize = 5
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$", "index_files", "\\.svg$"]
 enableEmoji = true
 
 [markup]
@@ -30,10 +29,10 @@ enableEmoji = true
 [params]
   orgName = "Rich Pauloo"
   orgLocal = ""
-  description = "A digital garden."
-  favicon = "/img/lim.png"
-  logo = "/img/lim.png"
-  mainSections = ["project", "blog"]
+  description = "Thinker, tea drinker, tinkerer."
+  favicon = "/img/favicon.svg"
+  logo = "/img/favicon.svg"
+  mainSections = ["project"]
   navallcaps = true
   # show/hide social icons in site header & footer
   # configure social icons and links below in [[params.social]]
@@ -41,45 +40,10 @@ enableEmoji = true
   socialInFooter = true
   # Default image for social sharing and search engines. 
   # Place image file in `static` folder and specify image name here.
-  sharing_image = "/img/avatar.png"
+  sharing_image = "/img/avatar.jpeg"
   # Twitter username (without @). Used when a visitor shares your site on Twitter.
   twitter = "richpauloo"
   
-  # use a built-in color theme
-  # one of: forest / grayscale / peach / plum /
-  #         poppy / sky / violet / water 
-  theme = "grayscale"
-  
-  # or, leave theme empty & make your own palette
-  # see docs at https://hugo-apero.netlify.app/blog/color-themes/
-  # the custom scss file must be in the assets/ folder
-  # add the filename name here, without extension
-  # to use hex colors instead of named tachyons colors, include "hex" in filename
-  custom_theme = "" 
-  
-  # use an embedded font-family
-  # serif options: Fraunces / EB Garamond / Bitter
-  # sans-serif options: Commissioner / Atkinson Hyperlegible / Metropolis
-  # if you import your own fonts, name them here too
-  customtextFontFamily = ""
-  customheadingFontFamily = ""
-  # alternatively, leave empty and select basic font options: sans-serif or serif
-  # for more http://tachyons.io/docs/typography/font-family/
-  textFontFamily = "Atkinson Hyperlegible"
-  headingFontFamily = "EB Garamond"
-
-  # Configuration of https://utteranc.es/ for comments
-  [params.utterances]
-    use_utterances = false
-    repo_name = "apreshill/apero"
-    issue_term = "pathname" # url, pathname, or title
-    theme = "boxy-light"
-    label = "comments :crystal_ball:"
-
-  # Configuration of math rendering
-  [params.math]
-    renderer = "katex" # one of "mathjax" / "katex" 
-
   # Social icons may appear on homepage and in site header or footer
   # Configure show/hide above - add as many as you like below
   # Icon pack "fab" includes brand icons, see: https://fontawesome.com/icons?d=gallery&s=brands&m=free
@@ -114,10 +78,6 @@ enableEmoji = true
       icon_pack = "ai"
       url       = "https://scholar.google.com/citations?user=39VtrnEAAAAJ"
   [[params.social]]
-      icon      = "rss" # icon name without the 'fa-'
-      icon_pack = "fas"
-      url       = "/blog"
-  [[params.social]]
       icon      = "stack-overflow" # icon name without the 'fa-'
       icon_pack = "fab"
       url       = "https://stackoverflow.com/users/8367943/rich-pauloo"
@@ -132,65 +92,16 @@ enableEmoji = true
   tag = "tags"
 
 [menu]
-  # Configure header 
+  [[menu.header]]
+    name = "Garden"
+    title = "Garden"
+    url = "/#garden"
+    weight = 1
   [[menu.header]]
     name = "About"
-    title = "About Rich"
+    title = "About"
     url = "/about/"
-    weight = 1
-  [[menu.header]]
-    name = "Blog"
-    title = "Blog"
-    url = "/blog/"
-    weight = 4
-  [[menu.header]]
-    name = "Projects"
-    title = "Project Portfolio"
-    url = "/project/"
-    weight = 3
-  [[menu.header]]
-    name = "Research"
-    title = "Research"
-    url = "/research/"
     weight = 2
-  [[menu.header]]
-    name = "Contact"
-    title = "Contact"
-    url = "/contact/"
-    weight = 5
-  [[menu.header]]
-    name = "CV"
-    title = "CV"
-    #url = "/cv"
-    url = "/pauloo_cv.pdf"
-    weight = 6
-  #[[menu.header]]
-  #  name = "A collection"
-  #  title = "A collection"
-  #  url = "/collection/"
-  #  weight = 5
-  #[[menu.header]]
-  #  name = "Elements"
-  #  title = "Element Page"
-  #  url = "/elements/"
-  #  weight = 6
-    
-  # Configure footer  
-  [[menu.footer]]
-    name = "License"
-    title = "License"
-    url = "/license/"
-    weight = 1
-  [[menu.footer]]
-    name = "Contact"
-    title = "Contact form"
-    url = "/contact/"
-    weight = 2
-  #[[menu.footer]]
-  #  name = "Contributors"
-  #  title = "Contributors"
-  #  url = "/contributors/"
-  #  weight = 3
 
 # see https://gohugo.io/about/hugo-and-gdpr/    
 [privacy]

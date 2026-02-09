@@ -1,5 +1,8 @@
 ---
-author: 
+build:
+  render: never
+  list: never
+author:
 cascade:
   author: 
   show_author_byline: true

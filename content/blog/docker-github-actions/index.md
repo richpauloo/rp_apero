@@ -10,9 +10,8 @@ draft: false
 slug: docker-github-actions
 excerpt: Here we'll deploy a Docker container running R that sends an SMS (short message service, aka "text message") via the Twilio API, and orchestrate the code to run on a timer with Github Actions.
 layout: single
-subtitle: 
 title: Automate SMS and MMS with R, Twilio, Docker, and Github Actions
-subtitle: 
+subtitle:
 links:
 - icon: github
   icon_pack: fab

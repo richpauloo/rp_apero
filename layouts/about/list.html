@@ -1,0 +1,31 @@
+{{ define "main" }}
+<div class="page-content">
+  <h1 class="page-title">About</h1>
+  <div class="about-section">
+    <div class="about-sidebar">
+      {{ $sidebar := .GetPage "sidebar" }}
+      {{ with $sidebar }}
+        {{ $avatar := .Resources.GetMatch "avatar.*" }}
+        {{ with $avatar }}
+          <img src="{{ .RelPermalink }}" alt="Rich Pauloo" class="about-avatar">
+        {{ end }}
+        <div class="about-name">{{ .Params.author }}</div>
+        <div class="about-role">{{ .Params.role }}</div>
+      {{ end }}
+      <div class="about-social">
+        {{ range .Site.Params.social }}
+          <a href="{{ .url }}" target="_blank" rel="noopener">{{ .icon }}</a>
+        {{ end }}
+      </div>
+    </div>
+    <div>
+      {{ $main := .GetPage "main" }}
+      {{ with $main }}
+        <div class="prose">
+          {{ .Params.intro | markdownify }}
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</div>
+{{ end }}

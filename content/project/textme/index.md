@@ -5,8 +5,7 @@ tags:
   - Data science
 date: "2019-10-30T00:00:00Z"
 
-# Optional external URL for project (replaces project detail page).
-#external_link: "http://calwaterquality.com"
+external_link: "https://github.com/richpauloo/textme"
 
 image:
   caption: ''
