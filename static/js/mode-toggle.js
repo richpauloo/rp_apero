@@ -68,11 +68,8 @@
       if (voronoiControlsEl) voronoiControlsEl.style.display = 'none';
 
       window.voronoiAnimating = false;
-      if (flowNeedsResize) {
-        window.FlowField.resize();
-        window.FlowField.initParticles();
-        flowNeedsResize = false;
-      }
+      window.FlowField.resize();
+      flowNeedsResize = false;
       window.flowAnimating = true;
       window.FlowField.animate();
     }
@@ -173,22 +170,26 @@
     }
 
     // Resize handler
+    var resizeRaf = null;
     window.addEventListener('resize', function() {
-      if (window.activeMode === 'flow') {
-        window.FlowField.resize();
-        window.FlowField.initParticles();
-        voronoiNeedsResize = true;
-      } else {
-        window.Voronoi.resize();
-        var pts = window.Voronoi.points();
-        var vw = window.Voronoi.getW();
-        var vh = window.Voronoi.getH();
-        for (var j = 0; j < pts.length; j++) {
-          pts[j].x = Math.min(pts[j].x, vw);
-          pts[j].y = Math.min(pts[j].y, vh);
+      if (resizeRaf) return;
+      resizeRaf = requestAnimationFrame(function() {
+        resizeRaf = null;
+        if (window.activeMode === 'flow') {
+          var flowResized = window.FlowField.resize();
+          if (flowResized) voronoiNeedsResize = true;
+        } else {
+          window.Voronoi.resize();
+          var pts = window.Voronoi.points();
+          var vw = window.Voronoi.getW();
+          var vh = window.Voronoi.getH();
+          for (var j = 0; j < pts.length; j++) {
+            pts[j].x = Math.min(pts[j].x, vw);
+            pts[j].y = Math.min(pts[j].y, vh);
+          }
+          flowNeedsResize = true;
         }
-        flowNeedsResize = true;
-      }
+      });
     });
 
     // Control panel toggle (gear icon)

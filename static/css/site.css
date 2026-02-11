@@ -117,6 +117,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   height: 100%;
   display: block;
   will-change: transform;
+  touch-action: pan-y;
 }
 
 #voronoiCanvas { cursor: crosshair; }

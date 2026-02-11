@@ -73,13 +73,42 @@
   var fMouseX = -9999, fMouseY = -9999;
 
   function resizeFlow() {
-    flowW = flowCanvas.width = window.innerWidth;
-    flowH = flowCanvas.height = window.innerHeight;
+    var dpr = Math.max(1, window.devicePixelRatio || 1);
+    var nextW = Math.max(1, Math.round(flowCanvas.clientWidth || window.innerWidth));
+    var nextH = Math.max(1, Math.round(flowCanvas.clientHeight || window.innerHeight));
+    var pixelW = Math.round(nextW * dpr);
+    var pixelH = Math.round(nextH * dpr);
+    var prevW = flowW || nextW;
+    var prevH = flowH || nextH;
+
+    if (flowCanvas.width === pixelW && flowCanvas.height === pixelH && flowW === nextW && flowH === nextH) {
+      return false;
+    }
+
+    flowCanvas.width = pixelW;
+    flowCanvas.height = pixelH;
+    flowCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    flowW = nextW;
+    flowH = nextH;
     cols = Math.ceil(flowW / GRID_SIZE) + 1;
     rows = Math.ceil(flowH / GRID_SIZE) + 1;
     field = new Float32Array(cols * rows);
+
+    if (particles.length > 0) {
+      var scaleX = flowW / prevW;
+      var scaleY = flowH / prevH;
+      for (var i = 0; i < particles.length; i++) {
+        particles[i].x *= scaleX;
+        particles[i].y *= scaleY;
+        particles[i].px = particles[i].x;
+        particles[i].py = particles[i].y;
+      }
+    }
+
     flowCtx.fillStyle = FLOW_BG;
     flowCtx.fillRect(0, 0, flowW, flowH);
+    return true;
   }
 
   function createParticle() {
@@ -205,9 +234,15 @@
   // Mouse/touch events
   flowCanvas.addEventListener('mousemove', function(e) { fMouseX = e.clientX; fMouseY = e.clientY; });
   flowCanvas.addEventListener('mouseleave', function() { fMouseX = -9999; fMouseY = -9999; });
-  flowCanvas.addEventListener('touchmove', function(e) {
-    if (e.touches.length > 0) { fMouseX = e.touches[0].clientX; fMouseY = e.touches[0].clientY; }
-  }, { passive: true });
+  var flowIsMobile = window.matchMedia('(max-width: 768px)').matches;
+  if (flowIsMobile) {
+    // On mobile we prioritize smooth scrolling over touch-driven particle repulsion.
+    flowCanvas.addEventListener('touchmove', function() {}, { passive: true });
+  } else {
+    flowCanvas.addEventListener('touchmove', function(e) {
+      if (e.touches.length > 0) { fMouseX = e.touches[0].clientX; fMouseY = e.touches[0].clientY; }
+    }, { passive: true });
+  }
   flowCanvas.addEventListener('touchend', function() { fMouseX = -9999; fMouseY = -9999; });
 
   // Wire controls
