@@ -219,13 +219,24 @@
   });
   voronoiCanvas.addEventListener('mouseenter', function() { vMouseIn = true; });
   voronoiCanvas.addEventListener('mouseleave', function() { vMouseIn = false; });
-  voronoiCanvas.addEventListener('touchmove', function(e) {
-    e.preventDefault();
-    var rect = voronoiCanvas.getBoundingClientRect();
-    vMouseX = e.touches[0].clientX - rect.left;
-    vMouseY = e.touches[0].clientY - rect.top;
-    vMouseIn = true;
-  }, { passive: false });
+  var isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+  if (isMobile) {
+    // On mobile, allow scrolling — don't capture touch events
+    voronoiCanvas.addEventListener('touchmove', function(e) {
+      // Do nothing — let the browser handle scrolling
+    }, { passive: true });
+    voronoiCanvas.style.cursor = 'default';
+  } else {
+    // On desktop/tablet, keep interactive cursor cell
+    voronoiCanvas.addEventListener('touchmove', function(e) {
+      e.preventDefault();
+      var rect = voronoiCanvas.getBoundingClientRect();
+      vMouseX = e.touches[0].clientX - rect.left;
+      vMouseY = e.touches[0].clientY - rect.top;
+      vMouseIn = true;
+    }, { passive: false });
+  }
   voronoiCanvas.addEventListener('touchend', function() { vMouseIn = false; });
 
   // Wire controls
