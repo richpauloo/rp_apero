@@ -179,15 +179,17 @@
           var flowResized = window.FlowField.resize();
           if (flowResized) voronoiNeedsResize = true;
         } else {
-          window.Voronoi.resize();
-          var pts = window.Voronoi.points();
-          var vw = window.Voronoi.getW();
-          var vh = window.Voronoi.getH();
-          for (var j = 0; j < pts.length; j++) {
-            pts[j].x = Math.min(pts[j].x, vw);
-            pts[j].y = Math.min(pts[j].y, vh);
+          var voronoiResized = window.Voronoi.resize();
+          if (voronoiResized) {
+            var pts = window.Voronoi.points();
+            var vw = window.Voronoi.getW();
+            var vh = window.Voronoi.getH();
+            for (var j = 0; j < pts.length; j++) {
+              pts[j].x = Math.min(pts[j].x, vw);
+              pts[j].y = Math.min(pts[j].y, vh);
+            }
+            flowNeedsResize = true;
           }
-          flowNeedsResize = true;
         }
       });
     });
