@@ -148,6 +148,30 @@
       window.FlowField.animate();
     }
 
+    // Pause/resume animation when hero leaves/enters viewport (saves battery, prevents scroll artifacts)
+    if ('IntersectionObserver' in window) {
+      var heroObserver = new IntersectionObserver(function(entries) {
+        var visible = entries[0].isIntersecting;
+        if (window.activeMode === 'flow') {
+          if (visible && !window.flowAnimating) {
+            window.flowAnimating = true;
+            window.FlowField.animate();
+          } else if (!visible && window.flowAnimating) {
+            window.flowAnimating = false;
+          }
+        } else {
+          if (visible && !window.voronoiAnimating) {
+            window.voronoiAnimating = true;
+            window.Voronoi.setStartTime(performance.now());
+            requestAnimationFrame(function(ts) { window.Voronoi.animate(ts); });
+          } else if (!visible && window.voronoiAnimating) {
+            window.voronoiAnimating = false;
+          }
+        }
+      }, { threshold: 0 });
+      heroObserver.observe(heroEl);
+    }
+
     // Resize handler
     window.addEventListener('resize', function() {
       if (window.activeMode === 'flow') {

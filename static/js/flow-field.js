@@ -71,7 +71,6 @@
   var particles = [];
   var flowTime = 0;
   var fMouseX = -9999, fMouseY = -9999;
-  var lastFrameTime = 0;
 
   function resizeFlow() {
     flowW = flowCanvas.width = window.innerWidth;
@@ -190,16 +189,11 @@
     }
   }
 
-  function animateFlow(timestamp) {
+  function animateFlow() {
     if (!window.flowAnimating) return;
 
-    var elapsed = timestamp - lastFrameTime;
-    // Skip fade overlay if rAF was throttled (e.g. mobile scroll) to prevent black flash
-    if (lastFrameTime > 0 && elapsed < 100) {
-      flowCtx.fillStyle = 'rgba(' + FLOW_BG_RGB[0] + ', ' + FLOW_BG_RGB[1] + ', ' + FLOW_BG_RGB[2] + ', ' + FP.trailAlpha + ')';
-      flowCtx.fillRect(0, 0, flowW, flowH);
-    }
-    lastFrameTime = timestamp;
+    flowCtx.fillStyle = 'rgba(' + FLOW_BG_RGB[0] + ', ' + FLOW_BG_RGB[1] + ', ' + FLOW_BG_RGB[2] + ', ' + FP.trailAlpha + ')';
+    flowCtx.fillRect(0, 0, flowW, flowH);
 
     updateField();
     updateAndDrawParticles();
