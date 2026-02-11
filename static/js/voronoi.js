@@ -87,12 +87,35 @@
   }
 
   function resizeVoronoi() {
-    var dpr = window.devicePixelRatio || 1;
-    voronoiW = voronoiCanvas.clientWidth;
-    voronoiH = voronoiCanvas.clientHeight;
-    voronoiCanvas.width = voronoiW * dpr;
-    voronoiCanvas.height = voronoiH * dpr;
+    var dpr = Math.max(1, window.devicePixelRatio || 1);
+    var nextW = Math.max(1, Math.round(voronoiCanvas.clientWidth || window.innerWidth));
+    var nextH = Math.max(1, Math.round(voronoiCanvas.clientHeight || window.innerHeight));
+    var pixelW = Math.round(nextW * dpr);
+    var pixelH = Math.round(nextH * dpr);
+    var prevW = voronoiW || nextW;
+    var prevH = voronoiH || nextH;
+
+    if (voronoiCanvas.width === pixelW && voronoiCanvas.height === pixelH && voronoiW === nextW && voronoiH === nextH) {
+      return false;
+    }
+
+    voronoiCanvas.width = pixelW;
+    voronoiCanvas.height = pixelH;
     voronoiCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    voronoiW = nextW;
+    voronoiH = nextH;
+
+    if (voronoiPoints.length > 0) {
+      var scaleX = voronoiW / Math.max(1, prevW);
+      var scaleY = voronoiH / Math.max(1, prevH);
+      for (var i = 0; i < voronoiPoints.length; i++) {
+        var p = voronoiPoints[i];
+        p.x = Math.min(voronoiW, Math.max(0, p.x * scaleX));
+        p.y = Math.min(voronoiH, Math.max(0, p.y * scaleY));
+      }
+    }
+
+    return true;
   }
 
   function syncVoronoiCount() {
@@ -219,13 +242,24 @@
   });
   voronoiCanvas.addEventListener('mouseenter', function() { vMouseIn = true; });
   voronoiCanvas.addEventListener('mouseleave', function() { vMouseIn = false; });
-  voronoiCanvas.addEventListener('touchmove', function(e) {
-    e.preventDefault();
-    var rect = voronoiCanvas.getBoundingClientRect();
-    vMouseX = e.touches[0].clientX - rect.left;
-    vMouseY = e.touches[0].clientY - rect.top;
-    vMouseIn = true;
-  }, { passive: false });
+  var isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+  if (isMobile) {
+    // On mobile, allow scrolling — don't capture touch events
+    voronoiCanvas.addEventListener('touchmove', function(e) {
+      // Do nothing — let the browser handle scrolling
+    }, { passive: true });
+    voronoiCanvas.style.cursor = 'default';
+  } else {
+    // On desktop/tablet, keep interactive cursor cell
+    voronoiCanvas.addEventListener('touchmove', function(e) {
+      e.preventDefault();
+      var rect = voronoiCanvas.getBoundingClientRect();
+      vMouseX = e.touches[0].clientX - rect.left;
+      vMouseY = e.touches[0].clientY - rect.top;
+      vMouseIn = true;
+    }, { passive: false });
+  }
   voronoiCanvas.addEventListener('touchend', function() { vMouseIn = false; });
 
   // Wire controls

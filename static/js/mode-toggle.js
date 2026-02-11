@@ -68,11 +68,8 @@
       if (voronoiControlsEl) voronoiControlsEl.style.display = 'none';
 
       window.voronoiAnimating = false;
-      if (flowNeedsResize) {
-        window.FlowField.resize();
-        window.FlowField.initParticles();
-        flowNeedsResize = false;
-      }
+      window.FlowField.resize();
+      flowNeedsResize = false;
       window.flowAnimating = true;
       window.FlowField.animate();
     }
@@ -148,23 +145,53 @@
       window.FlowField.animate();
     }
 
-    // Resize handler
-    window.addEventListener('resize', function() {
-      if (window.activeMode === 'flow') {
-        window.FlowField.resize();
-        window.FlowField.initParticles();
-        voronoiNeedsResize = true;
-      } else {
-        window.Voronoi.resize();
-        var pts = window.Voronoi.points();
-        var vw = window.Voronoi.getW();
-        var vh = window.Voronoi.getH();
-        for (var j = 0; j < pts.length; j++) {
-          pts[j].x = Math.min(pts[j].x, vw);
-          pts[j].y = Math.min(pts[j].y, vh);
+    // Pause/resume animation when hero leaves/enters viewport (saves battery, prevents scroll artifacts)
+    if ('IntersectionObserver' in window) {
+      var heroObserver = new IntersectionObserver(function(entries) {
+        var visible = entries[0].isIntersecting;
+        if (window.activeMode === 'flow') {
+          if (visible && !window.flowAnimating) {
+            window.flowAnimating = true;
+            window.FlowField.animate();
+          } else if (!visible && window.flowAnimating) {
+            window.flowAnimating = false;
+          }
+        } else {
+          if (visible && !window.voronoiAnimating) {
+            window.voronoiAnimating = true;
+            window.Voronoi.setStartTime(performance.now());
+            requestAnimationFrame(function(ts) { window.Voronoi.animate(ts); });
+          } else if (!visible && window.voronoiAnimating) {
+            window.voronoiAnimating = false;
+          }
         }
-        flowNeedsResize = true;
-      }
+      }, { threshold: 0 });
+      heroObserver.observe(heroEl);
+    }
+
+    // Resize handler
+    var resizeRaf = null;
+    window.addEventListener('resize', function() {
+      if (resizeRaf) return;
+      resizeRaf = requestAnimationFrame(function() {
+        resizeRaf = null;
+        if (window.activeMode === 'flow') {
+          var flowResized = window.FlowField.resize();
+          if (flowResized) voronoiNeedsResize = true;
+        } else {
+          var voronoiResized = window.Voronoi.resize();
+          if (voronoiResized) {
+            var pts = window.Voronoi.points();
+            var vw = window.Voronoi.getW();
+            var vh = window.Voronoi.getH();
+            for (var j = 0; j < pts.length; j++) {
+              pts[j].x = Math.min(pts[j].x, vw);
+              pts[j].y = Math.min(pts[j].y, vh);
+            }
+            flowNeedsResize = true;
+          }
+        }
+      });
     });
 
     // Control panel toggle (gear icon)
