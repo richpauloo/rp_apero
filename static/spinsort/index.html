@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>SPINSORT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{
+  background:#050510;
+  font-family:'Press Start 2P',monospace;
+  color:#fff;user-select:none;-webkit-user-select:none;touch-action:none;
+}
+body::before{
+  content:'';position:fixed;inset:-60px;z-index:0;pointer-events:none;
+  background:
+    repeating-linear-gradient(0deg,rgba(30,40,100,.06) 0 1px,transparent 1px 52px),
+    repeating-linear-gradient(90deg,rgba(30,40,100,.06) 0 1px,transparent 1px 52px);
+  animation:gridScroll 40s linear infinite}
+@keyframes gridScroll{to{transform:translate(52px,52px)}}
+#crt{position:fixed;inset:0;z-index:9000;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.08) 0 1px,transparent 1px 3px)}
+#vig{position:fixed;inset:0;z-index:8999;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55)100%)}
+
+/* ─── SCREENS ─── */
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:500;transition:opacity .4s}
+.screen.hidden{display:none}
+
+/* title */
+#title-screen{background:radial-gradient(ellipse at center,#0a0a30,#050510 70%)}
+#title-screen h1{
+  font-size:clamp(30px,8vw,64px);color:#0ff;letter-spacing:4px;
+  text-shadow:0 0 12px #0ff,0 0 36px #0ff,0 0 72px #08f;
+  animation:glow 2.5s ease-in-out infinite alternate;margin-bottom:16px}
+@keyframes glow{from{text-shadow:0 0 12px #0ff,0 0 36px #0ff}to{text-shadow:0 0 24px #0ff,0 0 60px #0ff,0 0 100px #08f}}
+.tagline{font-size:clamp(6px,1.6vw,12px);color:#08f;text-align:center;line-height:2.2;margin-bottom:36px;padding:0 20px;max-width:500px}
+.howto{font-size:clamp(7px,1.6vw,13px);color:#aab;text-align:center;line-height:2.6;margin-bottom:32px;padding:0 20px}
+.howto .g{color:#0f0} .howto .r{color:#f55}
+
+.btn{
+  font-family:'Press Start 2P',monospace;font-size:clamp(12px,3vw,20px);
+  color:#000;background:#0f0;border:none;padding:16px 48px;cursor:pointer;
+  letter-spacing:3px;position:relative;overflow:hidden;
+  box-shadow:0 0 24px rgba(0,255,0,.25),inset 0 -3px 0 rgba(0,0,0,.2);
+  transition:transform .1s}
+.btn:hover{transform:scale(1.04)} .btn:active{transform:scale(.96)}
+.btn::after{content:'';position:absolute;inset:-50%;
+  background:linear-gradient(45deg,transparent 40%,rgba(255,255,255,.12)50%,transparent 60%);
+  animation:shine 3s infinite}
+@keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+/* game over */
+#go-screen{background:rgba(0,0,0,.92)}
+#go-screen h1{font-size:clamp(22px,6vw,48px);color:#f44;text-shadow:0 0 20px #f44,0 0 40px #f44;margin-bottom:18px}
+.go-stat{font-size:clamp(9px,2.2vw,16px);margin-bottom:8px}
+.go-score{color:#0ff} .go-high{color:#ff0}
+.go-detail{color:#889;font-size:clamp(6px,1.4vw,10px);margin-bottom:22px}
+.btn-share{
+  font-family:'Press Start 2P',monospace;font-size:clamp(7px,1.6vw,11px);
+  color:#0ff;background:transparent;border:2px solid #0ff;padding:10px 28px;
+  cursor:pointer;letter-spacing:2px;margin-top:12px;
+  box-shadow:0 0 12px rgba(0,255,255,.15);transition:all .15s}
+.btn-share:hover{background:rgba(0,255,255,.1);box-shadow:0 0 20px rgba(0,255,255,.3)}
+.btn-share:active{transform:scale(.95)}
+.go-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;align-items:center}
+
+#toast{position:fixed;bottom:60px;left:50%;transform:translateX(-50%) translateY(20px);z-index:9999;
+  font-family:'Press Start 2P',monospace;font-size:clamp(7px,1.5vw,11px);
+  color:#000;background:#0ff;padding:10px 24px;border-radius:4px;
+  pointer-events:none;opacity:0;transition:opacity .25s,transform .25s;
+  box-shadow:0 0 20px rgba(0,255,255,.4)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ─── HUD ─── */
+#hud{position:fixed;top:0;left:0;right:0;height:56px;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;padding:0 20px;
+  background:linear-gradient(to bottom,rgba(0,0,0,.88),rgba(0,0,0,.25),transparent);
+  font-size:clamp(11px,2.2vw,18px)}
+#hud.hidden{display:none}
+.hud-lives{color:#f44;letter-spacing:5px;font-size:clamp(14px,2.8vw,24px);text-shadow:0 0 8px rgba(255,50,50,.4)}
+.hud-level{color:#ff0;text-align:center}
+.hud-score{color:#0ff;text-align:right;min-width:100px}
+
+/* ─── BINS ─── */
+.bin{position:fixed;top:52px;bottom:12px;width:clamp(90px,22vw,240px);z-index:50;
+  display:flex;flex-direction:column;overflow:hidden;
+  background:rgba(0,0,0,.45);border:1px solid rgba(80,80,120,.15);border-radius:6px}
+#bin-l{left:6px} #bin-r{right:6px}
+.bin-cvs{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;border-radius:6px}
+.bin-hdr{text-align:center;padding:12px 4px 8px;font-size:clamp(8px,1.6vw,13px);letter-spacing:4px;flex-shrink:0;position:relative;z-index:1}
+#bin-l .bin-hdr{color:rgba(0,220,0,.6);border-bottom:1px solid rgba(0,220,0,.1)}
+#bin-r .bin-hdr{color:rgba(255,80,80,.6);border-bottom:1px solid rgba(255,80,80,.1)}
+.bin-list{flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:6px;gap:4px;overflow:hidden;position:relative;z-index:1}
+.sw{font-family:'Press Start 2P',monospace;font-size:clamp(7px,1.4vw,11px);
+  padding:5px 8px;text-align:center;border-radius:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  animation:swIn .3s ease-out}
+#bin-l .sw{color:#0d0;background:rgba(0,200,0,.07);border:1px solid rgba(0,200,0,.15)}
+#bin-r .sw{color:#e55;background:rgba(220,60,60,.07);border:1px solid rgba(220,60,60,.15)}
+@keyframes swIn{from{transform:scaleY(0);opacity:0}to{transform:scaleY(1);opacity:1}}
+
+/* ─── CENTER ─── */
+#center{position:fixed;top:0;bottom:0;z-index:100;
+  left:clamp(100px,22vw,248px);right:clamp(100px,22vw,248px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  pointer-events:none}
+#center.hidden{display:none}
+
+#dir{display:flex;justify-content:space-between;width:100%;padding:0 4px;
+  font-size:clamp(10px,2.2vw,16px);margin-bottom:20px;opacity:.8}
+.dir-l{color:#0f0} .dir-r{color:#f55}
+
+#card{
+  padding:clamp(16px,3.5vw,28px) clamp(28px,6vw,56px);
+  border:3px solid rgba(255,255,255,.22);background:rgba(5,5,20,.9);
+  border-radius:6px;box-shadow:0 0 40px rgba(80,80,200,.1);
+  pointer-events:auto;touch-action:none;cursor:grab;
+  transition:transform .4s cubic-bezier(.2,0,.3,1),opacity .4s}
+#card.fly-left{transform:translateX(min(-50vw,-250px)) rotate(-10deg) scale(.35);opacity:0}
+#card.fly-right{transform:translateX(max(50vw,250px)) rotate(10deg) scale(.35);opacity:0}
+#card.appear{animation:cardPop .28s ease-out}
+#card.wrong-anim{animation:cardWrong .55s ease}
+#card.urgent{border-color:#f44;box-shadow:0 0 30px rgba(255,50,50,.2);animation:urgPulse .35s infinite}
+@keyframes cardPop{0%{transform:scale(0);opacity:0}65%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
+@keyframes cardWrong{0%{transform:scale(1)}12%{transform:scale(1.08) rotate(-3deg)}24%{transform:scale(1.08) rotate(3deg)}36%{transform:scale(1.05) rotate(-2deg)}50%{transform:scale(1) rotate(1deg)}70%{opacity:.4;transform:scale(.85)}100%{opacity:0;transform:scale(.4)}}
+@keyframes urgPulse{0%,100%{box-shadow:0 0 20px rgba(255,50,50,.2)}50%{box-shadow:0 0 40px rgba(255,50,50,.4)}}
+
+#word{font-size:clamp(18px,4.5vw,38px);color:#fff;text-shadow:0 0 14px rgba(255,255,255,.4);letter-spacing:2px;white-space:nowrap}
+
+#timer{width:min(80%,340px);height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;margin-top:18px}
+#tbar{height:100%;width:100%;background:#0f0;border-radius:3px;transform-origin:left;transition:background .4s}
+#truth{margin-top:14px;font-size:clamp(8px,1.6vw,12px);min-height:1.5em;opacity:0;transition:opacity .25s}
+#streak{margin-top:14px;font-size:clamp(11px,2.5vw,20px);color:#ff0;text-shadow:0 0 14px rgba(255,255,0,.4);
+  min-height:1.5em;opacity:0;transition:opacity .3s}
+#streak.show{opacity:1}
+
+/* ─── FEEDBACK ─── */
+#fb{position:fixed;top:38%;left:50%;transform:translate(-50%,-50%);z-index:600;
+  font-size:clamp(50px,14vw,100px);pointer-events:none;opacity:0;transition:opacity .12s}
+#fb.ok{color:#0f0;text-shadow:0 0 40px #0f0,0 0 80px #0f0;opacity:1}
+#fb.no{color:#f44;text-shadow:0 0 40px #f44,0 0 80px #f44;opacity:1}
+
+/* ─── LEVEL-UP / MILESTONE BANNER ─── */
+#lvlup{position:fixed;top:12%;left:50%;transform:translate(-50%,0) scale(0);z-index:610;
+  font-size:clamp(24px,6vw,50px);color:#ff0;text-shadow:0 0 25px currentColor,0 0 60px currentColor;
+  pointer-events:none;transition:transform .35s cubic-bezier(.2,0,.3,1),opacity .35s;opacity:0;
+  text-align:center;line-height:1.6;white-space:nowrap}
+#lvlup.show{transform:translate(-50%,0) scale(1);opacity:1}
+#lvlup .ms-line{font-size:.6em;display:block;margin-top:12px}
+
+/* ─── PARTICLES ─── */
+.ptcl{position:fixed;pointer-events:none;z-index:700;border-radius:50%;
+  animation:ptclFly .7s ease-out forwards}
+@keyframes ptclFly{
+  0%{transform:translate(0,0) scale(1);opacity:1}
+  100%{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0}}
+
+/* ─── SCREEN SHAKE ─── */
+#game.shake{animation:shk .35s ease}
+@keyframes shk{
+  0%,100%{transform:translate(0)}
+  12%{transform:translate(-7px,4px)}
+  25%{transform:translate(6px,-5px)}
+  37%{transform:translate(-5px,3px)}
+  50%{transform:translate(4px,-3px)}
+  62%{transform:translate(-2px,4px)}}
+
+#flash{position:fixed;inset:0;z-index:300;pointer-events:none;opacity:0;transition:opacity .15s}
+
+/* ─── DEATH OVERLAY ─── */
+#death-cvs{position:fixed;inset:0;width:100%;height:100%;z-index:480;display:none;pointer-events:none}
+
+/* ─── TAP ZONES ─── */
+.tap{position:fixed;top:0;bottom:0;z-index:90;cursor:pointer;transition:background .15s}
+.tap:active{background:rgba(255,255,255,.02)}
+#tap-l{left:0;right:50%} #tap-r{left:50%;right:0}
+.tap.hidden{display:none}
+
+@media(max-width:540px){
+  .bin{width:clamp(60px,18vw,120px)}
+  #center{left:clamp(68px,18vw,128px);right:clamp(68px,18vw,128px)}
+  #word{font-size:clamp(14px,5vw,28px)}
+  .sw{font-size:clamp(5px,1.2vw,8px)}
+  .hud-lives{font-size:clamp(12px,2.4vw,18px)}
+}
+</style>
+</head>
+<body>
+<div id="crt"></div>
+<div id="vig"></div>
+
+<div id="game">
+  <div id="hud" class="hidden">
+    <div class="hud-lives" id="lives"></div>
+    <div class="hud-level" id="lvl"></div>
+    <div class="hud-score" id="sc"></div>
+  </div>
+
+  <div id="bin-l" class="bin hidden">
+    <canvas id="cvs-l" class="bin-cvs"></canvas>
+    <div class="bin-hdr">REAL</div>
+    <div class="bin-list" id="bl"></div>
+  </div>
+  <div id="bin-r" class="bin hidden">
+    <canvas id="cvs-r" class="bin-cvs"></canvas>
+    <div class="bin-hdr">FAKE</div>
+    <div class="bin-list" id="br"></div>
+  </div>
+
+  <div id="center" class="hidden">
+    <div id="dir"><span class="dir-l">&#9664; REAL</span><span class="dir-r">FAKE &#9654;</span></div>
+    <div id="card"><span id="word"></span></div>
+    <div id="timer"><div id="tbar"></div></div>
+    <div id="truth"></div>
+    <div id="streak"></div>
+  </div>
+
+  <div id="tap-l" class="tap hidden"></div>
+  <div id="tap-r" class="tap hidden"></div>
+</div>
+
+<div id="fb"></div>
+<div id="lvlup"></div>
+<div id="flash"></div>
+<div id="toast">COPIED TO CLIPBOARD!</div>
+<canvas id="death-cvs"></canvas>
+
+<!-- TITLE -->
+<div id="title-screen" class="screen">
+  <h1>SPINSORT</h1>
+  <div class="tagline">Think you know Claude Code's<br>spinner verbs?</div>
+  <div class="howto">
+    <span class="g">&#9664; LEFT</span> = real &nbsp;&nbsp;
+    <span class="r">RIGHT &#9654;</span> = fake
+  </div>
+  <button class="btn" id="btn-go">PLAY</button>
+</div>
+
+<!-- GAME OVER -->
+<div id="go-screen" class="screen hidden">
+  <h1>GAME OVER</h1>
+  <div class="go-stat go-score" id="go-sc"></div>
+  <div class="go-stat go-high" id="go-hi"></div>
+  <div class="go-detail" id="go-det"></div>
+  <div class="go-btns">
+    <button class="btn" id="btn-re">PLAY AGAIN</button>
+    <button class="btn-share" id="btn-share">SHARE SCORE</button>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   REAL SPINNER VERBS (170)
+   ═══════════════════════════════════════════ */
+const REAL=[
+"Accomplishing","Actioning","Actualizing","Architecting","Baking","Beaming",
+"Beboppin'","Befuddling","Billowing","Blanching","Bloviating","Boogieing",
+"Boondoggling","Booping","Bootstrapping","Brewing","Bunning","Burrowing",
+"Calculating","Canoodling","Caramelizing","Cascading","Catapulting","Cerebrating",
+"Channeling","Channelling","Choreographing","Churning","Clauding","Coalescing",
+"Cogitating","Combobulating","Composing","Computing","Concocting","Considering",
+"Contemplating","Cooking","Crafting","Creating","Crunching","Crystallizing",
+"Cultivating","Deciphering","Deliberating","Determining","Dilly-dallying",
+"Discombobulating","Doing","Doodling","Drizzling","Ebbing","Effecting",
+"Elucidating","Embellishing","Enchanting","Envisioning","Evaporating","Fermenting",
+"Fiddle-faddling","Finagling","Flambéing","Flibbertigibbeting","Flowing",
+"Flummoxing","Fluttering","Forging","Forming","Frolicking","Frosting",
+"Gallivanting","Galloping","Garnishing","Generating","Gesticulating","Germinating",
+"Gitifying","Grooving","Gusting","Harmonizing","Hashing","Hatching","Herding",
+"Honking","Hullaballooing","Hyperspacing","Ideating","Imagining","Improvising",
+"Incubating","Inferring","Infusing","Ionizing","Jitterbugging","Julienning",
+"Kneading","Leavening","Levitating","Lollygagging","Manifesting","Marinating",
+"Meandering","Metamorphosing","Misting","Moonwalking","Moseying","Mulling",
+"Mustering","Musing","Nebulizing","Nesting","Newspapering","Noodling","Nucleating",
+"Orbiting","Orchestrating","Osmosing","Perambulating","Percolating","Perusing",
+"Philosophising","Photosynthesizing","Pollinating","Pondering","Pontificating",
+"Pouncing","Precipitating","Prestidigitating","Processing","Proofing","Propagating",
+"Puttering","Puzzling","Quantumizing","Razzle-dazzling","Razzmatazzing",
+"Recombobulating","Reticulating","Roosting","Ruminating","Sautéing","Scampering",
+"Schlepping","Scurrying","Seasoning","Shenaniganing","Shimmying","Simmering",
+"Skedaddling","Sketching","Slithering","Smooshing","Sock-hopping","Spelunking",
+"Spinning","Sprouting","Stewing","Sublimating","Swirling","Swooping","Symbioting",
+"Synthesizing","Tempering","Thinking","Thundering","Tinkering","Tomfoolering",
+"Topsy-turvying","Transfiguring","Transmuting","Twisting","Undulating","Unfurling",
+"Unravelling","Vibing","Waddling","Wandering","Warping","Whatchamacalliting",
+"Whirlpooling","Whirring","Whisking","Wibbling","Working","Wrangling","Zesting",
+"Zigzagging"];
+
+const F1=[
+"Running","Walking","Typing","Sitting","Standing","Reading","Writing",
+"Sleeping","Eating","Drinking","Driving","Jumping","Swimming","Climbing",
+"Falling","Pushing","Pulling","Lifting","Carrying","Dropping","Talking",
+"Singing","Painting","Playing","Laughing","Shouting","Kicking","Throwing",
+"Catching","Opening","Closing","Building","Breaking","Fixing","Washing",
+"Cleaning","Jogging","Sneezing","Blinking","Nodding","Waving","Folding",
+"Parking","Ironing","Mowing","Raking","Dusting","Mopping","Texting","Dialing"];
+
+const F2=[
+"Bamboozling","Dithering","Wobbling","Splattering","Gurgling","Jiggling",
+"Bumbling","Fumbling","Teetering","Tootling","Yodeling","Caterwauling",
+"Filibustering","Galumphing","Hornswoggling","Maundering","Flabbergasting",
+"Kerfuffling","Pussyfooting","Blundering","Trundling","Sashaying",
+"Waffling","Mollycoddling","Shilly-shallying","Rubbernecking","Sidestepping",
+"Leapfrogging","Backpedaling","Bushwhacking","Besmirching","Floundering",
+"Hobnobbing","Hoodwinking","Kibbitzing","Outfoxing",
+"Rabble-rousing","Waylaying","Bellyaching","Browbeating","Kowtowing",
+"Nitpicking","Serenading","Swashbuckling","Tapdancing","Yo-yoing",
+"Riff-raffing","Wishy-washying","Cantilevering","Discouraging"];
+
+const F3=[
+"Philosophizing","Lallygagging","Razzamatazzing","Confabulating",
+"Transmogrifying","Absquatulating","Snollygostering","Defenestrating",
+"Flimflamming","Cattywampusing","Persnicketing","Discombobulizing",
+"Tomfoolerizing","Canoodering","Fiddle-diddling","Skedoodling",
+"Whatchamadoing","Topsy-turvifying","Hyperventilating","Perambulizing",
+"Circumnavigating","Prognosticating","Flibbertigibbering","Beboppifying",
+"Discoverificating","Supercalifragiling","Wibble-wobbling","Combobulizing",
+"Nebulifying","Quantumifying","Sock-puppeting","Gitificating",
+"Osmosifying","Nucleatifying","Boondogging","Smooshifying",
+"Hullabaloo-ing","Shenaniganning","Razzledazzlifying","Zigzanging"];
+
+/* ═══════════════════════════════════════════
+   AUDIO
+   ═══════════════════════════════════════════ */
+let ac;
+function initA(){if(!ac)try{ac=new(window.AudioContext||window.webkitAudioContext)}catch(e){}}
+function bip(f,d,t='square',v=.1){
+  if(!ac)return;const o=ac.createOscillator(),g=ac.createGain();
+  o.type=t;o.frequency.value=f;g.gain.value=v;
+  g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);
+  o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}
+const sfx={
+  ok(){bip(523,.07);setTimeout(()=>bip(659,.07),60);setTimeout(()=>bip(784,.1),120)},
+  no(){bip(200,.22,'sawtooth',.15);setTimeout(()=>bip(150,.3,'sawtooth',.1),100)},
+  lvl(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>bip(f,.1,'square',.08),i*80))},
+  end(){[300,250,200,160,120,80].forEach((f,i)=>setTimeout(()=>bip(f,.35,'sawtooth',.14),i*120))},
+  tick(){bip(880,.025,'sine',.03)},
+  pop(){bip(660,.06,'sine',.06)},
+  life(){[440,554,659,880,1047].forEach((f,i)=>setTimeout(()=>bip(f,.14,'sine',.12),i*65))},
+  chomp(){bip(120,.4,'sawtooth',.2);setTimeout(()=>bip(80,.5,'sawtooth',.15),150)}
+};
+
+/* ═══════════════════════════════════════════
+   DOM + CANVAS REFS
+   ═══════════════════════════════════════════ */
+const $=id=>document.getElementById(id);
+const card=$('card'),wordEl=$('word'),tbar=$('tbar'),truthEl=$('truth'),
+      streakEl=$('streak'),fbEl=$('fb'),lvlEl=$('lvlup'),flashEl=$('flash'),
+      gameEl=$('game'),blEl=$('bl'),brEl=$('br');
+const cvsL=$('cvs-l'),cvsR=$('cvs-r'),cxL=cvsL.getContext('2d'),cxR=cvsR.getContext('2d');
+const deathCvs=$('death-cvs'),deathCtx=deathCvs.getContext('2d');
+let nReal=0,nFake=0,deathAnim=false,deathStart=0;
+
+/* ═══════════════════════════════════════════
+   PARTICLES
+   ═══════════════════════════════════════════ */
+function burst(x,y,color,n=16,spread=120){
+  for(let i=0;i<n;i++){
+    const el=document.createElement('div');el.className='ptcl';
+    el.style.left=x+'px';el.style.top=y+'px';el.style.background=color;
+    const sz=Math.random()*7+3;el.style.width=el.style.height=sz+'px';
+    if(Math.random()>.5)el.style.borderRadius='0';
+    const a=Math.random()*Math.PI*2,d=Math.random()*spread+30;
+    el.style.setProperty('--dx',Math.cos(a)*d+'px');
+    el.style.setProperty('--dy',Math.sin(a)*d+'px');
+    document.body.appendChild(el);
+    el.addEventListener('animationend',()=>el.remove());
+  }
+}
+
+/* ═══════════════════════════════════════════
+   BIN VISUALS — tower (left) & creature (right)
+   ═══════════════════════════════════════════ */
+function sizeCvs(){
+  [cvsL,cvsR].forEach(c=>{const p=c.parentElement;if(p.offsetWidth){c.width=p.clientWidth;c.height=p.clientHeight}});
+}
+
+function drawTower(ctx,w,h,n,t){
+  ctx.clearRect(0,0,w,h);if(!n||!w)return;
+  const max=20,bh=Math.min((h-30)/max,28),bw=w*.8,x=(w-bw)/2;
+  const cnt=Math.min(n,max);
+
+  for(let i=0;i<cnt;i++){
+    const y=h-8-(i+1)*bh,p=i/max;
+    const g=80+p*175|0,b=180+p*75|0;
+    ctx.shadowColor=`rgb(0,${g},${b})`;ctx.shadowBlur=8+p*16;
+    ctx.fillStyle=`rgba(0,${g},${b},0.7)`;
+    const wobble=Math.sin(t*.002+i*.6)*2;
+    ctx.fillRect(x+wobble,y,bw,bh-2);
+    // highlight strip on top of each block
+    ctx.fillStyle=`rgba(100,${150+p*105|0},255,0.25)`;
+    ctx.fillRect(x+wobble+2,y,bw-4,2);
+  }
+  ctx.shadowBlur=0;
+
+  if(n>=4){
+    const topY=h-8-cnt*bh;
+    const pulse=.18+Math.sin(t*.003)*.1;
+    const gr=ctx.createRadialGradient(w/2,topY,0,w/2,topY,w*1.2);
+    gr.addColorStop(0,`rgba(0,255,255,${pulse})`);gr.addColorStop(1,'transparent');
+    ctx.fillStyle=gr;ctx.fillRect(0,0,w,h);
+  }
+  if(n>=8){
+    const topY=h-8-cnt*bh;
+    const rayW=6+Math.sin(t*.004)*3;
+    const rayA=.1+Math.sin(t*.005)*.06;
+    ctx.fillStyle=`rgba(0,255,255,${rayA})`;
+    ctx.fillRect(w/2-rayW/2,0,rayW,topY);
+    // sparkles
+    const sparkles=Math.min(n-7,10);
+    for(let i=0;i<sparkles;i++){
+      const sx=w*.1+((i*97+37)%100)/100*w*.8;
+      const sy=h*.03+((i*53+19)%100)/100*h*.6;
+      const sa=.3+Math.sin(t*.005+i*1.7)*.25;
+      const ss=1.5+Math.sin(t*.006+i*2.3)*1;
+      ctx.fillStyle=`rgba(200,255,255,${sa})`;
+      ctx.fillRect(sx-ss,sy,ss*2,1);ctx.fillRect(sx,sy-ss,1,ss*2);
+    }
+  }
+}
+
+function drawGhost(ctx,w,h,n,t,dying,cx,cy,r){
+  // body
+  ctx.fillStyle=dying?`rgba(220,30,30,0.95)`:`rgba(200,25,25,${.35+Math.min(n/14,1)*.6})`;
+  ctx.beginPath();ctx.arc(cx,cy,r,Math.PI,0);
+  const zn=4+Math.floor(Math.min(n/14,1)*2),zw=r*2/zn;
+  for(let i=0;i<=zn;i++){
+    const bx=cx-r+i*zw,up=i%2===0;
+    ctx.lineTo(bx,cy+r*(.12+(!up?.3:0)));
+  }
+  ctx.closePath();ctx.fill();
+
+  // inner shading
+  ctx.fillStyle=`rgba(120,10,10,${.2+Math.min(n/14,1)*.25})`;
+  ctx.beginPath();ctx.arc(cx,cy-r*.08,r*.6,0,Math.PI*2);ctx.fill();
+
+  // eyes (3+)
+  if(n>=3||dying){
+    const ey=cy-r*.12,esp=r*.3,er=r*.2;
+    ctx.fillStyle=dying?`rgba(255,255,180,${.85+Math.sin(t*.025)*.15})`:`rgba(255,255,255,${.65+Math.min(n/14,1)*.35})`;
+    ctx.beginPath();ctx.arc(cx-esp,ey,er,0,Math.PI*2);ctx.arc(cx+esp,ey,er,0,Math.PI*2);ctx.fill();
+    if(!dying){
+      const lx=Math.sin(t*.002)*er*.35,ly=Math.cos(t*.0025)*er*.2;
+      ctx.fillStyle='#d00';ctx.beginPath();
+      ctx.arc(cx-esp+lx,ey+ly,er*.55,0,Math.PI*2);ctx.arc(cx+esp+lx,ey+ly,er*.55,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=`rgba(255,180,0,${.4+Math.sin(t*.006)*.3})`;ctx.beginPath();
+      ctx.arc(cx-esp+lx,ey+ly,er*.22,0,Math.PI*2);ctx.arc(cx+esp+lx,ey+ly,er*.22,0,Math.PI*2);ctx.fill();
+    }
+  }
+  // mouth (5+)
+  if(n>=5||dying){
+    const my=cy+r*.22,mw=r*(.3+Math.min(n/14,1)*.2);
+    const openF=dying?.9:.3+Math.sin(t*.002)*.12;
+    ctx.fillStyle=`rgba(20,0,0,${.5+Math.min(n/14,1)*.45})`;
+    ctx.save();ctx.translate(cx,my);ctx.scale(1,openF);
+    ctx.beginPath();ctx.arc(0,0,mw,0,Math.PI);ctx.fill();ctx.restore();
+    if(n>=8||dying){
+      ctx.fillStyle='#ddd';
+      const tn=dying?6:Math.min(Math.floor((n-7)/2)+2,6),tw=mw*1.6/tn;
+      for(let i=0;i<tn;i++){
+        const tx=cx-mw*.8+i*tw+tw*.12;
+        ctx.fillRect(tx,my-1,tw*.6,2+Math.min(n/14,1)*5);
+      }
+    }
+  }
+}
+
+function drawCreature(ctx,w,h,n,t){
+  ctx.clearRect(0,0,w,h);if(!n||!w)return;
+  const s=Math.min(n/12,1);
+  const cx=w/2,cy=h*.45;
+  const maxR=Math.min(w,h)*.5;
+  const baseR=12+s*maxR;
+  const breathRate=.003+s*.003+(lives<=1?.005:0);
+  const r=baseR*(1+Math.sin(t*breathRate)*.05);
+
+  // ambient red fog
+  ctx.fillStyle=`rgba(100,0,0,${.08+s*.1})`;ctx.fillRect(0,0,w,h);
+
+  // outer glow
+  const glow=ctx.createRadialGradient(cx,cy,r*.5,cx,cy,r*2);
+  glow.addColorStop(0,`rgba(200,0,0,${.08+s*.12})`);glow.addColorStop(1,'transparent');
+  ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
+
+  drawGhost(ctx,w,h,n,t,false,cx,cy,r);
+}
+
+/* ═══════════════════════════════════════════
+   DEATH ANIMATION — creature fills screen
+   ═══════════════════════════════════════════ */
+function drawDeath(t){
+  const dc=deathCvs,ctx=deathCtx;
+  const elapsed=t-deathStart;
+  const dur=1200;
+  const p=Math.min(elapsed/dur,1);
+
+  dc.width=innerWidth;dc.height=innerHeight;
+
+  // darkening red fog
+  ctx.fillStyle=`rgba(60,0,0,${p*.7})`;
+  ctx.fillRect(0,0,dc.width,dc.height);
+
+  // creature growing from right side toward center
+  const startX=innerWidth*.85,startY=innerHeight*.4;
+  const endX=innerWidth*.5,endY=innerHeight*.45;
+  const cx=startX+(endX-startX)*p;
+  const cy=startY+(endY-startY)*p;
+  const r=40+p*Math.min(innerWidth,innerHeight)*.45;
+
+  drawGhost(ctx,dc.width,dc.height,16,t,true,cx,cy,r);
+
+  if(p<1){
+    requestAnimationFrame(drawDeath);
+  }else{
+    deathAnim=false;
+    dc.style.display='none';
+    showGameOver();
+  }
+}
+
+// bin render loop
+function binLoop(t){
+  if(state==='play'){
+    drawTower(cxL,cvsL.width,cvsL.height,nReal,t);
+    drawCreature(cxR,cvsR.width,cvsR.height,nFake,t);
+  }
+  requestAnimationFrame(binLoop);
+}
+requestAnimationFrame(binLoop);
+
+/* ═══════════════════════════════════════════
+   GAME STATE
+   ═══════════════════════════════════════════ */
+let state='title',score=0,lives=3,level=1,streak=0,bestStreak=0,
+    nOk=0,nTotal=0,curWord='',curReal=false,waiting=false,
+    wStart=0,maxT=5200,used=new Set();
+let hi=+(localStorage.getItem('ss_hi')||0);
+
+const MILESTONES={
+  3: {msg:'NICE START!',color:'#0ff'},
+  5: {msg:'\u2605 EXTRA LIFE \u2605',color:'#f0f',life:true},
+  7: {msg:'VERB APPRENTICE',color:'#0ff'},
+  10:{msg:'\u2605 EXTRA LIFE \u2605',color:'#ff0',life:true},
+  13:{msg:'DANGER ZONE',color:'#f80'},
+  15:{msg:'\u2605 EXTRA LIFE \u2605',color:'#f0f',life:true},
+  18:{msg:'VERB WIZARD',color:'#b4f'},
+  20:{msg:'\u2605 EXTRA LIFE \u2605',color:'#ff0',life:true},
+  25:{msg:'BEYOND MORTAL',color:'#f0f',life:true},
+  30:{msg:'ARE YOU CLAUDE?',color:'#0ff',life:true},
+};
+
+/* ═══════════════════════════════════════════
+   WORD PICKER
+   ═══════════════════════════════════════════ */
+function pick(){
+  const real=Math.random()<.5;
+  let pool;
+  if(real){
+    pool=REAL.filter(w=>!used.has(w));
+    if(!pool.length){used.clear();pool=[...REAL]}
+  }else{
+    if(level<=2)      pool=[...F1,...F1,...F2];
+    else if(level<=4) pool=[...F1,...F2,...F2];
+    else if(level<=6) pool=[...F2,...F2,...F3];
+    else if(level<=8) pool=[...F2,...F3,...F3];
+    else              pool=[...F3,...F3,...F3,...F2];
+    pool=pool.filter(w=>!used.has(w));
+    if(!pool.length){used.clear();pool=[...F1,...F2,...F3]}
+  }
+  const w=pool[Math.floor(Math.random()*pool.length)];
+  used.add(w);
+  return{word:w,real};
+}
+
+/* ═══════════════════════════════════════════
+   UI HELPERS
+   ═══════════════════════════════════════════ */
+function updHUD(){
+  $('lives').textContent='\u2665'.repeat(Math.max(0,lives));
+  $('lvl').textContent='LVL '+level;
+  $('sc').textContent=score;
+}
+function showEl(...ids){ids.forEach(id=>$(id).classList.remove('hidden'))}
+function hideEl(...ids){ids.forEach(id=>$(id).classList.add('hidden'))}
+
+function addBin(word,real){
+  if(real)nReal++;else nFake++;
+  const c=real?blEl:brEl;
+  const d=document.createElement('div');d.className='sw';d.textContent=word;
+  c.appendChild(d);
+  while(c.children.length>16)c.removeChild(c.firstChild);
+}
+
+function flash(r,g,b,a=.18){
+  flashEl.style.background=`rgba(${r},${g},${b},${a})`;flashEl.style.opacity='1';
+  setTimeout(()=>flashEl.style.opacity='0',150);
+}
+
+function showFB(type){
+  fbEl.textContent=type==='ok'?'\u2713':'\u2717';
+  fbEl.className=type;
+  setTimeout(()=>fbEl.className='',500);
+}
+
+function showTruth(word,real,correct){
+  truthEl.textContent=word+' \u2192 '+(real?'REAL':'FAKE')+' '+(correct?'\u2713':'\u2717');
+  truthEl.style.color=correct?'#0f0':'#f55';
+  truthEl.style.opacity='1';
+}
+
+function showLvlUp(){
+  const ms=MILESTONES[level];
+  let html='LEVEL '+level+'!';
+  if(ms) html+='<span class="ms-line" style="color:'+ms.color+'">'+ms.msg+'</span>';
+  lvlEl.innerHTML=html;
+  lvlEl.style.color=ms?ms.color:'#ff0';
+  lvlEl.classList.add('show');
+  const dur=ms?2400:1300;
+  setTimeout(()=>lvlEl.classList.remove('show'),dur);
+  if(ms){
+    // big multi-burst celebration
+    const cx=innerWidth/2,cy=innerHeight/2;
+    burst(cx,cy,ms.color,35,180);
+    setTimeout(()=>burst(cx,cy,'#fff',20,140),150);
+    flash(ms.color==='#ff0'?255:ms.color==='#f0f'?255:0,ms.color==='#ff0'?255:ms.color==='#0ff'?255:0,ms.color==='#0ff'?255:ms.color==='#f0f'?255:0,.2);
+    if(ms.life){
+      lives++;updHUD();
+      setTimeout(()=>sfx.life(),200);
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════
+   SHARE
+   ═══════════════════════════════════════════ */
+function getShareURL(){
+  try{const u=new URL(location.href);u.search='';u.hash='';return u.toString()}
+  catch(e){return location.href.split('?')[0].split('#')[0]}
+}
+function shareScore(){
+  const url=getShareURL();
+  const pct=nTotal>0?Math.round(nOk/nTotal*100):0;
+  const text=[
+    '\uD83C\uDFAE SPINSORT',
+    '\u2501'.repeat(14),
+    'Score: '+score.toLocaleString(),
+    'Level: '+level+' \u00B7 Streak: '+bestStreak+'x'+(bestStreak>=10?' \uD83D\uDD25':''),
+    'Sorted: '+nOk+'/'+nTotal+' ('+pct+'%)',
+    '\u2501'.repeat(14),
+    'Think you know Claude Code\'s',
+    'spinner verbs?',
+    url
+  ].join('\n');
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(showToast).catch(()=>fbCopy(text));
+  }else{fbCopy(text)}
+}
+function fbCopy(text){
+  const ta=document.createElement('textarea');
+  ta.value=text;ta.style.cssText='position:fixed;opacity:0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy')}catch(e){}
+  document.body.removeChild(ta);showToast();
+}
+function showToast(){
+  const el=$('toast');el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),1800);
+}
+
+/* ═══════════════════════════════════════════
+   GAME FLOW
+   ═══════════════════════════════════════════ */
+function startGame(){
+  state='play';score=0;lives=5;level=1;streak=0;bestStreak=0;nOk=0;nTotal=0;
+  used.clear();maxT=5200;
+  nReal=0;nFake=0;deathAnim=false;
+  deathCvs.style.display='none';
+  blEl.innerHTML='';brEl.innerHTML='';
+  truthEl.style.opacity='0';
+  streakEl.classList.remove('show');
+  hideEl('title-screen','go-screen');
+  showEl('hud','bin-l','bin-r','center','tap-l','tap-r');
+  updHUD();setTimeout(sizeCvs,50);nextWord();
+}
+
+function nextWord(){
+  const{word,real}=pick();
+  curWord=word;curReal=real;waiting=true;wStart=Date.now();
+  wordEl.textContent=word;
+  truthEl.style.opacity='0';
+  card.className='appear';
+  card.style.opacity='1';
+  sfx.pop();
+}
+
+function choose(dir){
+  if(!waiting||state!=='play')return;
+  waiting=false;nTotal++;
+  const correct=(dir===-1&&curReal)||(dir===1&&!curReal);
+  card.className=correct?(dir===-1?'fly-left':'fly-right'):'wrong-anim';
+
+  if(correct){
+    sfx.ok();streak++;if(streak>bestStreak)bestStreak=streak;nOk++;
+    let pts=100*level;
+    const ms=Date.now()-wStart;
+    if(ms<1200)pts+=50*level;
+    if(streak>=5)pts=Math.floor(pts*1.5);
+    if(streak>=10)pts*=2;
+    if(streak>=20)pts*=2;
+    score+=pts;
+    flash(0,255,80,.12);showFB('ok');showTruth(curWord,curReal,true);
+    addBin(curWord,curReal);
+    const r=card.getBoundingClientRect();
+    burst(r.left+r.width/2,r.top+r.height/2,curReal?'#0f0':'#f55',12);
+    if(streak>=3){
+      streakEl.textContent=streak+'x STREAK'+(streak>=10?' \uD83D\uDD25':'');
+      streakEl.classList.add('show');
+    }
+    if(nOk>0&&nOk%5===0){
+      level++;maxT=Math.max(2200,5200-level*300);
+      sfx.lvl();showLvlUp();
+    }
+  }else{
+    sfx.no();streak=0;lives--;
+    flash(255,50,50,.22);showFB('no');showTruth(curWord,curReal,false);
+    gameEl.classList.add('shake');setTimeout(()=>gameEl.classList.remove('shake'),400);
+    streakEl.classList.remove('show');
+    const r=card.getBoundingClientRect();
+    burst(r.left+r.width/2,r.top+r.height/2,'#f44',20);
+    if(lives<=0){endGame();return}
+  }
+  updHUD();
+  setTimeout(()=>{if(state==='play')nextWord()},correct?550:700);
+}
+
+function timeOut(){
+  if(!waiting||state!=='play')return;
+  waiting=false;nTotal++;streak=0;lives--;
+  card.className='wrong-anim';
+  sfx.no();flash(255,50,50,.22);showFB('no');showTruth(curWord,curReal,false);
+  gameEl.classList.add('shake');setTimeout(()=>gameEl.classList.remove('shake'),400);
+  streakEl.classList.remove('show');
+  const r=card.getBoundingClientRect();
+  burst(r.left+r.width/2,r.top+r.height/2,'#f44',20);
+  updHUD();
+  if(lives<=0){endGame();return}
+  setTimeout(()=>{if(state==='play')nextWord()},700);
+}
+
+function endGame(){
+  state='over';
+  if(score>hi){hi=score;localStorage.setItem('ss_hi',''+hi)}
+  hideEl('center','tap-l','tap-r');
+
+  // creature death: it rushes across the screen and eats you
+  sfx.chomp();
+  deathAnim=true;
+  deathStart=performance.now();
+  deathCvs.style.display='block';
+  requestAnimationFrame(drawDeath);
+
+  // sfx.end plays after the chomp
+  setTimeout(()=>sfx.end(),400);
+}
+
+function showGameOver(){
+  hideEl('hud','bin-l','bin-r');
+  $('go-sc').textContent='SCORE: '+score;
+  $('go-hi').textContent='HIGH SCORE: '+hi;
+  $('go-det').textContent='SORTED '+nOk+'/'+nTotal+' \u00B7 LVL '+level+' \u00B7 BEST STREAK '+bestStreak;
+  showEl('go-screen');
+}
+
+/* ═══════════════════════════════════════════
+   TIMER
+   ═══════════════════════════════════════════ */
+let tickPlayed=false;
+setInterval(()=>{
+  if(!waiting||state!=='play')return;
+  const el=Date.now()-wStart,pct=Math.max(0,1-el/maxT);
+  tbar.style.transform='scaleX('+pct.toFixed(4)+')';
+  tbar.style.background=pct>.5?'#0f0':pct>.25?'#ff0':'#f44';
+  if(pct<.25&&!card.classList.contains('urgent')&&!card.classList.contains('fly-left')&&!card.classList.contains('fly-right'))
+    card.classList.add('urgent');
+  if(pct<.3&&pct>.28&&!tickPlayed){sfx.tick();tickPlayed=true}
+  if(pct>.35)tickPlayed=false;
+  if(el>=maxT)timeOut();
+},30);
+
+/* ═══════════════════════════════════════════
+   INPUT
+   ═══════════════════════════════════════════ */
+addEventListener('keydown',e=>{
+  initA();
+  if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A'){e.preventDefault();choose(-1)}
+  if(e.key==='ArrowRight'||e.key==='d'||e.key==='D'){e.preventDefault();choose(1)}
+  if(e.key===' '||e.key==='Enter'){e.preventDefault();if(state!=='play')startGame()}
+});
+let tx0=null;
+addEventListener('touchstart',e=>{initA();tx0=e.touches[0].clientX},{passive:true});
+addEventListener('touchend',e=>{
+  if(tx0===null)return;
+  const x1=e.changedTouches[0].clientX,dx=x1-tx0;tx0=null;
+  if(state!=='play'){startGame();return}
+  if(Math.abs(dx)>35)choose(dx<0?-1:1);else choose(x1<innerWidth/2?-1:1);
+},{passive:true});
+$('tap-l').addEventListener('click',()=>{initA();choose(-1)});
+$('tap-r').addEventListener('click',()=>{initA();choose(1)});
+let mx0=null,mdn=false;
+card.addEventListener('mousedown',e=>{initA();mdn=true;mx0=e.clientX;e.preventDefault()});
+addEventListener('mouseup',e=>{if(!mdn)return;mdn=false;const dx=e.clientX-mx0;if(Math.abs(dx)>30&&state==='play')choose(dx<0?-1:1)});
+addEventListener('resize',sizeCvs);
+$('btn-go').addEventListener('click',()=>{initA();startGame()});
+$('btn-re').addEventListener('click',()=>{initA();startGame()});
+$('btn-share').addEventListener('click',()=>{initA();shareScore()});
+</script>
+</body>
+</html>
