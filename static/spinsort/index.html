@@ -692,6 +692,10 @@ function nextWord(){
   curWord=word;curReal=real;waiting=true;wStart=Date.now();
   wordEl.textContent=word;
   truthEl.style.opacity='0';
+  card.style.transition='none';
+  card.className='';
+  void card.offsetWidth;
+  card.style.transition='';
   card.className='appear';
   card.style.opacity='1';
   sfx.pop();
@@ -804,6 +808,7 @@ let tx0=null;
 addEventListener('touchstart',e=>{initA();tx0=e.touches[0].clientX},{passive:true});
 addEventListener('touchend',e=>{
   if(tx0===null)return;
+  if(e.target.closest('button')){tx0=null;return}
   const x1=e.changedTouches[0].clientX,dx=x1-tx0;tx0=null;
   if(state!=='play'){startGame();return}
   if(Math.abs(dx)>35)choose(dx<0?-1:1);else choose(x1<innerWidth/2?-1:1);
